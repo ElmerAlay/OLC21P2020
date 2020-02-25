@@ -1,0 +1,302 @@
+package analizadores;
+
+import structs.AST;
+import java_cup.runtime.*;
+
+parser code
+{:
+    public static AST root; //representa la raíz del árbol AST de la gramática
+    public static int cont = 0;    //Contador para llevar control de los id´s de los nodos
+
+    //Método para recuperación de errores
+    public void syntax_error(Symbol s){
+        String lexema = s.value.toString();
+        int fila = s.right;
+        int columna = s.left;
+
+        System.out.println("!!!! Error sintáctico recuperado !!!!!");
+        System.out.println("Lexema: " + lexema + " fila: " + fila + " columna: " + columna);
+    }
+
+    //Método cuando ya no es posible la recuperación de errores
+    public void unrecovered_syntax_error(Symbol s) throws java.lang.Exception{
+        String lexema = s.value.toString();
+        int fila = s.right;
+        int columna = s.left;
+
+        System.out.println("!!!! Error sintáctico, Panic mode !!!!!");
+        System.out.println("Lexema: " + lexema + " fila: " + fila + " columna: " + columna);
+    }
+:}
+
+action code
+{:
+:}
+
+
+terminal plus, minus, mul, div, pot, mod, ipar, fpar;
+terminal gt, lt, gte, lte, eq, neq;
+terminal or, and, not;
+terminal nulo, verdadero, falso, uminus;
+terminal pyc, asign;
+terminal String numero, flotante, cadena, id;
+
+non terminal INICIO, E, ASIGN, INST;
+
+precedence left  or;
+precedence left  and;
+precedence right not;
+precedence left lt, gt, lte, gte, eq, neq;
+
+precedence left plus, minus;
+precedence left mul, div, mod;
+precedence left pot;
+precedence right uminus;
+
+start with INICIO;
+
+INICIO ::= INST:r  {: 
+                    AST nd = new AST();
+                    nd.setLabel("INICIO");
+                    nd.setIdNode(Parser.cont++);
+                    nd.addChildren((AST)r);
+
+                    Parser.root = (AST) nd;
+                    RESULT = nd;
+                :}
+;
+
+INST    ::= ASIGN:asig  {:
+                            RESULT = (AST)asig;
+                        :}
+;
+
+E ::=   E:op1 plus E:op2    {:
+                                AST nd = new AST();
+                                nd.setLabel("+");
+                                nd.setIdNode(Parser.cont++);
+                                nd.addChildren((AST)op1);
+                                nd.addChildren((AST)op2);
+
+                                RESULT = nd;
+                            :}
+    |   E:op1 minus E:op2   {:
+                                AST nd = new AST();
+                                nd.setLabel("-");
+                                nd.setIdNode(Parser.cont++);
+                                nd.addChildren((AST)op1);
+                                nd.addChildren((AST)op2);
+
+                                RESULT = nd;
+                            :}
+    |   E:op1 mul E:op2 {:
+                            AST nd = new AST();
+                            nd.setLabel("*");
+                            nd.setIdNode(Parser.cont++);
+                            nd.addChildren((AST)op1);
+                            nd.addChildren((AST)op2);
+
+                            RESULT = nd;
+                        :}
+    |   E:op1 div E:op2 {:
+                            AST nd = new AST();
+                            nd.setLabel("/");
+                            nd.setIdNode(Parser.cont++);
+                            nd.addChildren((AST)op1);
+                            nd.addChildren((AST)op2);
+
+                            RESULT = nd;
+                        :}
+    |   E:op1 mod E:op2 {:
+                            AST nd = new AST();
+                            nd.setLabel("%%");
+                            nd.setIdNode(Parser.cont++);
+                            nd.addChildren((AST)op1);
+                            nd.addChildren((AST)op2);
+
+                            RESULT = nd;
+                        :}
+    |   E:op1 pot E:op2 {:
+                            AST nd = new AST();
+                            nd.setLabel("^");
+                            nd.setIdNode(Parser.cont++);
+                            nd.addChildren((AST)op1);
+                            nd.addChildren((AST)op2);
+
+                            RESULT = nd;
+                        :}
+    |   minus E:opu     {:
+                            AST nd = new AST();
+                            nd.setLabel("-");
+                            nd.setIdNode(Parser.cont++);
+                            nd.addChildren((AST)opu);
+
+                            RESULT = nd;
+                        :}%prec uminus
+    |   ipar E:e fpar   {:
+                            AST nd = new AST();
+                            nd.setLabel("( )");
+                            nd.setIdNode(Parser.cont++);
+                            nd.addChildren((AST)e);
+
+                            RESULT = nd;
+                        :}
+    |   E:op1 gt E:op2  {:
+                            AST nd = new AST();
+                            nd.setLabel(">");
+                            nd.setIdNode(Parser.cont++);
+                            nd.addChildren((AST)op1);
+                            nd.addChildren((AST)op2);
+
+                            RESULT = nd;
+                        :}
+    |   E:op1 lt E:op2  {:
+                            AST nd = new AST();
+                            nd.setLabel("<");
+                            nd.setIdNode(Parser.cont++);
+                            nd.addChildren((AST)op1);
+                            nd.addChildren((AST)op2);
+
+                            RESULT = nd;
+                        :}
+    |   E:op1 gte E:op2 {:
+                            AST nd = new AST();
+                            nd.setLabel(">=");
+                            nd.setIdNode(Parser.cont++);
+                            nd.addChildren((AST)op1);
+                            nd.addChildren((AST)op2);
+
+                            RESULT = nd;
+                        :}
+    |   E:op1 lte E:op2 {:
+                            AST nd = new AST();
+                            nd.setLabel("<=");
+                            nd.setIdNode(Parser.cont++);
+                            nd.addChildren((AST)op1);
+                            nd.addChildren((AST)op2);
+
+                            RESULT = nd;
+                        :}
+    |   E:op1 eq E:op2  {:
+                            AST nd = new AST();
+                            nd.setLabel("==");
+                            nd.setIdNode(Parser.cont++);
+                            nd.addChildren((AST)op1);
+                            nd.addChildren((AST)op2);
+
+                            RESULT = nd;
+                        :}
+    |   E:op1 neq E:op2 {:
+                            AST nd = new AST();
+                            nd.setLabel("!=");
+                            nd.setIdNode(Parser.cont++);
+                            nd.addChildren((AST)op1);
+                            nd.addChildren((AST)op2);
+
+                            RESULT = nd;
+                        :}
+    |   E:op1 or E:op2 {:
+                            AST nd = new AST();
+                            nd.setLabel("|");
+                            nd.setIdNode(Parser.cont++);
+                            nd.addChildren((AST)op1);
+                            nd.addChildren((AST)op2);
+
+                            RESULT = nd;
+                        :}
+    |   E:op1 and E:op2 {:
+                            AST nd = new AST();
+                            nd.setLabel("&");
+                            nd.setIdNode(Parser.cont++);
+                            nd.addChildren((AST)op1);
+                            nd.addChildren((AST)op2);
+
+                            RESULT = nd;
+                        :}
+    |   not E:opu       {:
+                            AST nd = new AST();
+                            nd.setLabel("!");
+                            nd.setIdNode(Parser.cont++);
+                            nd.addChildren((AST)opu);
+
+                            RESULT = nd;
+                        :}
+    |   numero:num  {:
+                        AST nd = new AST();
+                        nd.setLabel("Integer");
+                        nd.setIdNode(Parser.cont++);
+                        nd.setValue(num);
+
+                        RESULT = nd;
+                    :}
+    |   flotante:fl {:
+                        AST nd = new AST();
+                        nd.setLabel("Numerico");
+                        nd.setIdNode(Parser.cont++);
+                        nd.setValue(fl);
+
+                        RESULT = nd;
+                    :}
+    |   cadena:cad  {:
+                        AST nd = new AST();
+                        nd.setLabel("String");
+                        nd.setIdNode(Parser.cont++);
+                        nd.setValue(cad);
+
+                        RESULT = nd;
+                    :}
+    |   verdadero {:
+                        AST nd = new AST();
+                        nd.setLabel("True");
+                        nd.setIdNode(Parser.cont++);
+                        nd.setValue("true");
+
+                        RESULT = nd;
+                    :}
+    |   falso   {:
+                    AST nd = new AST();
+                    nd.setLabel("False");
+                    nd.setIdNode(Parser.cont++);
+                    nd.setValue("false");
+
+                    RESULT = nd;
+                :}
+    |   nulo    {:
+                    AST nd = new AST();
+                    nd.setLabel("Null");
+                    nd.setIdNode(Parser.cont++);
+                    nd.setValue("null");
+
+                    RESULT = nd;
+                :}
+;
+
+ASIGN   ::= id:n asign E:exp    {:
+                                    AST ch1 = new AST();
+                                    ch1.setLabel("id");
+                                    ch1.setIdNode(Parser.cont++);
+                                    ch1.setValue(n);
+
+                                    AST nd = new AST();
+                                    nd.setLabel("ASIGN");
+                                    nd.setIdNode(Parser.cont++);
+                                    nd.addChildren(ch1);
+                                    nd.addChildren((AST)exp);
+
+                                    RESULT = nd;
+                                :}
+        |   id:n asign E:exp pyc  {:
+                                    AST ch1 = new AST();
+                                    ch1.setLabel("id");
+                                    ch1.setIdNode(Parser.cont++);
+                                    ch1.setValue(n);
+
+                                    AST nd = new AST();
+                                    nd.setLabel("ASIGN");
+                                    nd.setIdNode(Parser.cont++);
+                                    nd.addChildren(ch1);
+                                    nd.addChildren((AST)exp);
+
+                                    RESULT = nd;
+                                :} 
+;

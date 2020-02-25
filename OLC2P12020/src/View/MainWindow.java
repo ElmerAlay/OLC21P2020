@@ -5,6 +5,13 @@
  */
 package View;
 
+import analizadores.Lexer;
+import analizadores.Parser;
+import structs.Graficar;
+import structs.Recorrido;
+import java.io.BufferedReader;
+import java.io.StringReader;
+
 /**
  *
  * @author junio
@@ -38,6 +45,11 @@ public class MainWindow extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         btn_Run.setText("Run");
+        btn_Run.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_RunActionPerformed(evt);
+            }
+        });
 
         txt_input.setColumns(20);
         txt_input.setRows(5);
@@ -83,6 +95,21 @@ public class MainWindow extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btn_RunActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_RunActionPerformed
+        String input = txt_input.getText();
+        Lexer scanner = new Lexer(new BufferedReader(new StringReader(input)));
+        Parser parser = new Parser(scanner);
+        
+        try {
+            parser.parse();
+            //System.out.println(parser.root.getLabel());
+            Graficar.graficar(Graficar.Recorrido(parser.root),"AST_proyecto");
+            txt_console.setText(new Recorrido().Resultado(parser.root).toString());
+        }catch(Exception e){
+            
+        }
+    }//GEN-LAST:event_btn_RunActionPerformed
 
     /**
      * @param args the command line arguments

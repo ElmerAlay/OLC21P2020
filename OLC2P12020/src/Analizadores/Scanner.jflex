@@ -36,13 +36,37 @@ comentariomulti =   "#*" ~"*#"
     "true"              { return new Symbol(Simbolo.verdadero, yycolumn, yyline, yytext().toLowerCase()); }
     "false"             { return new Symbol(Simbolo.falso, yycolumn, yyline, yytext().toLowerCase()); }
 
+    "+"                 { return new Symbol(Simbolo.plus, yycolumn, yyline, yytext().toLowerCase()); }
+    "-"                 { return new Symbol(Simbolo.minus, yycolumn, yyline, yytext().toLowerCase()); }
+    "*"                 { return new Symbol(Simbolo.mul, yycolumn, yyline, yytext().toLowerCase()); }
+    "/"                 { return new Symbol(Simbolo.div, yycolumn, yyline, yytext().toLowerCase()); }
+    "^"                 { return new Symbol(Simbolo.pot, yycolumn, yyline, yytext().toLowerCase()); }
+    "%%"                { return new Symbol(Simbolo.mod, yycolumn, yyline, yytext().toLowerCase()); }
+
+    "("                 { return new Symbol(Simbolo.ipar, yycolumn, yyline, yytext().toLowerCase()); }
+    ")"                 { return new Symbol(Simbolo.fpar, yycolumn, yyline, yytext().toLowerCase()); }
+
+    ">"                 { return new Symbol(Simbolo.gt, yycolumn, yyline, yytext().toLowerCase()); }
+    "<"                 { return new Symbol(Simbolo.lt, yycolumn, yyline, yytext().toLowerCase()); }
+    ">="                { return new Symbol(Simbolo.gte, yycolumn, yyline, yytext().toLowerCase()); }
+    "<="                { return new Symbol(Simbolo.lte, yycolumn, yyline, yytext().toLowerCase()); }
+    "=="                { return new Symbol(Simbolo.eq, yycolumn, yyline, yytext().toLowerCase()); }
+    "!="                { return new Symbol(Simbolo.neq, yycolumn, yyline, yytext().toLowerCase()); }
+
+    "&"                 { return new Symbol(Simbolo.and, yycolumn, yyline, yytext().toLowerCase()); }
+    "|"                 { return new Symbol(Simbolo.or, yycolumn, yyline, yytext().toLowerCase()); }
+    "!"                 { return new Symbol(Simbolo.not, yycolumn, yyline, yytext().toLowerCase()); }
+
+    "="                 { return new Symbol(Simbolo.asign, yycolumn, yyline, yytext().toLowerCase()); }
+    ";"                 { return new Symbol(Simbolo.pyc, yycolumn, yyline, yytext().toLowerCase()); }
+
     \"                  { 
                             yybegin(STRING); 
                             NuevoString.setLength(0);
                         }
 
     {numero}            { return new Symbol(Simbolo.numero, yycolumn, yyline, yytext().toLowerCase()); }
-    {flotante}            { return new Symbol(Simbolo.flotante, yycolumn, yyline, yytext().toLowerCase()); }
+    {flotante}          { return new Symbol(Simbolo.flotante, yycolumn, yyline, yytext().toLowerCase()); }
     {id}                { return new Symbol(Simbolo.id, yycolumn, yyline, yytext().toLowerCase()); }
     
     {comentariolinea}   { /* ignore */ }
@@ -67,6 +91,7 @@ comentariomulti =   "#*" ~"*#"
     \\t                 { NuevoString.append('\t'); }
     [ \r|\n|\r\n]       { 
                             yybegin(YYINITIAL);
-                            System.out.println("String sin finalizar."); }
+                            System.out.println("String sin finalizar."); 
+                        }
     .                   { NuevoString.append(yytext()); }
 }
