@@ -1,6 +1,8 @@
 package expressions;
 
-import abstracto.ASTNode;
+import abstracto.*;
+import java.util.LinkedList;
+import symbols.Environment;
 
 /**
  *
@@ -17,14 +19,17 @@ public class AND implements ASTNode{
     }
 
     @Override
-    public Object execute() {
-        Object op1 = this.op1.execute();
-        Object op2 = this.op2.execute();
+    public Object execute(Environment environment, LinkedList<TError> LError) {
+        Object op1 = this.op1.execute(environment, LError);
+        Object op2 = this.op2.execute(environment, LError);
         
         if(op1 instanceof Boolean && op2 instanceof Boolean){
             return Boolean.parseBoolean(op1.toString()) && Boolean.parseBoolean(op2.toString());
         }
-         
-        return "Error semántico, no se puede comparar lógicamente esos 2 tipos de datos\n";
+        
+        TError error = new TError("+", "Semántico", "no se puede comparar lógicamente esos 2 tipos de datos", 0, 0);
+        LError.add(error);
+        
+        return error;
     }
 }

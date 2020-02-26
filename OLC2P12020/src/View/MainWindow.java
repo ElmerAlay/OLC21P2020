@@ -5,24 +5,33 @@
  */
 package View;
 
+import abstracto.*;
 import analizadores.Lexer;
 import analizadores.Parser;
 import structs.Graficar;
 import structs.Recorrido;
 import java.io.BufferedReader;
 import java.io.StringReader;
+import java.util.LinkedList;
+import symbols.Environment;
 
 /**
  *
  * @author junio
  */
 public class MainWindow extends javax.swing.JFrame {
-
+    private Environment global; //= new Environment(null);
+    private LinkedList<TError> LError; //= new LinkedList<TError>();
+    private LinkedList<ASTNode> lInst;
+    
     /**
      * Creates new form MainWindow
      */
     public MainWindow() {
         initComponents();
+        global = new Environment(null);
+        LError = new LinkedList<>();
+        lInst = new LinkedList<>();
         txt_console.setEditable(false);
     }
 
@@ -103,9 +112,14 @@ public class MainWindow extends javax.swing.JFrame {
         
         try {
             parser.parse();
-            //System.out.println(parser.root.getLabel());
+            
             Graficar.graficar(Graficar.Recorrido(parser.root),"AST_proyecto");
-            txt_console.setText(new Recorrido().Resultado(parser.root).toString());
+            
+            Recorrido re = new Recorrido(global, LError, lInst);
+            re.Resultado(parser.root);
+            txt_console.setText(global.get("var1").getValue().toString()+"\n");
+            txt_console.setText(LError.getLast().getLexema()+" "+LError.getLast().getDescripcion()+"\n");
+            
         }catch(Exception e){
             
         }

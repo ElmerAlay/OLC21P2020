@@ -1,6 +1,8 @@
 package expressions;
 
-import abstracto.ASTNode;
+import abstracto.*;
+import java.util.LinkedList;
+import symbols.Environment;
 
 /**
  *
@@ -15,7 +17,7 @@ public class Constant implements ASTNode{
     }
 
     @Override
-    public Object execute() {
+    public Object execute(Environment environment, LinkedList<TError> LError) {
         return value;
     }
 }

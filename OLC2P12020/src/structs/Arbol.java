@@ -1,5 +1,6 @@
 package structs;
 
+import symbols.Environment;
 import abstracto.ASTNode;
 import java.util.ArrayList;
 import javafx.scene.Group;
@@ -12,7 +13,7 @@ import javafx.scene.control.TextArea;
 public class Arbol {
     private ArrayList<ASTNode> instrucciones;
     private TextArea consola;
-    private TS global;
+    private Environment global;
     private Group grupo;
     
     public Arbol(ArrayList<ASTNode> instrucciones) {
@@ -35,11 +36,11 @@ public class Arbol {
         this.consola = consola;
     }
 
-    public TS getGlobal() {
+    public Environment getGlobal() {
         return global;
     }
 
-    public void setGlobal(TS global) {
+    public void setGlobal(Environment global) {
         this.global = global;
     }
 

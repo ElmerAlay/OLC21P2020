@@ -41,7 +41,7 @@ terminal nulo, verdadero, falso, uminus;
 terminal pyc, asign;
 terminal String numero, flotante, cadena, id;
 
-non terminal INICIO, E, ASIGN, INST;
+non terminal INICIO, E, ASIGN, INST, LINST;
 
 precedence left  or;
 precedence left  and;
@@ -55,15 +55,34 @@ precedence right uminus;
 
 start with INICIO;
 
-INICIO ::= INST:r  {: 
-                    AST nd = new AST();
-                    nd.setLabel("INICIO");
-                    nd.setIdNode(Parser.cont++);
-                    nd.addChildren((AST)r);
+INICIO ::= LINST:r  {: 
+                        AST nd = new AST();
+                        nd.setLabel("INICIO");
+                        nd.setIdNode(Parser.cont++);
+                        nd.addChildren((AST)r);
 
-                    Parser.root = (AST) nd;
-                    RESULT = nd;
-                :}
+                        Parser.root = (AST) nd;
+                        RESULT = nd;
+                    :}
+;
+
+LINST   ::= LINST:linst INST:inst   {:
+                                        AST nd = new AST();
+                                        nd.setLabel("LINST");
+                                        nd.setIdNode(Parser.cont++);
+                                        nd.addChildren((AST)linst);
+                                        nd.addChildren((AST)inst);
+
+                                        RESULT = nd;
+                                    :}
+        |   INST:inst   {:
+                            AST nd = new AST();
+                            nd.setLabel("LINST");
+                            nd.setIdNode(Parser.cont++);
+                            nd.addChildren((AST)inst);
+
+                            RESULT = nd;
+                        :}
 ;
 
 INST    ::= ASIGN:asig  {:
@@ -269,11 +288,19 @@ E ::=   E:op1 plus E:op2    {:
 
                     RESULT = nd;
                 :}
+    |   id:val  {:
+                    AST nd = new AST();
+                    nd.setLabel("Ref");
+                    nd.setIdNode(Parser.cont++);
+                    nd.setValue(val);
+
+                    RESULT = nd;
+                :}
 ;
 
 ASIGN   ::= id:n asign E:exp    {:
                                     AST ch1 = new AST();
-                                    ch1.setLabel("id");
+                                    ch1.setLabel("ID");
                                     ch1.setIdNode(Parser.cont++);
                                     ch1.setValue(n);
 
@@ -287,7 +314,7 @@ ASIGN   ::= id:n asign E:exp    {:
                                 :}
         |   id:n asign E:exp pyc  {:
                                     AST ch1 = new AST();
-                                    ch1.setLabel("id");
+                                    ch1.setLabel("ID");
                                     ch1.setIdNode(Parser.cont++);
                                     ch1.setValue(n);
 

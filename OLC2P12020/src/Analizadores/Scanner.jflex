@@ -25,7 +25,7 @@ import java_cup.runtime.Symbol;
 
 numero      =   [0-9]+
 flotante    =   {numero}\.{numero}
-id          =   [a-zA-Z]([_.a-zA-Z]|{numero})* | [.a-zA-Z](([_.a-zA-Z]){numero})*
+id          =   [a-zA-Z]([_.a-zA-Z]|{numero})* | "."("."|[a-zA-Z])(("."|[_a-zA-Z])|{numero})*
 comentariolinea =   "#" ~"\n"
 comentariomulti =   "#*" ~"*#"
 

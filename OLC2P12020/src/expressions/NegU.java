@@ -1,6 +1,8 @@
 package expressions;
 
-import abstracto.ASTNode;
+import abstracto.*;
+import java.util.LinkedList;
+import symbols.Environment;
 
 /**
  *
@@ -15,8 +17,8 @@ public class NegU implements ASTNode{
     }
     
     @Override
-    public Object execute() {
-        Object opu = this.opu.execute();
+    public Object execute(Environment environment, LinkedList<TError> LError) {
+        Object opu = this.opu.execute(environment, LError);
         
         if(opu instanceof Float){
             return Float.parseFloat(opu.toString()) * -1;
@@ -24,7 +26,10 @@ public class NegU implements ASTNode{
             return Integer.parseInt(opu.toString()) * -1;
         }
         
-        return "Error semántico, no se puede aplicar negación unaria ese tipo de dato\n";
+        TError error = new TError("+", "Semántico", "no se puede aplicar negación unaria ese tipo de dato", 0, 0);
+        LError.add(error);
+        
+        return error;
     }
     
 }

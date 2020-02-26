@@ -1,4 +1,4 @@
-package structs;
+package symbols;
 
 /**
  *
@@ -7,8 +7,9 @@ package structs;
 public class Type {
     
     public static enum Types {
-        NUMERO,
-        CADENA,
+        NUMERICO,
+        INTEGER,
+        STRING,
         BOOLEANO,
         VOID,
         LISTA
@@ -26,6 +27,10 @@ public class Type {
         this.typeObject = typeObject;
     }
     
+    /**
+     * Nos devuelve una cadena con el tipo de dato y el tipo de objeto si existiera
+     * @return String con los tipos
+     */
     @Override
     public String toString() {
         if (typeObject == null) {
@@ -34,6 +39,12 @@ public class Type {
         return this.types + ":" + this.typeObject;
     }
     
+    /**
+     * Compara la variable type si son tipos primitivos
+     * de lo contrario compara la variable typeObject si se trata de tipos compuestos
+     * @param obj Tipo con el que queremos comparar a nuestro objeto type
+     * @return true si los 2 tipos son iguales
+     */
     public boolean equals(Type obj) {
         if (this.typeObject == null && obj.typeObject == null) {
             return this.types == obj.types;

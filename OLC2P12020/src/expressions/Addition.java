@@ -1,6 +1,8 @@
 package expressions;
 
-import abstracto.ASTNode;
+import abstracto.*;
+import java.util.LinkedList;
+import symbols.Environment;
 
 /**
  *
@@ -18,9 +20,9 @@ public class Addition implements ASTNode{
     }
     
     @Override
-    public Object execute() {
-        Object op1 = this.op1.execute();
-        Object op2 = this.op2.execute();
+    public Object execute(Environment environment, LinkedList<TError> LError) {
+        Object op1 = this.op1.execute(environment, LError);
+        Object op2 = this.op2.execute(environment, LError);
         
         if(op1 instanceof String || op2 instanceof String){
             return "" + op1 + op2;
@@ -30,7 +32,11 @@ public class Addition implements ASTNode{
         }else if((op1 instanceof Integer && op2 instanceof Integer)){
             return Integer.parseInt(op1.toString()) + Integer.parseInt(op2.toString());
         }
-        return "Error semántico, no se puede operar esos 2 tipos de datos\n";
+     
+        TError error = new TError("+", "Semántico", "no se puede sumar esos 2 tipos de datos", 0, 0);
+        LError.add(error);
+        
+        return error;
     }
     
 }

@@ -1,16 +1,33 @@
 package structs;
 
 import abstracto.ASTNode;
+import abstracto.TError;
 import expressions.*;
+import instructions.*;
+import java.util.LinkedList;
+import symbols.*;
 
 /**
  *
  * @author junio
  */
 public class Recorrido {
-    public Object Resultado(AST root){
-        return getExpression(root).execute();
+    private Environment global; //= new Environment(null);
+    private LinkedList<TError> LError; //= new LinkedList<TError>();
+    private LinkedList<ASTNode> lInst;
+
+    public Recorrido(Environment global, LinkedList<TError> LError, LinkedList<ASTNode> lInst) {
+        this.global = global;
+        this.LError = LError;
+        this.lInst = lInst;
+    }
+    
+    public void Resultado(AST root){
+        for(ASTNode exp : getInstruccions(root, lInst)){
+            exp.execute(global, LError);
+        }
         
+        //return global;
     }
     
     private ASTNode getExpression(AST root){
@@ -26,10 +43,10 @@ public class Recorrido {
                     return new Constant(true);
                 else if(root.getLabel().equals("False"))
                     return new Constant(false);
+                else if(root.getLabel().equals("Ref"))
+                    return new VarRef(root.getValue());
             case 1:
-                if(root.getLabel().equals("INICIO"))
-                    return getExpression(root.getChildren().get(0));
-                else if(root.getLabel().equals("-")){
+                if(root.getLabel().equals("-")){
                     ASTNode opu = getExpression(root.getChildren().get(0));
                     return new NegU(opu);
                 }else if(root.getLabel().equals("!")){
@@ -95,9 +112,31 @@ public class Recorrido {
                     ASTNode op1 = getExpression(root.getChildren().get(0));
                     ASTNode op2 = getExpression(root.getChildren().get(1));
                     return new AND(op1, op2);
-                }
+                }else if(root.getLabel().equals("ASIGN")){
+                    ASTNode op1 = getExpression(root.getChildren().get(1));
+                    return new VarAssig(root.getChildren().get(0).getValue(), op1);
+                } 
         }
         
+        return null;
+    }
+    
+    private LinkedList<ASTNode> getInstruccions(AST root, LinkedList<ASTNode> lInst){
+        switch(root.getChildren().size()){
+            case 1:
+                if(root.getLabel().equals("INICIO")){
+                    return getInstruccions(root.getChildren().get(0), lInst);
+                }else if(root.getLabel().equals("LINST")){
+                    lInst.add(getExpression(root.getChildren().get(0)));
+                    return lInst;
+                }
+            case 2:
+                if(root.getLabel().equals("LINST")){
+                    lInst = getInstruccions(root.getChildren().get(0), lInst);
+                    lInst.add(getExpression(root.getChildren().get(1)));
+                    return lInst;
+                }
+        }
         return null;
     }
 }
