@@ -41,7 +41,7 @@ public class Equals implements ASTNode{
                 return false;
         }
          
-        TError error = new TError("+", "Semántico", "no se puede comparar lógicamente esos 2 tipos de datos", 0, 0);
+        TError error = new TError("==", "Semántico", "no se puede comparar lógicamente esos 2 tipos de datos", 0, 0);
         LError.add(error);
         
         return error;

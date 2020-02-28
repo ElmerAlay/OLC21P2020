@@ -20,13 +20,15 @@ public class Pot implements ASTNode{
 
     @Override
     public Object execute(Environment environment, LinkedList<TError> LError) {
-        Object op1 = this.op1.execute(environment, LError);
-        Object op2 = this.op2.execute(environment, LError);
+        Object ope1 = this.op1.execute(environment, LError);
+        Object ope2 = this.op2.execute(environment, LError);
         
-        if(((op1 instanceof Float || op1 instanceof Integer) && (op2 instanceof Float || op2 instanceof Integer)))
-            return Math.pow(Float.parseFloat(op1.toString()), Float.parseFloat(op2.toString()));
+        if((ope1 instanceof Float || ope1 instanceof Integer) && (ope2 instanceof Float || ope2 instanceof Integer)){
+            Double result = Math.pow(Float.parseFloat(ope1.toString()), Float.parseFloat(ope2.toString()));
+            return Float.parseFloat(result.toString());
+        }
         
-        TError error = new TError("+", "Semántico", "no se puede realizar potencia a esos 2 tipos de datos", 0, 0);
+        TError error = new TError("^", "Semántico", "no se puede realizar potencia a esos 2 tipos de datos", 0, 0);
         LError.add(error);
         
         return error;

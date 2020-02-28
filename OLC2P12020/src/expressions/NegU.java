@@ -26,7 +26,7 @@ public class NegU implements ASTNode{
             return Integer.parseInt(opu.toString()) * -1;
         }
         
-        TError error = new TError("+", "Semántico", "no se puede aplicar negación unaria ese tipo de dato", 0, 0);
+        TError error = new TError("-", "Semántico", "no se puede aplicar negación unaria ese tipo de dato", 0, 0);
         LError.add(error);
         
         return error;

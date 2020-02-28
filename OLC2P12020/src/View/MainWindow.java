@@ -14,6 +14,10 @@ import java.io.BufferedReader;
 import java.io.StringReader;
 import java.util.LinkedList;
 import symbols.Environment;
+import symbols.Vec;
+import expressions.*;
+import instructions.StructAssig;
+import instructions.VarAssig;
 
 /**
  *
@@ -29,9 +33,6 @@ public class MainWindow extends javax.swing.JFrame {
      */
     public MainWindow() {
         initComponents();
-        global = new Environment(null);
-        LError = new LinkedList<>();
-        lInst = new LinkedList<>();
         txt_console.setEditable(false);
     }
 
@@ -115,14 +116,39 @@ public class MainWindow extends javax.swing.JFrame {
             
             Graficar.graficar(Graficar.Recorrido(parser.root),"AST_proyecto");
             
+            global = new Environment(null);
+            LError = new LinkedList<>();
+            lInst = new LinkedList<>();
+            
             Recorrido re = new Recorrido(global, LError, lInst);
             re.Resultado(parser.root);
-            txt_console.setText(global.get("var1").getValue().toString()+"\n");
+            txt_console.setText(((Vec)global.get("var1").getValue()).getValues()[3].toString()+"\n");
             txt_console.setText(LError.getLast().getLexema()+" "+LError.getLast().getDescripcion()+"\n");
             
         }catch(Exception e){
             
         }
+        
+        /*global = new Environment(null);
+        LError = new LinkedList<>();
+        VarAssig var1 = new VarAssig("var1", new Constant(Float.parseFloat("4.6")));
+        var1.execute(global, LError);
+        LinkedList<ASTNode> l = new LinkedList<>();
+        l.add(new Constant(4));
+        StructAssig asig = new StructAssig("var1", new Constant(true), l);
+        asig.execute(global, LError);
+        l.add(new Constant(2));
+        StructAssig asig2 = new StructAssig("var1", new Constant("hola"), l);
+        asig2.execute(global, LError);
+        int tam = ((Vec)global.get("var1").getValue()).getValues().length;
+        Object v[] = ((Vec)global.get("var1").getValue()).getValues();
+        
+        System.out.println("Tamaño:" + tam + " Tipo: " + global.get("var1").getType().getTypes());
+        for(int i = 0; i < tam; i++){
+            //txt_console.setText(v[i].toString() + " ");
+            System.out.println(v[i].toString());
+        }*/
+        
     }//GEN-LAST:event_btn_RunActionPerformed
 
     /**

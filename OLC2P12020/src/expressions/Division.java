@@ -31,7 +31,7 @@ public class Division implements ASTNode{
                 return Integer.parseInt(op1.toString()) / Integer.parseInt(op2.toString());
             }
         else {
-            TError error = new TError("+", "Semántico", "no se puede dividir dentro de 0", 0, 0);
+            TError error = new TError("/", "Semántico", "no se puede dividir dentro de 0", 0, 0);
             LError.add(error);
 
             return error;

@@ -1,41 +1,35 @@
 digraph G { node[shape=oval, style=filled, collor=coral]; edge[color=chartreuse3]; rankdir=UD 
 
-"23" [label="INICIO"]
-"22" [label="LINST"]
-"23" -> "22"
-"22" [label="LINST"]
-"14" [label="LINST"]
-"22" -> "14"
-"14" [label="LINST"]
-"13" [label="ASIGN"]
-"14" -> "13"
-"13" [label="ASIGN"]
-"12" [label="ID_var2"]
-"13" -> "12"
-"13" [label="ASIGN"]
-"11" [label="Integer_12"]
-"13" -> "11"
-"22" [label="LINST"]
-"21" [label="ASIGN"]
-"22" -> "21"
-"21" [label="ASIGN"]
-"20" [label="ID_var1"]
-"21" -> "20"
-"21" [label="ASIGN"]
-"19" [label="*"]
-"21" -> "19"
-"19" [label="*"]
-"17" [label="*"]
-"19" -> "17"
-"17" [label="*"]
-"15" [label="Ref_var2"]
-"17" -> "15"
-"17" [label="*"]
-"16" [label="Integer_3"]
-"17" -> "16"
-"19" [label="*"]
-"18" [label="String_hola"]
-"19" -> "18"
+"10" [label="INICIO"]
+"9" [label="LINST"]
+"10" -> "9"
+"9" [label="LINST"]
+"3" [label="LINST"]
+"9" -> "3"
+"3" [label="LINST"]
+"2" [label="ASIGN"]
+"3" -> "2"
+"2" [label="ASIGN"]
+"1" [label="ID_var1"]
+"2" -> "1"
+"2" [label="ASIGN"]
+"0" [label="Integer_2"]
+"2" -> "0"
+"9" [label="LINST"]
+"8" [label="ASIGN"]
+"9" -> "8"
+"8" [label="ASIGN"]
+"7" [label="ID_var1"]
+"8" -> "7"
+"8" [label="ASIGN"]
+"5" [label="LCOR"]
+"8" -> "5"
+"5" [label="LCOR"]
+"4" [label="Integer_4"]
+"5" -> "4"
+"8" [label="ASIGN"]
+"6" [label="String_hola"]
+"8" -> "6"
 
 }
 

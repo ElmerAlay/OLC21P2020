@@ -5,6 +5,7 @@ import java.util.LinkedList;
 import symbols.Environment;
 import symbols.Symbol;
 import symbols.Type;
+import symbols.Vec;
 
 /**
  *
@@ -22,6 +23,7 @@ public class VarAssig implements ASTNode{
     
     @Override
     public Object execute(Environment environment, LinkedList<TError> LError) {
+        
         Object value = exp.execute(environment, LError);    //obtenemos el valor de la expresión
         Type type = new Type(null, "Vector");       //Creamos un nuevo tipo con valores iniciales
         
@@ -35,16 +37,17 @@ public class VarAssig implements ASTNode{
         else if (value instanceof Boolean)
             type.setTypes(Type.Types.BOOLEANO);
         else {
-            TError error = new TError("+", "Semántico", "No se pudo asignar el valor a la variable", 0, 0);
+            TError error = new TError(name, "Semántico", "No se pudo asignar el valor a la variable", 0, 0);
             LError.add(error);
 
             return error;
         }
         
-        if(environment.get(name) == null) //Significa que no encontró una variable con ese nombre registrado
-            environment.put(new Symbol(type, name, value)); //Entonces lo agregamos a la tabla de simbolos
+        Object[] val = {value};
+        if(environment.get(name) == null) //Significa que no encontró una variable con ese nombre registrado    
+            environment.put(new Symbol(type, name, new Vec(val))); //Entonces lo agregamos a la tabla de simbolos
         else {
-            environment.get(name).setValue(value); //De lo contrario actualizo su valor en la tabla
+            environment.get(name).setValue(new Vec(val)); //De lo contrario actualizo su valor en la tabla
             environment.get(name).setType(type);
         }
         

@@ -3,6 +3,7 @@ package expressions;
 import abstracto.*;
 import java.util.LinkedList;
 import symbols.Environment;
+import symbols.Vec;
 
 /**
  *
@@ -24,7 +25,7 @@ public class VarRef implements ASTNode{
 
             return error;
         }else
-            return environment.get(name).getValue();
+            return ((Vec)environment.get(name).getValue()).getValues()[0];
         
     }
     

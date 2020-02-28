@@ -30,7 +30,7 @@ public class Subtraction implements ASTNode{
             return Integer.parseInt(op1.toString()) - Integer.parseInt(op2.toString());
         }
         
-        TError error = new TError("+", "Semántico", "no se puede restar esos 2 tipos de datos", 0, 0);
+        TError error = new TError("-", "Semántico", "no se puede restar esos 2 tipos de datos", 0, 0);
         LError.add(error);
         
         return error;

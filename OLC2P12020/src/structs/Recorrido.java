@@ -115,7 +115,18 @@ public class Recorrido {
                 }else if(root.getLabel().equals("ASIGN")){
                     ASTNode op1 = getExpression(root.getChildren().get(1));
                     return new VarAssig(root.getChildren().get(0).getValue(), op1);
-                } 
+                }else if(root.getLabel().equals("Struct")){
+                    LinkedList<ASTNode> indexes = new LinkedList<>();
+                    indexes = getCor(root.getChildren().get(1), indexes);
+                    return new StructRef(root.getChildren().get(0).getValue(), indexes);
+                }
+            case 3:
+                if(root.getLabel().equals("ASIGN")){
+                    ASTNode op1 = getExpression(root.getChildren().get(2));
+                    LinkedList<ASTNode> indexes = new LinkedList<>();
+                    indexes = getCor(root.getChildren().get(1), indexes);
+                    return new StructAssig(root.getChildren().get(0).getValue(), op1, indexes);
+                }
         }
         
         return null;
@@ -135,6 +146,25 @@ public class Recorrido {
                     lInst = getInstruccions(root.getChildren().get(0), lInst);
                     lInst.add(getExpression(root.getChildren().get(1)));
                     return lInst;
+                }
+        }
+        return null;
+    }
+    
+    private LinkedList<ASTNode> getCor(AST root, LinkedList<ASTNode> lCor){
+        switch(root.getChildren().size()){
+            case 1:
+                if(root.getLabel().equals("LCOR")){
+                    lCor.add(getExpression(root.getChildren().get(0)));
+                    
+                    return lCor;
+                }
+            case 2:
+                if(root.getLabel().equals("LCOR")){
+                    lCor = getCor(root.getChildren().get(0), lCor);
+                    lCor.add(getExpression(root.getChildren().get(1)));
+                    
+                    return lCor;
                 }
         }
         return null;

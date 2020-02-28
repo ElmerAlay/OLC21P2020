@@ -27,7 +27,7 @@ public class OR implements ASTNode{
             return Boolean.parseBoolean(op1.toString()) || Boolean.parseBoolean(op2.toString());
         }
          
-        TError error = new TError("+", "Semántico", "no se puede comparar lógicamente esos 2 tipos de datos", 0, 0);
+        TError error = new TError("|", "Semántico", "no se puede comparar lógicamente esos 2 tipos de datos", 0, 0);
         LError.add(error);
         
         return error;

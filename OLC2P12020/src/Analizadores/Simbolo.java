@@ -8,35 +8,37 @@ package analizadores;
 /** CUP generated class containing symbol constants. */
 public class Simbolo {
   /* terminals */
-  public static final int pyc = 23;
-  public static final int cadena = 27;
-  public static final int lte = 13;
+  public static final int pyc = 25;
+  public static final int cadena = 29;
+  public static final int lte = 15;
   public static final int minus = 3;
-  public static final int not = 18;
+  public static final int not = 20;
   public static final int ipar = 8;
-  public static final int numero = 25;
+  public static final int numero = 27;
   public static final int pot = 6;
-  public static final int lt = 11;
-  public static final int flotante = 26;
-  public static final int gte = 12;
-  public static final int or = 16;
-  public static final int uminus = 22;
-  public static final int nulo = 19;
+  public static final int lt = 13;
+  public static final int flotante = 28;
+  public static final int gte = 14;
+  public static final int fcor = 11;
+  public static final int or = 18;
+  public static final int uminus = 24;
+  public static final int nulo = 21;
   public static final int div = 5;
   public static final int EOF = 0;
-  public static final int verdadero = 20;
-  public static final int gt = 10;
-  public static final int id = 28;
+  public static final int verdadero = 22;
+  public static final int gt = 12;
+  public static final int id = 30;
   public static final int error = 1;
   public static final int fpar = 9;
-  public static final int asign = 24;
+  public static final int icor = 10;
+  public static final int asign = 26;
   public static final int plus = 2;
-  public static final int neq = 15;
+  public static final int neq = 17;
   public static final int mul = 4;
-  public static final int falso = 21;
+  public static final int falso = 23;
   public static final int mod = 7;
-  public static final int and = 17;
-  public static final int eq = 14;
+  public static final int and = 19;
+  public static final int eq = 16;
   public static final String[] terminalNames = new String[] {
   "EOF",
   "error",
@@ -48,6 +50,8 @@ public class Simbolo {
   "mod",
   "ipar",
   "fpar",
+  "icor",
+  "fcor",
   "gt",
   "lt",
   "gte",

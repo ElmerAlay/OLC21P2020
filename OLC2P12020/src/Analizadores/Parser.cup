@@ -34,14 +34,15 @@ action code
 :}
 
 
-terminal plus, minus, mul, div, pot, mod, ipar, fpar;
+terminal plus, minus, mul, div, pot, mod;
+terminal ipar, fpar, icor, fcor;
 terminal gt, lt, gte, lte, eq, neq;
 terminal or, and, not;
 terminal nulo, verdadero, falso, uminus;
 terminal pyc, asign;
 terminal String numero, flotante, cadena, id;
 
-non terminal INICIO, E, ASIGN, INST, LINST;
+non terminal INICIO, E, ASIGN, INST, LINST, LCOR;
 
 precedence left  or;
 precedence left  and;
@@ -85,8 +86,11 @@ LINST   ::= LINST:linst INST:inst   {:
                         :}
 ;
 
-INST    ::= ASIGN:asig  {:
-                            RESULT = (AST)asig;
+INST    ::= ASIGN:asig  pyc {:
+                                RESULT = (AST)asig;
+                            :}
+        |   ASIGN:asig  {:
+                                RESULT = (AST)asig;
                         :}
 ;
 
@@ -296,6 +300,39 @@ E ::=   E:op1 plus E:op2    {:
 
                     RESULT = nd;
                 :}
+    |   id:val LCOR:lcor    {:
+                                AST n = new AST();
+                                n.setLabel("Ref");
+                                n.setIdNode(Parser.cont++);
+                                n.setValue(val);
+
+                                AST nd = new AST();
+                                nd.setLabel("Struct");
+                                nd.setIdNode(Parser.cont++);
+                                nd.addChildren(n);
+                                nd.addChildren((AST)lcor);
+
+                                RESULT = nd;
+                            :}
+;
+
+LCOR    ::= LCOR:lcor icor E:exp fcor   {:
+                                            AST nd = new AST();
+                                            nd.setLabel("LCOR");
+                                            nd.setIdNode(Parser.cont++);
+                                            nd.addChildren((AST)lcor);
+                                            nd.addChildren((AST)exp);
+
+                                            RESULT = nd;
+                                        :}
+        |   icor E:exp fcor {:
+                                AST nd = new AST();
+                                nd.setLabel("LCOR");
+                                nd.setIdNode(Parser.cont++);
+                                nd.addChildren((AST)exp);
+
+                                RESULT = nd;
+                            :}
 ;
 
 ASIGN   ::= id:n asign E:exp    {:
@@ -312,18 +349,19 @@ ASIGN   ::= id:n asign E:exp    {:
 
                                     RESULT = nd;
                                 :}
-        |   id:n asign E:exp pyc  {:
-                                    AST ch1 = new AST();
-                                    ch1.setLabel("ID");
-                                    ch1.setIdNode(Parser.cont++);
-                                    ch1.setValue(n);
+        |   id:n LCOR:index asign E:exp {:
+                                            AST ch1 = new AST();
+                                            ch1.setLabel("ID");
+                                            ch1.setIdNode(Parser.cont++);
+                                            ch1.setValue(n);
 
-                                    AST nd = new AST();
-                                    nd.setLabel("ASIGN");
-                                    nd.setIdNode(Parser.cont++);
-                                    nd.addChildren(ch1);
-                                    nd.addChildren((AST)exp);
+                                            AST nd = new AST();
+                                            nd.setLabel("ASIGN");
+                                            nd.setIdNode(Parser.cont++);
+                                            nd.addChildren(ch1);
+                                            nd.addChildren((AST)index);
+                                            nd.addChildren((AST)exp);
 
-                                    RESULT = nd;
-                                :} 
+                                            RESULT = nd;
+                                        :}                        
 ;

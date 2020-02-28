@@ -25,7 +25,7 @@ import java_cup.runtime.Symbol;
 
 numero      =   [0-9]+
 flotante    =   {numero}\.{numero}
-id          =   [a-zA-Z]([_.a-zA-Z]|{numero})* | "."("."|[a-zA-Z])(("."|[_a-zA-Z])|{numero})*
+id          =   [a-zA-Z]([_.a-zA-Z]|{numero})* | "."("."|[_a-zA-Z])(("."|[_a-zA-Z])|{numero})*
 comentariolinea =   "#" ~"\n"
 comentariomulti =   "#*" ~"*#"
 
@@ -45,6 +45,8 @@ comentariomulti =   "#*" ~"*#"
 
     "("                 { return new Symbol(Simbolo.ipar, yycolumn, yyline, yytext().toLowerCase()); }
     ")"                 { return new Symbol(Simbolo.fpar, yycolumn, yyline, yytext().toLowerCase()); }
+    "["                 { return new Symbol(Simbolo.icor, yycolumn, yyline, yytext().toLowerCase()); }
+    "]"                 { return new Symbol(Simbolo.fcor, yycolumn, yyline, yytext().toLowerCase()); }
 
     ">"                 { return new Symbol(Simbolo.gt, yycolumn, yyline, yytext().toLowerCase()); }
     "<"                 { return new Symbol(Simbolo.lt, yycolumn, yyline, yytext().toLowerCase()); }
@@ -89,7 +91,8 @@ comentariomulti =   "#*" ~"*#"
     \\n                 { NuevoString.append('\n'); }
     \\r                 { NuevoString.append('\r'); }
     \\t                 { NuevoString.append('\t'); }
-    [ \r|\n|\r\n]       { 
+    [ ]                 { NuevoString.append(' '); }
+    [\r|\n|\r\n]        { 
                             yybegin(YYINITIAL);
                             System.out.println("String sin finalizar."); 
                         }
