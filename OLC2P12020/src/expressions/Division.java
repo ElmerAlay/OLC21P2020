@@ -3,6 +3,7 @@ package expressions;
 import abstracto.*;
 import java.util.LinkedList;
 import symbols.Environment;
+import symbols.Vec;
 
 /**
  *
@@ -23,22 +24,145 @@ public class Division implements ASTNode{
         Object op1 = this.op1.execute(environment,LError);
         Object op2 = this.op2.execute(environment,LError);
         
-        if(!op2.toString().equals("0"))
-            if((op1 instanceof Float && (op2 instanceof Float || op2 instanceof Integer)) || 
-               (op2 instanceof Float && (op1 instanceof Float || op1 instanceof Integer))){
-                return Float.parseFloat(op1.toString()) / Float.parseFloat(op2.toString());
-            }else if((op1 instanceof Integer && op2 instanceof Integer)){
-                return Integer.parseInt(op1.toString()) / Integer.parseInt(op2.toString());
-            }
-        else {
-            TError error = new TError("/", "Semántico", "no se puede dividir dentro de 0", 0, 0);
-            LError.add(error);
+        
+        //Primero verifico que los 2 operadores sean de tipo vector
+        if(op1 instanceof Vec && op2 instanceof Vec){
+            Object vec1[] = ((Vec)op1).getValues();
+            Object vec2[] = ((Vec)op2).getValues();
+            
+            //Verifico si el 1er vector es de tamaño 1 y el 2do también
+            if (vec1.length==1 && vec2.length==1) {
+                if(!vec2[0].toString().equals("0")){
+                    if((vec1[0] instanceof Float && (vec2[0] instanceof Float || vec2[0] instanceof Integer)) || 
+                        (vec2[0] instanceof Float && (vec1[0] instanceof Float || vec1[0] instanceof Integer))){
+                        Object result[] = { Float.parseFloat(vec1[0].toString()) / Float.parseFloat(vec2[0].toString()) };
+                        return new Vec(result);
+                    }else if((vec1[0] instanceof Integer && vec2[0] instanceof Integer)){
+                        Object result[] = {Integer.parseInt(vec1[0].toString()) / Integer.parseInt(vec2[0].toString())};
+                        return new Vec(result);
+                    }else{
+                        TError error = new TError("/", "Semántico", "no se puede dividir esos 2 tipos de datos", 0, 0);
+                        LError.add(error);
 
-            return error;
+                        return error;
+                    }
+                }else{
+                    TError error = new TError("/", "Semántico", "no se puede dividir dentro de 0", 0, 0);
+                    LError.add(error);
+
+                    return error;
+                }
+            }
+            //Verifico que los 2 vectores sean del mismo tamaño pero que no sean 1
+            else if(vec1.length==vec2.length){
+                boolean flag = true;
+                Object result[] = new Object[vec1.length];
+                
+                //Recorrro los vectores y opero
+                for(int i=0; i<vec1.length; i++){
+                    if(!vec2[i].toString().equals("0")){
+                        if((vec1[i] instanceof Float && (vec2[i] instanceof Float || vec2[i] instanceof Integer)) || 
+                            (vec2[i] instanceof Float && (vec1[i] instanceof Float || vec1[i] instanceof Integer))){
+                            result[i] = Float.parseFloat(vec1[i].toString()) / Float.parseFloat(vec2[i].toString());
+                        }else if((vec1[i] instanceof Integer && vec2[i] instanceof Integer)){
+                            result[i] = Integer.parseInt(vec1[i].toString()) / Integer.parseInt(vec2[i].toString());
+                        }else{
+                            flag = false;
+                            break;
+                        }
+                    }else{
+                        flag = false;
+                        break;
+                    }
+                }
+                
+                //Verifico el valor de la variable flag
+                if(flag){
+                    return new Vec(result);
+                }else{
+                    TError error = new TError("/", "Semántico", "no se puede dividir esos 2 tipos de datos o no se puede dividir dentro de 0", 0, 0);
+                    LError.add(error);
+
+                    return error;
+                }
+            }
+            //verifico que el 1er vector sea 1 y el segundo sea de mayor tamaño
+            else if(vec1.length==1 && vec2.length>1){
+                boolean flag = true;
+                Object result[] = new Object[vec2.length];
+                
+                //Recorrro los vectores y opero
+                for(int i=0; i<vec2.length; i++){
+                    if(!vec2[i].toString().equals("0")){
+                        if((vec1[0] instanceof Float && (vec2[i] instanceof Float || vec2[i] instanceof Integer)) || 
+                            (vec2[i] instanceof Float && (vec1[0] instanceof Float || vec1[0] instanceof Integer))){
+                            result[i] = Float.parseFloat(vec1[0].toString()) / Float.parseFloat(vec2[i].toString());
+                        }else if((vec1[i] instanceof Integer && vec2[i] instanceof Integer)){
+                            result[i] = Integer.parseInt(vec1[0].toString()) / Integer.parseInt(vec2[i].toString());
+                        }else{
+                            flag = false;
+                            break;
+                        }
+                    }else{
+                        flag = false;
+                        break;
+                    }
+                }
+                
+                //Verifico el valor de la variable flag
+                if(flag){
+                    return new Vec(result);
+                }else{
+                    TError error = new TError("/", "Semántico", "no se puede dividir esos 2 tipos de datos o no se puede dividir dentro de 0", 0, 0);
+                    LError.add(error);
+
+                    return error;
+                }
+            }
+            //Verifico que el primer vector sea de tamaño n y el vector 2 sea tamaño 1
+            else if(vec1.length>1 && vec2.length==1){
+                boolean flag = true;
+                Object result[] = new Object[vec1.length];
+                
+                //Recorrro los vectores y opero
+                for(int i=0; i<vec1.length; i++){
+                    if(!vec2[0].toString().equals("0")){
+                        if((vec1[i] instanceof Float && (vec2[0] instanceof Float || vec2[0] instanceof Integer)) || 
+                            (vec2[0] instanceof Float && (vec1[i] instanceof Float || vec1[i] instanceof Integer))){
+                            result[i] = Float.parseFloat(vec1[i].toString()) / Float.parseFloat(vec2[0].toString());
+                        }else if((vec1[i] instanceof Integer && vec2[i] instanceof Integer)){
+                            result[i] = Integer.parseInt(vec1[i].toString()) / Integer.parseInt(vec2[0].toString());
+                        }else{
+                            flag = false;
+                            break;
+                        }
+                    }else{
+                        flag = false;
+                        break;
+                    }
+                }
+                
+                //Verifico el valor de la variable flag
+                if(flag){
+                    return new Vec(result);
+                }else{
+                    TError error = new TError("/", "Semántico", "no se puede dividir esos 2 tipos de datos", 0, 0);
+                    LError.add(error);
+
+                    return error;
+                }
+            }
+            //Por último es el caso en el que los vectores son de distinto tamaño
+            else{
+                TError error = new TError("/", "Semántico", "no se puede dividir 2 vectores de distinto tamaño", 0, 0);
+                LError.add(error);
+
+                return error;
+            }
         }
         
         
-        TError error = new TError("+", "Semántico", "no se puede dividir esos 2 tipos de datos", 0, 0);
+        TError error = new TError("/", "Semántico", "no se puede dividir esos 2 tipos de datos", 0, 0);
         LError.add(error);
         
         return error;

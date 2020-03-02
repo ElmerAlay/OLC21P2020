@@ -3,6 +3,7 @@ package expressions;
 import abstracto.*;
 import java.util.LinkedList;
 import symbols.Environment;
+import symbols.Vec;
 
 /**
  *
@@ -18,6 +19,7 @@ public class Constant implements ASTNode{
 
     @Override
     public Object execute(Environment environment, LinkedList<TError> LError) {
-        return value;
+        Object val[] = { value };
+        return new Vec(val);
     }
 }

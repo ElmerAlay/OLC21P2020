@@ -123,7 +123,7 @@ public class MainWindow extends javax.swing.JFrame {
             Recorrido re = new Recorrido(global, LError, lInst);
             re.Resultado(parser.root);
             txt_console.setText(((Vec)global.get("var1").getValue()).getValues()[3].toString()+"\n");
-            txt_console.setText(LError.getLast().getLexema()+" "+LError.getLast().getDescripcion()+"\n");
+            txt_console.setText(LError.getLast().getLexema()+" "+LError.getFirst().getDescripcion()+"\n");
             
         }catch(Exception e){
             
@@ -131,15 +131,20 @@ public class MainWindow extends javax.swing.JFrame {
         
         /*global = new Environment(null);
         LError = new LinkedList<>();
-        VarAssig var1 = new VarAssig("var1", new Constant(Float.parseFloat("4.6")));
+        Addition a = new Addition(new Constant(5), new Constant(Float.parseFloat("4.6")));
+        VarAssig var1 = new VarAssig("var1", a);
         var1.execute(global, LError);
         LinkedList<ASTNode> l = new LinkedList<>();
         l.add(new Constant(4));
         StructAssig asig = new StructAssig("var1", new Constant(true), l);
         asig.execute(global, LError);
         l.add(new Constant(2));
-        StructAssig asig2 = new StructAssig("var1", new Constant("hola"), l);
+        StructAssig asig2 = new StructAssig("var1", new Constant(5), l);
         asig2.execute(global, LError);
+        
+        a = new Addition(new VarRef("var1"), new Constant(new Float("5.5")));
+        var1 = new VarAssig("var1", a);
+        var1.execute(global, LError);
         int tam = ((Vec)global.get("var1").getValue()).getValues().length;
         Object v[] = ((Vec)global.get("var1").getValue()).getValues();
         
@@ -147,8 +152,11 @@ public class MainWindow extends javax.swing.JFrame {
         for(int i = 0; i < tam; i++){
             //txt_console.setText(v[i].toString() + " ");
             System.out.println(v[i].toString());
-        }*/
+        }
         
+        for(int i=0; i<LError.size(); i++){
+            System.out.println(LError.get(i).getLexema() + " : " + LError.get(i).getDescripcion());
+        }*/
     }//GEN-LAST:event_btn_RunActionPerformed
 
     /**

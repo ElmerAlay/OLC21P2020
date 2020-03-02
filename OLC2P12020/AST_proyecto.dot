@@ -1,35 +1,77 @@
 digraph G { node[shape=oval, style=filled, collor=coral]; edge[color=chartreuse3]; rankdir=UD 
 
-"10" [label="INICIO"]
-"9" [label="LINST"]
-"10" -> "9"
-"9" [label="LINST"]
-"3" [label="LINST"]
-"9" -> "3"
-"3" [label="LINST"]
-"2" [label="ASIGN"]
-"3" -> "2"
-"2" [label="ASIGN"]
-"1" [label="ID_var1"]
-"2" -> "1"
-"2" [label="ASIGN"]
-"0" [label="Integer_2"]
-"2" -> "0"
-"9" [label="LINST"]
-"8" [label="ASIGN"]
-"9" -> "8"
-"8" [label="ASIGN"]
-"7" [label="ID_var1"]
-"8" -> "7"
-"8" [label="ASIGN"]
-"5" [label="LCOR"]
-"8" -> "5"
-"5" [label="LCOR"]
-"4" [label="Integer_4"]
-"5" -> "4"
-"8" [label="ASIGN"]
-"6" [label="String_hola"]
-"8" -> "6"
+"78" [label="INICIO"]
+"77" [label="LINST"]
+"78" -> "77"
+"77" [label="LINST"]
+"67" [label="LINST"]
+"77" -> "67"
+"67" [label="LINST"]
+"57" [label="LINST"]
+"67" -> "57"
+"57" [label="LINST"]
+"56" [label="ASIGN"]
+"57" -> "56"
+"56" [label="ASIGN"]
+"55" [label="ID_var1"]
+"56" -> "55"
+"56" [label="ASIGN"]
+"54" [label="False_false"]
+"56" -> "54"
+"67" [label="LINST"]
+"66" [label="ASIGN"]
+"67" -> "66"
+"66" [label="ASIGN"]
+"65" [label="ID_var1"]
+"66" -> "65"
+"66" [label="ASIGN"]
+"59" [label="LCOR"]
+"66" -> "59"
+"59" [label="LCOR"]
+"58" [label="Integer_4"]
+"59" -> "58"
+"66" [label="ASIGN"]
+"64" [label="!"]
+"66" -> "64"
+"64" [label="!"]
+"63" [label="Struct"]
+"64" -> "63"
+"63" [label="Struct"]
+"62" [label="Ref_var1"]
+"63" -> "62"
+"63" [label="Struct"]
+"61" [label="LCOR"]
+"63" -> "61"
+"61" [label="LCOR"]
+"60" [label="Integer_1"]
+"61" -> "60"
+"77" [label="LINST"]
+"76" [label="ASIGN"]
+"77" -> "76"
+"76" [label="ASIGN"]
+"75" [label="ID_var1"]
+"76" -> "75"
+"76" [label="ASIGN"]
+"69" [label="LCOR"]
+"76" -> "69"
+"69" [label="LCOR"]
+"68" [label="Integer_4"]
+"69" -> "68"
+"76" [label="ASIGN"]
+"74" [label="!"]
+"76" -> "74"
+"74" [label="!"]
+"73" [label="Struct"]
+"74" -> "73"
+"73" [label="Struct"]
+"72" [label="Ref_var1"]
+"73" -> "72"
+"73" [label="Struct"]
+"71" [label="LCOR"]
+"73" -> "71"
+"71" [label="LCOR"]
+"70" [label="Integer_2"]
+"71" -> "70"
 
 }
 
