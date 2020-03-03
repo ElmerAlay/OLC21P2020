@@ -18,6 +18,15 @@ import symbols.Vec;
 import expressions.*;
 import instructions.StructAssig;
 import instructions.VarAssig;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JFileChooser;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
  *
@@ -27,6 +36,8 @@ public class MainWindow extends javax.swing.JFrame {
     private Environment global; //= new Environment(null);
     private LinkedList<TError> LError; //= new LinkedList<TError>();
     private LinkedList<ASTNode> lInst;
+    private String fileName = "";
+    public static String output = "";
     
     /**
      * Creates new form MainWindow
@@ -51,6 +62,10 @@ public class MainWindow extends javax.swing.JFrame {
         jSeparator1 = new javax.swing.JSeparator();
         jScrollPane2 = new javax.swing.JScrollPane();
         txt_console = new javax.swing.JTextArea();
+        btn_open = new javax.swing.JButton();
+        btn_save = new javax.swing.JButton();
+        btn_saveAs = new javax.swing.JButton();
+        btn_clean = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -72,6 +87,34 @@ public class MainWindow extends javax.swing.JFrame {
         txt_console.setRows(5);
         jScrollPane2.setViewportView(txt_console);
 
+        btn_open.setText("Open");
+        btn_open.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_openActionPerformed(evt);
+            }
+        });
+
+        btn_save.setText("Save");
+        btn_save.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_saveActionPerformed(evt);
+            }
+        });
+
+        btn_saveAs.setText("Save As");
+        btn_saveAs.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_saveAsActionPerformed(evt);
+            }
+        });
+
+        btn_clean.setText("Clean");
+        btn_clean.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_cleanActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -79,28 +122,41 @@ public class MainWindow extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 714, Short.MAX_VALUE)
+                    .addComponent(jSeparator1, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
+                        .addComponent(btn_open)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btn_save)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btn_saveAs)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btn_clean)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btn_Run)
-                        .addGap(671, 671, 671))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jSeparator1)
-                            .addComponent(jScrollPane1))
-                        .addContainerGap())))
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(btn_Run, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(btn_open, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btn_save, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btn_saveAs, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(btn_clean, javax.swing.GroupLayout.DEFAULT_SIZE, 43, Short.MAX_VALUE)
+                        .addComponent(btn_Run, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 308, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(16, Short.MAX_VALUE))
         );
 
         pack();
@@ -122,9 +178,11 @@ public class MainWindow extends javax.swing.JFrame {
             
             Recorrido re = new Recorrido(global, LError, lInst);
             re.Resultado(parser.root);
-            txt_console.setText(((Vec)global.get("var1").getValue()).getValues()[3].toString()+"\n");
-            txt_console.setText(LError.getLast().getLexema()+" "+LError.getFirst().getDescripcion()+"\n");
-            
+            //txt_console.setText(((Vec)global.get("var1").getValue()).getValues()[3].toString()+"\n");
+            //txt_console.setText(LError.getLast().getLexema()+" "+LError.getFirst().getDescripcion()+"\n");
+            txt_console.setText(output);
+            output = "";
+            System.out.println(LError.getLast().getLexema()+" "+LError.getFirst().getDescripcion()+"\n");
         }catch(Exception e){
             
         }
@@ -159,6 +217,78 @@ public class MainWindow extends javax.swing.JFrame {
         }*/
     }//GEN-LAST:event_btn_RunActionPerformed
 
+    private void btn_openActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_openActionPerformed
+        JFileChooser fc = new JFileChooser("D:\\Documents\\Universidad\\Compiladores 2\\Proyecto1\\Entradas");
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("Archivos del lenguaje Arit... *.arit", "arit");
+        
+        fc.setFileFilter(filter);
+        int seleccion = fc.showOpenDialog(txt_input);
+        
+        if (seleccion == JFileChooser.APPROVE_OPTION)
+        {
+            File f = fc.getSelectedFile();
+            String data = "";
+           
+            try {
+                Scanner sc = new Scanner(f);
+                
+                while (sc.hasNextLine()) {
+                    data += sc.nextLine();
+                    data += "\n";
+                }
+                
+                fileName = fc.getSelectedFile().getAbsolutePath();
+                txt_input.setText(data);
+            } catch (FileNotFoundException ex) {
+                ex.printStackTrace();
+            }
+        }
+    }//GEN-LAST:event_btn_openActionPerformed
+
+    private void btn_saveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_saveActionPerformed
+        if(fileName.equals("")){
+            saveFile();
+        }else{
+            File f = new File(fileName);
+        
+            try{
+                FileWriter fw = new FileWriter(f);
+                String text = txt_input.getText();
+                fw.write(text);
+                fw.close();
+            }catch(IOException ex){
+                ex.printStackTrace();
+            }
+        }
+    }//GEN-LAST:event_btn_saveActionPerformed
+
+    private void btn_saveAsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_saveAsActionPerformed
+        saveFile();
+    }//GEN-LAST:event_btn_saveAsActionPerformed
+
+    private void btn_cleanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_cleanActionPerformed
+        txt_input.setText("");
+        fileName = "";
+    }//GEN-LAST:event_btn_cleanActionPerformed
+
+    private void saveFile(){
+        JFileChooser fc = new JFileChooser("D:\\Documents\\Universidad\\Compiladores 2\\Proyecto1\\Entradas");
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("Archivos del lenguaje Arit... *.arit", "arit");
+        
+        fc.setFileFilter(filter);
+        fc.showSaveDialog(this);
+        File f = fc.getSelectedFile();
+        
+        try{
+            FileWriter fw = new FileWriter(f);
+            String text = txt_input.getText();
+            fw.write(text);
+            fw.close();
+        }catch(IOException ex){
+            ex.printStackTrace();
+        }
+    }
+    
     /**
      * @param args the command line arguments
      */
@@ -196,6 +326,10 @@ public class MainWindow extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btn_Run;
+    private javax.swing.JButton btn_clean;
+    private javax.swing.JButton btn_open;
+    private javax.swing.JButton btn_save;
+    private javax.swing.JButton btn_saveAs;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JSeparator jSeparator1;

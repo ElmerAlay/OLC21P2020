@@ -39,10 +39,10 @@ terminal ipar, fpar, icor, fcor;
 terminal gt, lt, gte, lte, eq, neq;
 terminal or, and, not;
 terminal nulo, verdadero, falso, uminus;
-terminal pyc, asign;
+terminal pyc, asign, colon;
 terminal String numero, flotante, cadena, id;
 
-non terminal INICIO, E, ASIGN, INST, LINST, LCOR;
+non terminal INICIO, E, ASIGN, INST, LINST, LCOR, LPARAM, LLAMAD;
 
 precedence left  or;
 precedence left  and;
@@ -90,8 +90,14 @@ INST    ::= ASIGN:asig  pyc {:
                                 RESULT = (AST)asig;
                             :}
         |   ASIGN:asig  {:
-                                RESULT = (AST)asig;
+                            RESULT = (AST)asig;
                         :}
+        |   LLAMAD:llamad pyc   {:
+                                    RESULT = (AST)llamad;
+                                :}
+        |   LLAMAD:llamad   {:
+                                RESULT = (AST)llamad;
+                            :}
 ;
 
 E ::=   E:op1 plus E:op2    {:
@@ -314,6 +320,9 @@ E ::=   E:op1 plus E:op2    {:
 
                                 RESULT = nd;
                             :}
+    |   LLAMAD:llam {:
+                        RESULT = (AST)llam;
+                    :}
 ;
 
 LCOR    ::= LCOR:lcor icor E:exp fcor   {:
@@ -333,6 +342,25 @@ LCOR    ::= LCOR:lcor icor E:exp fcor   {:
 
                                 RESULT = nd;
                             :}
+;
+
+LPARAM  ::= LPARAM:lparam colon E:exp   {:
+                                            AST nd = new AST();
+                                            nd.setLabel("LPARAM");
+                                            nd.setIdNode(Parser.cont++);
+                                            nd.addChildren((AST)lparam);
+                                            nd.addChildren((AST)exp);
+
+                                            RESULT = nd;
+                                        :}
+        |   E:exp   {:
+                        AST nd = new AST();
+                        nd.setLabel("LPARAM");
+                        nd.setIdNode(Parser.cont++);
+                        nd.addChildren((AST)exp);
+
+                        RESULT = nd;
+                    :}
 ;
 
 ASIGN   ::= id:n asign E:exp    {:
@@ -364,4 +392,33 @@ ASIGN   ::= id:n asign E:exp    {:
 
                                             RESULT = nd;
                                         :}                        
+;
+
+LLAMAD  ::= id:val ipar LPARAM:lparam fpar  {:
+                                            AST n = new AST();
+                                            n.setLabel("Ref");
+                                            n.setIdNode(Parser.cont++);
+                                            n.setValue(val);
+
+                                            AST nd = new AST();
+                                            nd.setLabel("Llam");
+                                            nd.setIdNode(Parser.cont++);
+                                            nd.addChildren(n);
+                                            nd.addChildren((AST)lparam);
+
+                                            RESULT = nd;
+                                        :}
+    |   id:val ipar fpar    {:
+                                AST n = new AST();
+                                n.setLabel("Ref");
+                                n.setIdNode(Parser.cont++);
+                                n.setValue(val);
+
+                                AST nd = new AST();
+                                nd.setLabel("Llam");
+                                nd.setIdNode(Parser.cont++);
+                                nd.addChildren(n);
+
+                                RESULT = nd;   
+                            :}
 ;

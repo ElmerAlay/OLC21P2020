@@ -119,6 +119,10 @@ public class Recorrido {
                     LinkedList<ASTNode> indexes = new LinkedList<>();
                     indexes = getCor(root.getChildren().get(1), indexes);
                     return new StructRef(root.getChildren().get(0).getValue(), indexes);
+                }else if(root.getLabel().equals("Llam")){
+                    LinkedList<ASTNode> lparam = new LinkedList<>();
+                    lparam = getParam(root.getChildren().get(1), lparam);
+                    return new CallFunc(root.getChildren().get(0).getValue(), lparam);
                 }
             case 3:
                 if(root.getLabel().equals("ASIGN")){
@@ -165,6 +169,25 @@ public class Recorrido {
                     lCor.add(getExpression(root.getChildren().get(1)));
                     
                     return lCor;
+                }
+        }
+        return null;
+    }
+    
+    private LinkedList<ASTNode> getParam(AST root, LinkedList<ASTNode> lparam){
+        switch(root.getChildren().size()){
+            case 1:
+                if(root.getLabel().equals("LPARAM")){
+                    lparam.add(getExpression(root.getChildren().get(0)));
+                    
+                    return lparam;
+                }
+            case 2:
+                if(root.getLabel().equals("LPARAM")){
+                    lparam = getParam(root.getChildren().get(0), lparam);
+                    lparam.add(getExpression(root.getChildren().get(1)));
+                    
+                    return lparam;
                 }
         }
         return null;

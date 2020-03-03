@@ -9,15 +9,15 @@ package analizadores;
 public class Simbolo {
   /* terminals */
   public static final int pyc = 25;
-  public static final int cadena = 29;
+  public static final int cadena = 30;
   public static final int lte = 15;
   public static final int minus = 3;
   public static final int not = 20;
   public static final int ipar = 8;
-  public static final int numero = 27;
+  public static final int numero = 28;
   public static final int pot = 6;
   public static final int lt = 13;
-  public static final int flotante = 28;
+  public static final int flotante = 29;
   public static final int gte = 14;
   public static final int fcor = 11;
   public static final int or = 18;
@@ -27,11 +27,12 @@ public class Simbolo {
   public static final int EOF = 0;
   public static final int verdadero = 22;
   public static final int gt = 12;
-  public static final int id = 30;
+  public static final int id = 31;
   public static final int error = 1;
   public static final int fpar = 9;
   public static final int icor = 10;
   public static final int asign = 26;
+  public static final int colon = 27;
   public static final int plus = 2;
   public static final int neq = 17;
   public static final int mul = 4;
@@ -67,6 +68,7 @@ public class Simbolo {
   "uminus",
   "pyc",
   "asign",
+  "colon",
   "numero",
   "flotante",
   "cadena",

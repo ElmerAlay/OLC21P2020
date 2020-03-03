@@ -61,6 +61,7 @@ comentariomulti =   "#*" ~"*#"
 
     "="                 { return new Symbol(Simbolo.asign, yycolumn, yyline, yytext().toLowerCase()); }
     ";"                 { return new Symbol(Simbolo.pyc, yycolumn, yyline, yytext().toLowerCase()); }
+    ","                 { return new Symbol(Simbolo.colon, yycolumn, yyline, yytext().toLowerCase()); }
 
     \"                  { 
                             yybegin(STRING); 

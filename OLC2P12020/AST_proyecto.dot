@@ -1,77 +1,119 @@
 digraph G { node[shape=oval, style=filled, collor=coral]; edge[color=chartreuse3]; rankdir=UD 
 
-"78" [label="INICIO"]
-"77" [label="LINST"]
-"78" -> "77"
-"77" [label="LINST"]
-"67" [label="LINST"]
-"77" -> "67"
-"67" [label="LINST"]
-"57" [label="LINST"]
-"67" -> "57"
-"57" [label="LINST"]
-"56" [label="ASIGN"]
-"57" -> "56"
-"56" [label="ASIGN"]
-"55" [label="ID_var1"]
-"56" -> "55"
-"56" [label="ASIGN"]
-"54" [label="False_false"]
-"56" -> "54"
-"67" [label="LINST"]
-"66" [label="ASIGN"]
-"67" -> "66"
-"66" [label="ASIGN"]
-"65" [label="ID_var1"]
-"66" -> "65"
-"66" [label="ASIGN"]
-"59" [label="LCOR"]
-"66" -> "59"
-"59" [label="LCOR"]
-"58" [label="Integer_4"]
-"59" -> "58"
-"66" [label="ASIGN"]
-"64" [label="!"]
-"66" -> "64"
-"64" [label="!"]
-"63" [label="Struct"]
-"64" -> "63"
-"63" [label="Struct"]
-"62" [label="Ref_var1"]
-"63" -> "62"
-"63" [label="Struct"]
-"61" [label="LCOR"]
-"63" -> "61"
-"61" [label="LCOR"]
-"60" [label="Integer_1"]
-"61" -> "60"
-"77" [label="LINST"]
-"76" [label="ASIGN"]
-"77" -> "76"
-"76" [label="ASIGN"]
-"75" [label="ID_var1"]
-"76" -> "75"
-"76" [label="ASIGN"]
-"69" [label="LCOR"]
-"76" -> "69"
-"69" [label="LCOR"]
-"68" [label="Integer_4"]
-"69" -> "68"
-"76" [label="ASIGN"]
-"74" [label="!"]
-"76" -> "74"
-"74" [label="!"]
-"73" [label="Struct"]
-"74" -> "73"
-"73" [label="Struct"]
-"72" [label="Ref_var1"]
-"73" -> "72"
-"73" [label="Struct"]
-"71" [label="LCOR"]
-"73" -> "71"
-"71" [label="LCOR"]
-"70" [label="Integer_2"]
-"71" -> "70"
+"129" [label="INICIO"]
+"128" [label="LINST"]
+"129" -> "128"
+"128" [label="LINST"]
+"121" [label="LINST"]
+"128" -> "121"
+"121" [label="LINST"]
+"116" [label="LINST"]
+"121" -> "116"
+"116" [label="LINST"]
+"111" [label="LINST"]
+"116" -> "111"
+"111" [label="LINST"]
+"105" [label="LINST"]
+"111" -> "105"
+"105" [label="LINST"]
+"94" [label="LINST"]
+"105" -> "94"
+"94" [label="LINST"]
+"93" [label="ASIGN"]
+"94" -> "93"
+"93" [label="ASIGN"]
+"92" [label="ID_var1"]
+"93" -> "92"
+"93" [label="ASIGN"]
+"91" [label="Integer_5"]
+"93" -> "91"
+"105" [label="LINST"]
+"104" [label="ASIGN"]
+"105" -> "104"
+"104" [label="ASIGN"]
+"103" [label="ID_var1"]
+"104" -> "103"
+"104" [label="ASIGN"]
+"96" [label="LCOR"]
+"104" -> "96"
+"96" [label="LCOR"]
+"95" [label="Integer_4"]
+"96" -> "95"
+"104" [label="ASIGN"]
+"102" [label="*"]
+"104" -> "102"
+"102" [label="*"]
+"100" [label="Struct"]
+"102" -> "100"
+"100" [label="Struct"]
+"99" [label="Ref_var1"]
+"100" -> "99"
+"100" [label="Struct"]
+"98" [label="LCOR"]
+"100" -> "98"
+"98" [label="LCOR"]
+"97" [label="Integer_1"]
+"98" -> "97"
+"102" [label="*"]
+"101" [label="Integer_4"]
+"102" -> "101"
+"111" [label="LINST"]
+"110" [label="ASIGN"]
+"111" -> "110"
+"110" [label="ASIGN"]
+"109" [label="ID_var1"]
+"110" -> "109"
+"110" [label="ASIGN"]
+"107" [label="LCOR"]
+"110" -> "107"
+"107" [label="LCOR"]
+"106" [label="Integer_2"]
+"107" -> "106"
+"110" [label="ASIGN"]
+"108" [label="String_Hola que tal"]
+"110" -> "108"
+"116" [label="LINST"]
+"115" [label="Llam"]
+"116" -> "115"
+"115" [label="Llam"]
+"114" [label="Ref_print"]
+"115" -> "114"
+"115" [label="Llam"]
+"113" [label="LPARAM"]
+"115" -> "113"
+"113" [label="LPARAM"]
+"112" [label="String_Los valores del vector son: "]
+"113" -> "112"
+"121" [label="LINST"]
+"120" [label="Llam"]
+"121" -> "120"
+"120" [label="Llam"]
+"119" [label="Ref_print"]
+"120" -> "119"
+"120" [label="Llam"]
+"118" [label="LPARAM"]
+"120" -> "118"
+"118" [label="LPARAM"]
+"117" [label="Ref_var1"]
+"118" -> "117"
+"128" [label="LINST"]
+"127" [label="Llam"]
+"128" -> "127"
+"127" [label="Llam"]
+"126" [label="Ref_print"]
+"127" -> "126"
+"127" [label="Llam"]
+"125" [label="LPARAM"]
+"127" -> "125"
+"125" [label="LPARAM"]
+"124" [label="|"]
+"125" -> "124"
+"124" [label="|"]
+"122" [label="True_true"]
+"124" -> "122"
+"124" [label="|"]
+"123" [label="False_false"]
+"124" -> "123"
 
 }
 
