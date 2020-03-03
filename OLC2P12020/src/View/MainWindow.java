@@ -284,6 +284,8 @@ public class MainWindow extends javax.swing.JFrame {
             String text = txt_input.getText();
             fw.write(text);
             fw.close();
+            
+            fileName = fc.getSelectedFile().getAbsolutePath();
         }catch(IOException ex){
             ex.printStackTrace();
         }

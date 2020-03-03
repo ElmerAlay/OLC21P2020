@@ -12,10 +12,9 @@ import symbols.Vec;
  */
 public class Print implements ASTNode{
     private ASTNode exp;
-    private Environment environment;
-    private LinkedList<TError> LError;
 
     public Print(ASTNode exp) {
+        super();
         this.exp = exp;
     }
     

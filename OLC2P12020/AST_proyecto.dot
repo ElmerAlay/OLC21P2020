@@ -1,101 +1,167 @@
 digraph G { node[shape=oval, style=filled, collor=coral]; edge[color=chartreuse3]; rankdir=UD 
 
-"129" [label="INICIO"]
+"137" [label="INICIO"]
+"136" [label="LINST"]
+"137" -> "136"
+"136" [label="LINST"]
 "128" [label="LINST"]
-"129" -> "128"
+"136" -> "128"
 "128" [label="LINST"]
-"121" [label="LINST"]
-"128" -> "121"
-"121" [label="LINST"]
-"116" [label="LINST"]
-"121" -> "116"
-"116" [label="LINST"]
-"111" [label="LINST"]
-"116" -> "111"
-"111" [label="LINST"]
-"105" [label="LINST"]
-"111" -> "105"
-"105" [label="LINST"]
-"94" [label="LINST"]
-"105" -> "94"
-"94" [label="LINST"]
-"93" [label="ASIGN"]
-"94" -> "93"
-"93" [label="ASIGN"]
-"92" [label="ID_var1"]
-"93" -> "92"
-"93" [label="ASIGN"]
-"91" [label="Integer_5"]
-"93" -> "91"
-"105" [label="LINST"]
-"104" [label="ASIGN"]
-"105" -> "104"
-"104" [label="ASIGN"]
-"103" [label="ID_var1"]
-"104" -> "103"
-"104" [label="ASIGN"]
-"96" [label="LCOR"]
+"120" [label="LINST"]
+"128" -> "120"
+"120" [label="LINST"]
+"112" [label="LINST"]
+"120" -> "112"
+"112" [label="LINST"]
+"104" [label="LINST"]
+"112" -> "104"
+"104" [label="LINST"]
+"96" [label="LINST"]
 "104" -> "96"
-"96" [label="LCOR"]
-"95" [label="Integer_4"]
+"96" [label="LINST"]
+"88" [label="LINST"]
+"96" -> "88"
+"88" [label="LINST"]
+"80" [label="LINST"]
+"88" -> "80"
+"80" [label="LINST"]
+"72" [label="LINST"]
+"80" -> "72"
+"72" [label="LINST"]
+"71" [label="ASIGN"]
+"72" -> "71"
+"71" [label="ASIGN"]
+"70" [label="ID_.id"]
+"71" -> "70"
+"71" [label="ASIGN"]
+"69" [label="Integer_5"]
+"71" -> "69"
+"80" [label="LINST"]
+"79" [label="Llam"]
+"80" -> "79"
+"79" [label="Llam"]
+"78" [label="Ref_print"]
+"79" -> "78"
+"79" [label="Llam"]
+"77" [label="LPARAM"]
+"79" -> "77"
+"77" [label="LPARAM"]
+"76" [label="Llam"]
+"77" -> "76"
+"76" [label="Llam"]
+"75" [label="Ref_stringlength"]
+"76" -> "75"
+"76" [label="Llam"]
+"74" [label="LPARAM"]
+"76" -> "74"
+"74" [label="LPARAM"]
+"73" [label="Ref_.id"]
+"74" -> "73"
+"88" [label="LINST"]
+"87" [label="Llam"]
+"88" -> "87"
+"87" [label="Llam"]
+"86" [label="Ref_print"]
+"87" -> "86"
+"87" [label="Llam"]
+"85" [label="LPARAM"]
+"87" -> "85"
+"85" [label="LPARAM"]
+"84" [label="Llam"]
+"85" -> "84"
+"84" [label="Llam"]
+"83" [label="Ref_tolowercase"]
+"84" -> "83"
+"84" [label="Llam"]
+"82" [label="LPARAM"]
+"84" -> "82"
+"82" [label="LPARAM"]
+"81" [label="String_HOLA QUE HaCe"]
+"82" -> "81"
+"96" [label="LINST"]
+"95" [label="Llam"]
 "96" -> "95"
-"104" [label="ASIGN"]
-"102" [label="*"]
-"104" -> "102"
-"102" [label="*"]
-"100" [label="Struct"]
-"102" -> "100"
-"100" [label="Struct"]
-"99" [label="Ref_var1"]
+"95" [label="Llam"]
+"94" [label="Ref_print"]
+"95" -> "94"
+"95" [label="Llam"]
+"93" [label="LPARAM"]
+"95" -> "93"
+"93" [label="LPARAM"]
+"92" [label="Llam"]
+"93" -> "92"
+"92" [label="Llam"]
+"91" [label="Ref_touppercase"]
+"92" -> "91"
+"92" [label="Llam"]
+"90" [label="LPARAM"]
+"92" -> "90"
+"90" [label="LPARAM"]
+"89" [label="String_hola que tal"]
+"90" -> "89"
+"104" [label="LINST"]
+"103" [label="Llam"]
+"104" -> "103"
+"103" [label="Llam"]
+"102" [label="Ref_print"]
+"103" -> "102"
+"103" [label="Llam"]
+"101" [label="LPARAM"]
+"103" -> "101"
+"101" [label="LPARAM"]
+"100" [label="Llam"]
+"101" -> "100"
+"100" [label="Llam"]
+"99" [label="Ref_trunk"]
 "100" -> "99"
-"100" [label="Struct"]
-"98" [label="LCOR"]
+"100" [label="Llam"]
+"98" [label="LPARAM"]
 "100" -> "98"
-"98" [label="LCOR"]
-"97" [label="Integer_1"]
+"98" [label="LPARAM"]
+"97" [label="Numerico_7.4"]
 "98" -> "97"
-"102" [label="*"]
-"101" [label="Integer_4"]
-"102" -> "101"
-"111" [label="LINST"]
-"110" [label="ASIGN"]
+"112" [label="LINST"]
+"111" [label="Llam"]
+"112" -> "111"
+"111" [label="Llam"]
+"110" [label="Ref_print"]
 "111" -> "110"
-"110" [label="ASIGN"]
-"109" [label="ID_var1"]
-"110" -> "109"
-"110" [label="ASIGN"]
-"107" [label="LCOR"]
-"110" -> "107"
-"107" [label="LCOR"]
-"106" [label="Integer_2"]
-"107" -> "106"
-"110" [label="ASIGN"]
-"108" [label="String_Hola que tal"]
-"110" -> "108"
-"116" [label="LINST"]
-"115" [label="Llam"]
-"116" -> "115"
-"115" [label="Llam"]
-"114" [label="Ref_print"]
-"115" -> "114"
-"115" [label="Llam"]
-"113" [label="LPARAM"]
-"115" -> "113"
-"113" [label="LPARAM"]
-"112" [label="String_Los valores del vector son: "]
-"113" -> "112"
-"121" [label="LINST"]
-"120" [label="Llam"]
-"121" -> "120"
-"120" [label="Llam"]
-"119" [label="Ref_print"]
+"111" [label="Llam"]
+"109" [label="LPARAM"]
+"111" -> "109"
+"109" [label="LPARAM"]
+"108" [label="Llam"]
+"109" -> "108"
+"108" [label="Llam"]
+"107" [label="Ref_trunk"]
+"108" -> "107"
+"108" [label="Llam"]
+"106" [label="LPARAM"]
+"108" -> "106"
+"106" [label="LPARAM"]
+"105" [label="Numerico_7.9"]
+"106" -> "105"
+"120" [label="LINST"]
+"119" [label="Llam"]
 "120" -> "119"
-"120" [label="Llam"]
-"118" [label="LPARAM"]
-"120" -> "118"
-"118" [label="LPARAM"]
-"117" [label="Ref_var1"]
-"118" -> "117"
+"119" [label="Llam"]
+"118" [label="Ref_print"]
+"119" -> "118"
+"119" [label="Llam"]
+"117" [label="LPARAM"]
+"119" -> "117"
+"117" [label="LPARAM"]
+"116" [label="Llam"]
+"117" -> "116"
+"116" [label="Llam"]
+"115" [label="Ref_round"]
+"116" -> "115"
+"116" [label="Llam"]
+"114" [label="LPARAM"]
+"116" -> "114"
+"114" [label="LPARAM"]
+"113" [label="Numerico_5.8"]
+"114" -> "113"
 "128" [label="LINST"]
 "127" [label="Llam"]
 "128" -> "127"
@@ -106,14 +172,38 @@ digraph G { node[shape=oval, style=filled, collor=coral]; edge[color=chartreuse3
 "125" [label="LPARAM"]
 "127" -> "125"
 "125" [label="LPARAM"]
-"124" [label="|"]
+"124" [label="Llam"]
 "125" -> "124"
-"124" [label="|"]
-"122" [label="True_true"]
-"124" -> "122"
-"124" [label="|"]
-"123" [label="False_false"]
+"124" [label="Llam"]
+"123" [label="Ref_round"]
 "124" -> "123"
+"124" [label="Llam"]
+"122" [label="LPARAM"]
+"124" -> "122"
+"122" [label="LPARAM"]
+"121" [label="Numerico_5.5"]
+"122" -> "121"
+"136" [label="LINST"]
+"135" [label="Llam"]
+"136" -> "135"
+"135" [label="Llam"]
+"134" [label="Ref_print"]
+"135" -> "134"
+"135" [label="Llam"]
+"133" [label="LPARAM"]
+"135" -> "133"
+"133" [label="LPARAM"]
+"132" [label="Llam"]
+"133" -> "132"
+"132" [label="Llam"]
+"131" [label="Ref_round"]
+"132" -> "131"
+"132" [label="Llam"]
+"130" [label="LPARAM"]
+"132" -> "130"
+"130" [label="LPARAM"]
+"129" [label="Numerico_5.4"]
+"130" -> "129"
 
 }
 
