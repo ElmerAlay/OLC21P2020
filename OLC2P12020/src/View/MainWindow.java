@@ -182,7 +182,10 @@ public class MainWindow extends javax.swing.JFrame {
             //txt_console.setText(LError.getLast().getLexema()+" "+LError.getFirst().getDescripcion()+"\n");
             txt_console.setText(output);
             output = "";
-            System.out.println(LError.getLast().getLexema()+" "+LError.getFirst().getDescripcion()+"\n");
+            
+            for(int i=0; i<LError.size(); i++){
+                System.out.println(LError.get(i).getLexema() + " : " + LError.get(i).getDescripcion());
+            }
         }catch(Exception e){
             
         }

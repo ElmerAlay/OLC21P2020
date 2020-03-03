@@ -9,6 +9,9 @@ import NativeFunctions.ToUpperCase;
 import NativeFunctions.Trunk;
 import abstracto.*;
 import java.util.LinkedList;
+import stadisticFunctions.Mean;
+import stadisticFunctions.Median;
+import stadisticFunctions.Mode;
 import symbols.Environment;
 
 /**
@@ -56,6 +59,12 @@ public class CallFunc implements ASTNode{
             //Verifico que sólo tenga un parámetro
             if(lparam.size()==1)
                 return new Round(lparam.get(0)).execute(environment, LError);
+        }else if(name.equals("mean")){
+            return new Mean(lparam).execute(environment, LError);
+        }else if(name.equals("median")){
+            return new Median(lparam).execute(environment, LError);
+        }else if(name.equals("mode")){
+            return new Mode(lparam).execute(environment, LError);
         }
         
         TError error = new TError(name, "Semántico", "Error de argumentos en la función", 0, 0);
