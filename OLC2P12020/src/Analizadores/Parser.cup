@@ -334,6 +334,20 @@ LCOR    ::= LCOR:lcor icor E:exp fcor   {:
 
                                             RESULT = nd;
                                         :}
+        |   LCOR:lcor icor icor E:exp fcor fcor {:
+                                                    AST n = new AST();
+                                                    n.setLabel("LCOR2");
+                                                    n.setIdNode(Parser.cont++);
+                                                    n.addChildren((AST)exp);
+
+                                                    AST nd = new AST();
+                                                    nd.setLabel("LCOR");
+                                                    nd.setIdNode(Parser.cont++);
+                                                    nd.addChildren((AST)lcor);
+                                                    nd.addChildren((AST)n);
+
+                                                    RESULT = nd;
+                                                :}
         |   icor E:exp fcor {:
                                 AST nd = new AST();
                                 nd.setLabel("LCOR");
@@ -342,6 +356,14 @@ LCOR    ::= LCOR:lcor icor E:exp fcor   {:
 
                                 RESULT = nd;
                             :}
+        |   icor icor E:exp fcor fcor   {:
+                                            AST nd = new AST();
+                                            nd.setLabel("LCOR2");
+                                            nd.setIdNode(Parser.cont++);
+                                            nd.addChildren((AST)exp);
+
+                                            RESULT = nd;
+                                        :}
 ;
 
 LPARAM  ::= LPARAM:lparam colon E:exp   {:

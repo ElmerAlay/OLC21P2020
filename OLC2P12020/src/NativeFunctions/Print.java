@@ -4,6 +4,7 @@ import View.MainWindow;
 import abstracto.*;
 import java.util.LinkedList;
 import symbols.Environment;
+import symbols.ListStruct;
 import symbols.Vec;
 
 /**
@@ -18,20 +19,43 @@ public class Print implements ASTNode{
         this.exp = exp;
     }
     
+    public String printVec(Object vec[], String output){
+        for(int i=0; i<vec.length; i++){
+                output += vec[i].toString() + " ";
+        }
+        output += "\n";
+        return output;
+    }
+    
+    public String printList(LinkedList<Object> list, String output){
+        for(int i=0; i<list.size(); i++){
+            output += "[[" + (i+1) + "]]\n";
+            if(list.get(i) instanceof Vec){
+                Object vec[] = ((Vec)list.get(i)).getValues();
+                output = printVec(vec, output);
+            }else{
+                LinkedList<Object> l = ((ListStruct)list.get(i)).getValues();
+                output = printList(l, output);
+            }
+        }
+        output += "\n";
+        return output;
+    }
+    
     @Override
     public Object execute(Environment environment, LinkedList<TError> LError) {
         Object op = exp.execute(environment, LError);
         
         //verificamos si la expresión es un vector
         if(op instanceof Vec){
-            Object values[] = ((Vec)op).getValues();
             String output = "";
-            for(int i=0; i<values.length; i++){
-                output += values[i].toString() + " ";
-            }
-            output += "\n";
-            
-            MainWindow.output += output;
+            MainWindow.output += printVec(((Vec)op).getValues(), output);
+            return output;
+        }
+        //verificamos si la expresión es una lista
+        else if(op instanceof ListStruct){
+            String output = "";
+            MainWindow.output += printList(((ListStruct)op).getValues(), output);
             return output;
         }
         

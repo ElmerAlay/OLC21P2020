@@ -4,10 +4,10 @@ package symbols;
  *
  * @author junio
  */
-public class Vec {
+public class Vec2 {
     private Object[] values;
 
-    public Vec(Object[] values) {
+    public Vec2(Object[] values) {
         this.values = values;
     }
 

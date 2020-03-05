@@ -1,341 +1,146 @@
 digraph G { node[shape=oval, style=filled, collor=coral]; edge[color=chartreuse3]; rankdir=UD 
 
-"225" [label="INICIO"]
-"224" [label="LINST"]
-"225" -> "224"
-"224" [label="LINST"]
-"214" [label="LINST"]
-"224" -> "214"
-"214" [label="LINST"]
-"206" [label="LINST"]
-"214" -> "206"
-"206" [label="LINST"]
-"196" [label="LINST"]
-"206" -> "196"
-"196" [label="LINST"]
-"188" [label="LINST"]
-"196" -> "188"
-"188" [label="LINST"]
-"178" [label="LINST"]
-"188" -> "178"
-"178" [label="LINST"]
-"170" [label="LINST"]
-"178" -> "170"
-"170" [label="LINST"]
-"164" [label="LINST"]
-"170" -> "164"
-"164" [label="LINST"]
-"158" [label="LINST"]
-"164" -> "158"
-"158" [label="LINST"]
-"152" [label="LINST"]
-"158" -> "152"
-"152" [label="LINST"]
-"146" [label="LINST"]
-"152" -> "146"
-"146" [label="LINST"]
-"140" [label="LINST"]
-"146" -> "140"
-"140" [label="LINST"]
-"134" [label="LINST"]
-"140" -> "134"
-"134" [label="LINST"]
-"128" [label="LINST"]
-"134" -> "128"
-"128" [label="LINST"]
-"122" [label="LINST"]
-"128" -> "122"
-"122" [label="LINST"]
-"116" [label="LINST"]
-"122" -> "116"
-"116" [label="LINST"]
-"115" [label="ASIGN"]
-"116" -> "115"
-"115" [label="ASIGN"]
-"114" [label="ID_vector"]
-"115" -> "114"
-"115" [label="ASIGN"]
-"113" [label="Integer_12"]
-"115" -> "113"
-"122" [label="LINST"]
-"121" [label="ASIGN"]
-"122" -> "121"
-"121" [label="ASIGN"]
-"120" [label="ID_vector"]
-"121" -> "120"
-"121" [label="ASIGN"]
-"118" [label="LCOR"]
-"121" -> "118"
-"118" [label="LCOR"]
-"117" [label="Integer_10"]
-"118" -> "117"
-"121" [label="ASIGN"]
-"119" [label="Integer_15"]
-"121" -> "119"
-"128" [label="LINST"]
-"127" [label="ASIGN"]
-"128" -> "127"
-"127" [label="ASIGN"]
-"126" [label="ID_vector"]
-"127" -> "126"
-"127" [label="ASIGN"]
-"124" [label="LCOR"]
-"127" -> "124"
-"124" [label="LCOR"]
-"123" [label="Integer_2"]
-"124" -> "123"
-"127" [label="ASIGN"]
-"125" [label="Integer_13"]
-"127" -> "125"
-"134" [label="LINST"]
-"133" [label="ASIGN"]
-"134" -> "133"
-"133" [label="ASIGN"]
-"132" [label="ID_vector"]
-"133" -> "132"
-"133" [label="ASIGN"]
-"130" [label="LCOR"]
-"133" -> "130"
-"130" [label="LCOR"]
-"129" [label="Integer_3"]
-"130" -> "129"
-"133" [label="ASIGN"]
-"131" [label="Integer_15"]
-"133" -> "131"
-"140" [label="LINST"]
-"139" [label="ASIGN"]
-"140" -> "139"
-"139" [label="ASIGN"]
-"138" [label="ID_vector"]
-"139" -> "138"
-"139" [label="ASIGN"]
-"136" [label="LCOR"]
-"139" -> "136"
-"136" [label="LCOR"]
-"135" [label="Integer_4"]
-"136" -> "135"
-"139" [label="ASIGN"]
-"137" [label="Integer_16"]
-"139" -> "137"
-"146" [label="LINST"]
-"145" [label="ASIGN"]
-"146" -> "145"
-"145" [label="ASIGN"]
-"144" [label="ID_vector"]
-"145" -> "144"
-"145" [label="ASIGN"]
-"142" [label="LCOR"]
-"145" -> "142"
-"142" [label="LCOR"]
-"141" [label="Integer_5"]
-"142" -> "141"
-"145" [label="ASIGN"]
-"143" [label="Integer_24"]
-"145" -> "143"
-"152" [label="LINST"]
-"151" [label="ASIGN"]
-"152" -> "151"
-"151" [label="ASIGN"]
-"150" [label="ID_vector"]
-"151" -> "150"
-"151" [label="ASIGN"]
-"148" [label="LCOR"]
-"151" -> "148"
-"148" [label="LCOR"]
-"147" [label="Integer_6"]
-"148" -> "147"
-"151" [label="ASIGN"]
-"149" [label="Integer_15"]
-"151" -> "149"
-"158" [label="LINST"]
-"157" [label="ASIGN"]
-"158" -> "157"
-"157" [label="ASIGN"]
-"156" [label="ID_vector"]
-"157" -> "156"
-"157" [label="ASIGN"]
-"154" [label="LCOR"]
-"157" -> "154"
-"154" [label="LCOR"]
-"153" [label="Integer_7"]
-"154" -> "153"
-"157" [label="ASIGN"]
-"155" [label="Integer_17"]
-"157" -> "155"
-"164" [label="LINST"]
-"163" [label="ASIGN"]
-"164" -> "163"
-"163" [label="ASIGN"]
-"162" [label="ID_vector"]
-"163" -> "162"
-"163" [label="ASIGN"]
-"160" [label="LCOR"]
-"163" -> "160"
-"160" [label="LCOR"]
-"159" [label="Integer_8"]
-"160" -> "159"
-"163" [label="ASIGN"]
-"161" [label="Integer_19"]
-"163" -> "161"
-"170" [label="LINST"]
-"169" [label="ASIGN"]
-"170" -> "169"
-"169" [label="ASIGN"]
-"168" [label="ID_vector"]
-"169" -> "168"
-"169" [label="ASIGN"]
-"166" [label="LCOR"]
-"169" -> "166"
-"166" [label="LCOR"]
-"165" [label="Integer_9"]
-"166" -> "165"
-"169" [label="ASIGN"]
-"167" [label="Integer_17"]
-"169" -> "167"
-"178" [label="LINST"]
-"177" [label="Llam"]
-"178" -> "177"
-"177" [label="Llam"]
-"176" [label="Ref_print"]
-"177" -> "176"
-"177" [label="Llam"]
-"175" [label="LPARAM"]
-"177" -> "175"
-"175" [label="LPARAM"]
-"174" [label="Llam"]
-"175" -> "174"
-"174" [label="Llam"]
-"173" [label="Ref_mean"]
-"174" -> "173"
-"174" [label="Llam"]
-"172" [label="LPARAM"]
-"174" -> "172"
-"172" [label="LPARAM"]
-"171" [label="Ref_vector"]
-"172" -> "171"
-"188" [label="LINST"]
-"187" [label="Llam"]
-"188" -> "187"
-"187" [label="Llam"]
-"186" [label="Ref_print"]
-"187" -> "186"
-"187" [label="Llam"]
-"185" [label="LPARAM"]
-"187" -> "185"
-"185" [label="LPARAM"]
-"184" [label="Llam"]
-"185" -> "184"
-"184" [label="Llam"]
-"183" [label="Ref_mean"]
-"184" -> "183"
-"184" [label="Llam"]
-"182" [label="LPARAM"]
-"184" -> "182"
-"182" [label="LPARAM"]
-"180" [label="LPARAM"]
-"182" -> "180"
-"180" [label="LPARAM"]
-"179" [label="Ref_vector"]
-"180" -> "179"
-"182" [label="LPARAM"]
-"181" [label="Integer_14"]
-"182" -> "181"
-"196" [label="LINST"]
-"195" [label="Llam"]
-"196" -> "195"
-"195" [label="Llam"]
-"194" [label="Ref_print"]
-"195" -> "194"
-"195" [label="Llam"]
-"193" [label="LPARAM"]
-"195" -> "193"
-"193" [label="LPARAM"]
-"192" [label="Llam"]
-"193" -> "192"
-"192" [label="Llam"]
-"191" [label="Ref_median"]
-"192" -> "191"
-"192" [label="Llam"]
-"190" [label="LPARAM"]
-"192" -> "190"
-"190" [label="LPARAM"]
-"189" [label="Ref_vector"]
-"190" -> "189"
-"206" [label="LINST"]
-"205" [label="Llam"]
-"206" -> "205"
-"205" [label="Llam"]
-"204" [label="Ref_print"]
-"205" -> "204"
-"205" [label="Llam"]
-"203" [label="LPARAM"]
-"205" -> "203"
-"203" [label="LPARAM"]
-"202" [label="Llam"]
-"203" -> "202"
-"202" [label="Llam"]
-"201" [label="Ref_median"]
-"202" -> "201"
-"202" [label="Llam"]
-"200" [label="LPARAM"]
-"202" -> "200"
-"200" [label="LPARAM"]
-"198" [label="LPARAM"]
-"200" -> "198"
-"198" [label="LPARAM"]
-"197" [label="Ref_vector"]
-"198" -> "197"
-"200" [label="LPARAM"]
-"199" [label="Integer_14"]
-"200" -> "199"
-"214" [label="LINST"]
-"213" [label="Llam"]
-"214" -> "213"
-"213" [label="Llam"]
-"212" [label="Ref_print"]
-"213" -> "212"
-"213" [label="Llam"]
-"211" [label="LPARAM"]
-"213" -> "211"
-"211" [label="LPARAM"]
-"210" [label="Llam"]
-"211" -> "210"
-"210" [label="Llam"]
-"209" [label="Ref_mode"]
-"210" -> "209"
-"210" [label="Llam"]
-"208" [label="LPARAM"]
-"210" -> "208"
-"208" [label="LPARAM"]
-"207" [label="Ref_vector"]
-"208" -> "207"
-"224" [label="LINST"]
-"223" [label="Llam"]
-"224" -> "223"
-"223" [label="Llam"]
-"222" [label="Ref_print"]
-"223" -> "222"
-"223" [label="Llam"]
-"221" [label="LPARAM"]
-"223" -> "221"
-"221" [label="LPARAM"]
-"220" [label="Llam"]
-"221" -> "220"
-"220" [label="Llam"]
-"219" [label="Ref_mode"]
-"220" -> "219"
-"220" [label="Llam"]
-"218" [label="LPARAM"]
-"220" -> "218"
-"218" [label="LPARAM"]
-"216" [label="LPARAM"]
-"218" -> "216"
-"216" [label="LPARAM"]
-"215" [label="Ref_vector"]
-"216" -> "215"
-"218" [label="LPARAM"]
-"217" [label="Integer_14"]
-"218" -> "217"
+"47" [label="INICIO"]
+"46" [label="LINST"]
+"47" -> "46"
+"46" [label="LINST"]
+"38" [label="LINST"]
+"46" -> "38"
+"38" [label="LINST"]
+"26" [label="LINST"]
+"38" -> "26"
+"26" [label="LINST"]
+"17" [label="LINST"]
+"26" -> "17"
+"17" [label="LINST"]
+"8" [label="LINST"]
+"17" -> "8"
+"8" [label="LINST"]
+"7" [label="ASIGN"]
+"8" -> "7"
+"7" [label="ASIGN"]
+"6" [label="ID_lista"]
+"7" -> "6"
+"7" [label="ASIGN"]
+"5" [label="Llam"]
+"7" -> "5"
+"5" [label="Llam"]
+"4" [label="Ref_list"]
+"5" -> "4"
+"5" [label="Llam"]
+"3" [label="LPARAM"]
+"5" -> "3"
+"3" [label="LPARAM"]
+"1" [label="LPARAM"]
+"3" -> "1"
+"1" [label="LPARAM"]
+"0" [label="Integer_1"]
+"1" -> "0"
+"3" [label="LPARAM"]
+"2" [label="Integer_2"]
+"3" -> "2"
+"17" [label="LINST"]
+"16" [label="ASIGN"]
+"17" -> "16"
+"16" [label="ASIGN"]
+"15" [label="ID_lista"]
+"16" -> "15"
+"16" [label="ASIGN"]
+"13" [label="LCOR"]
+"16" -> "13"
+"13" [label="LCOR"]
+"10" [label="LCOR"]
+"13" -> "10"
+"10" [label="LCOR"]
+"9" [label="Integer_2"]
+"10" -> "9"
+"13" [label="LCOR"]
+"12" [label="LCOR2"]
+"13" -> "12"
+"12" [label="LCOR2"]
+"11" [label="Integer_2"]
+"12" -> "11"
+"16" [label="ASIGN"]
+"14" [label="String_hola"]
+"16" -> "14"
+"26" [label="LINST"]
+"25" [label="ASIGN"]
+"26" -> "25"
+"25" [label="ASIGN"]
+"24" [label="ID_lista"]
+"25" -> "24"
+"25" [label="ASIGN"]
+"22" [label="LCOR"]
+"25" -> "22"
+"22" [label="LCOR"]
+"19" [label="LCOR"]
+"22" -> "19"
+"19" [label="LCOR"]
+"18" [label="Integer_2"]
+"19" -> "18"
+"22" [label="LCOR"]
+"21" [label="LCOR2"]
+"22" -> "21"
+"21" [label="LCOR2"]
+"20" [label="Integer_1"]
+"21" -> "20"
+"25" [label="ASIGN"]
+"23" [label="True_true"]
+"25" -> "23"
+"38" [label="LINST"]
+"37" [label="ASIGN"]
+"38" -> "37"
+"37" [label="ASIGN"]
+"36" [label="ID_lista"]
+"37" -> "36"
+"37" [label="ASIGN"]
+"31" [label="LCOR"]
+"37" -> "31"
+"31" [label="LCOR"]
+"28" [label="LCOR"]
+"31" -> "28"
+"28" [label="LCOR"]
+"27" [label="Integer_4"]
+"28" -> "27"
+"31" [label="LCOR"]
+"30" [label="LCOR2"]
+"31" -> "30"
+"30" [label="LCOR2"]
+"29" [label="Integer_2"]
+"30" -> "29"
+"37" [label="ASIGN"]
+"35" [label="Llam"]
+"37" -> "35"
+"35" [label="Llam"]
+"34" [label="Ref_list"]
+"35" -> "34"
+"35" [label="Llam"]
+"33" [label="LPARAM"]
+"35" -> "33"
+"33" [label="LPARAM"]
+"32" [label="Integer_3"]
+"33" -> "32"
+"46" [label="LINST"]
+"45" [label="Llam"]
+"46" -> "45"
+"45" [label="Llam"]
+"44" [label="Ref_print"]
+"45" -> "44"
+"45" [label="Llam"]
+"43" [label="LPARAM"]
+"45" -> "43"
+"43" [label="LPARAM"]
+"42" [label="Struct"]
+"43" -> "42"
+"42" [label="Struct"]
+"41" [label="Ref_lista"]
+"42" -> "41"
+"42" [label="Struct"]
+"40" [label="LCOR2"]
+"42" -> "40"
+"40" [label="LCOR2"]
+"39" [label="Integer_4"]
+"40" -> "39"
 
 }
 

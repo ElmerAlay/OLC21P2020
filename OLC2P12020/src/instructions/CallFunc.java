@@ -1,12 +1,6 @@
 package instructions;
 
-import NativeFunctions.Print;
-import NativeFunctions.Remove;
-import NativeFunctions.Round;
-import NativeFunctions.StringLength;
-import NativeFunctions.ToLowerCase;
-import NativeFunctions.ToUpperCase;
-import NativeFunctions.Trunk;
+import NativeFunctions.*;
 import abstracto.*;
 import java.util.LinkedList;
 import stadisticFunctions.Mean;
@@ -65,6 +59,10 @@ public class CallFunc implements ASTNode{
             return new Median(lparam).execute(environment, LError);
         }else if(name.equals("mode")){
             return new Mode(lparam).execute(environment, LError);
+        }else if(name.equals("list")){
+            return new ListFunc(lparam).execute(environment, LError);
+        }else if(name.equals("c")){
+            return new C(lparam).execute(environment, LError);
         }
         
         TError error = new TError(name, "Semántico", "Error de argumentos en la función", 0, 0);

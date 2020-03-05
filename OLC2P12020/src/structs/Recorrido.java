@@ -162,11 +162,28 @@ public class Recorrido {
                     lCor.add(getExpression(root.getChildren().get(0)));
                     
                     return lCor;
+                }else if(root.getLabel().equals("LCOR2")){
+                    ASTNode op = getExpression(root.getChildren().get(0));
+                    lCor.add(new Constant2(op));
+                    
+                    return lCor;
                 }
             case 2:
                 if(root.getLabel().equals("LCOR")){
+                    LinkedList<ASTNode> lCor2 = new LinkedList<>();
+                    
                     lCor = getCor(root.getChildren().get(0), lCor);
-                    lCor.add(getExpression(root.getChildren().get(1)));
+                    if(root.getChildren().get(1).getLabel().equals("LCOR2")){
+                        lCor2 = getCor(root.getChildren().get(1), lCor2);
+                    }else
+                        lCor.add(getExpression(root.getChildren().get(1)));
+                    
+                    if(!lCor2.isEmpty()){
+                        LinkedList<ASTNode> lista = new LinkedList<>();
+                        lista.addAll(lCor);
+                        lista.addAll(lCor2);
+                        return lista;
+                    }
                     
                     return lCor;
                 }

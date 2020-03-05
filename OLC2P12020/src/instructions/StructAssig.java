@@ -1,11 +1,15 @@
 package instructions;
 
 import abstracto.*;
+import analizadores.Simbolo;
 import java.util.LinkedList;
+import symbols.Casteo;
 import symbols.Environment;
+import symbols.ListStruct;
 import symbols.Symbol;
 import symbols.Type;
 import symbols.Vec;
+import symbols.Vec2;
 
 /**
  *
@@ -270,6 +274,380 @@ public class StructAssig implements ASTNode{
                     return error;
                 }
             }
+            //Si la variable es lista
+            else if(symbol.getValue() instanceof ListStruct){
+                if(indexes.size()==1){
+                    Object i1= indexes.remove(0).execute(environment, LError);
+                    if(i1 instanceof Vec && ((Vec)i1).getValues().length==1){
+                        Object ind[] = ((Vec)i1).getValues();
+                        Object expr = exp.execute(environment, LError);
+                        if(expr instanceof Vec && ((Vec)expr).getValues().length==1){
+                            LinkedList<Object> list = ((ListStruct)environment.get(name).getValue()).getValues();
+                            if(ind[0] instanceof Integer){
+                                if(Integer.parseInt(ind[0].toString())>list.size()){
+                                    for(int i=list.size(); i<Integer.parseInt(ind[0].toString()); i++){
+                                        Object v[] = {"null"};
+                                        list.add(new Vec(v));
+                                    }
+                                    list.set((Integer.parseInt(ind[0].toString())-1), ((Vec)expr));
+                                    ((ListStruct)environment.get(name).getValue()).setValues(list);
+                                }else if(Integer.parseInt(ind[0].toString())<=list.size() && Integer.parseInt(ind[0].toString())>0){
+                                    list.set((Integer.parseInt(ind[0].toString())-1), ((Vec)expr));
+                                    ((ListStruct)environment.get(name).getValue()).setValues(list);
+                                }else{
+                                    TError error = new TError(name, "Semántico", "El índice no es menor a 1", 0, 0);
+                                    LError.add(error);
+
+                                    return error;
+                                }
+                            }
+                            else{
+                                TError error = new TError(name, "Semántico", "El índice no es de tipo integer", 0, 0);
+                                LError.add(error);
+
+                                return error;
+                            }
+                        }
+                        else if(expr instanceof ListStruct && ((ListStruct)expr).getValues().size()==1){
+                            LinkedList<Object> list = new LinkedList<>();
+                            list.addAll(((ListStruct)environment.get(name).getValue()).getValues());
+                            if(ind[0] instanceof Integer){
+                                if(Integer.parseInt(ind[0].toString())>list.size()){
+                                    for(int i=list.size(); i<Integer.parseInt(ind[0].toString()); i++){
+                                        Object v[] = {"null"};
+                                        list.add(new Vec(v));
+                                    }
+                                    list.set((Integer.parseInt(ind[0].toString())-1), ((ListStruct)expr));
+                                    ((ListStruct)environment.get(name).getValue()).setValues(list);
+                                }else if(Integer.parseInt(ind[0].toString())<=list.size() && Integer.parseInt(ind[0].toString())>0){
+                                    list.set((Integer.parseInt(ind[0].toString())-1), ((ListStruct)expr));
+                                    ((ListStruct)environment.get(name).getValue()).setValues(list);
+                                }else{
+                                    TError error = new TError(name, "Semántico", "El índice no es menor a 1", 0, 0);
+                                    LError.add(error);
+
+                                    return error;
+                                }
+                            }else{
+                                TError error = new TError(name, "Semántico", "El índice no es de tipo integer", 0, 0);
+                                LError.add(error);
+
+                                return error;
+                            }
+                        }
+                        else{
+                            TError error = new TError(name, "Semántico", "Para modificación tipo1 no se puede agregar más de un elemento", 0, 0);
+                            LError.add(error);
+
+                            return error;
+                        }
+                    }
+                    else if(i1 instanceof Vec2 && ((Vec2)i1).getValues().length==1){
+                        Object ind[] = ((Vec2)i1).getValues();
+                        Object expr = exp.execute(environment, LError);
+                        if(expr instanceof Vec){
+                            LinkedList<Object> list = ((ListStruct)environment.get(name).getValue()).getValues();
+                            if(ind[0] instanceof Integer){
+                                if(Integer.parseInt(ind[0].toString())>list.size()){
+                                    for(int i=list.size(); i<Integer.parseInt(ind[0].toString()); i++){
+                                        Object v[] = {"null"};
+                                        list.add(new Vec(v));
+                                    }
+                                    list.set((Integer.parseInt(ind[0].toString())-1), ((Vec)expr));
+                                    ((ListStruct)environment.get(name).getValue()).setValues(list);
+                                }else if(Integer.parseInt(ind[0].toString())<=list.size() && Integer.parseInt(ind[0].toString())>0){
+                                    list.set((Integer.parseInt(ind[0].toString())-1), ((Vec)expr));
+                                    ((ListStruct)environment.get(name).getValue()).setValues(list);
+                                }else{
+                                    TError error = new TError(name, "Semántico", "El índice es menor a 1", 0, 0);
+                                    LError.add(error);
+
+                                    return error;
+                                }
+                            }
+                            else{
+                                TError error = new TError(name, "Semántico", "El índice no es de tipo integer", 0, 0);
+                                LError.add(error);
+
+                                return error;
+                            }
+                        }
+                        else if(expr instanceof ListStruct){
+                            LinkedList<Object> list = new LinkedList<>();
+                            list.addAll(((ListStruct)environment.get(name).getValue()).getValues());
+                            if(ind[0] instanceof Integer){
+                                if(Integer.parseInt(ind[0].toString())>list.size()){
+                                    for(int i=list.size(); i<Integer.parseInt(ind[0].toString()); i++){
+                                        Object v[] = {"null"};
+                                        list.add(new Vec(v));
+                                    }
+                                    list.set((Integer.parseInt(ind[0].toString())-1), ((ListStruct)expr));
+                                    ((ListStruct)environment.get(name).getValue()).setValues(list);
+                                }else if(Integer.parseInt(ind[0].toString())<=list.size() && Integer.parseInt(ind[0].toString())>0){
+                                    list.set((Integer.parseInt(ind[0].toString())-1), ((ListStruct)expr));
+                                    ((ListStruct)environment.get(name).getValue()).setValues(list);
+                                }else{
+                                    TError error = new TError(name, "Semántico", "El índice no es menor a 1", 0, 0);
+                                    LError.add(error);
+
+                                    return error;
+                                }
+                            }else{
+                                TError error = new TError(name, "Semántico", "El índice no es de tipo integer", 0, 0);
+                                LError.add(error);
+
+                                return error;
+                            }
+                        }
+                        else{
+                            TError error = new TError(name, "Semántico", "modificación tipo2, la expresión no es vector o lista", 0, 0);
+                            LError.add(error);
+
+                            return error;
+                        }
+                    }
+                    else{
+                        TError error = new TError(name, "Semántico", "El índice no es un vector de tamaño 1", 0, 0);
+                        LError.add(error);
+
+                        return error; 
+                    }
+                }
+                else if(indexes.size()==2){
+                    Object i1= indexes.remove(0).execute(environment, LError);
+                    Object i2= indexes.remove(0).execute(environment, LError);
+                    if((i1 instanceof Vec && i2 instanceof Vec2) && (((Vec)i1).getValues().length==1 &&((Vec2)i2).getValues().length==1)
+                       && (((Vec)i1).getValues()[0] instanceof Integer && ((Vec2)i2).getValues()[0] instanceof Integer)){
+                        Object expr = exp.execute(environment, LError);
+                        LinkedList<Object> list = new LinkedList<>();
+                        list.addAll(((ListStruct)environment.get(name).getValue()).getValues());
+                        if(expr instanceof Vec && ((Vec)expr).getValues().length==1){
+                            int ind1 = Integer.parseInt(((Vec)i1).getValues()[0].toString());
+                            
+                            if(ind1>list.size()){
+                                for(int i=list.size(); i<ind1; i++){
+                                    Object a[] = {"null"};
+                                    list.add(new Vec(a));
+                                };
+                                    
+                                Object val[] = {Boolean.parseBoolean("false")};
+                                int ind2 = Integer.parseInt(((Vec2)i2).getValues()[0].toString());
+                                if(((Vec2)i2).getValues()[0] instanceof Integer && ind2>0){
+                                    Object result[] = Casteo.llenar(val, ((Vec)expr).getValues()[0], ind2);
+                                    list.set(ind1-1, new Vec(result));
+                                    ((ListStruct)environment.get(name).getValue()).setValues(list);
+                                }else{
+                                    TError error = new TError(name, "Semántico", "El índice no es integer mayor a 0", 0, 0);
+                                    LError.add(error);
+
+                                    return error;
+                                }
+                            }else if(ind1<=list.size()&&ind1>0){
+                                Object l = list.get(ind1-1);
+                                if(l instanceof Vec){
+                                    Object val[] = ((Vec)l).getValues();
+                                    int ind2 = Integer.parseInt(((Vec2)i2).getValues()[0].toString());
+                                    
+                                    if(((Vec2)i2).getValues()[0] instanceof Integer && ind2>0){
+                                        Object result[] = Casteo.llenar(val, ((Vec)expr).getValues()[0], ind2);
+                                        list.set(ind1-1, new Vec(result));
+                                        ((ListStruct)environment.get(name).getValue()).setValues(list);
+                                    }else{
+                                        TError error = new TError(name, "Semántico", "El índice no es integer mayor a 0", 0, 0);
+                                        LError.add(error);
+
+                                        return error;
+                                    }
+                                }else{
+                                    TError error = new TError(name, "Semántico", "No se puede modificar porque el valor no es vector", 0, 0);
+                                    LError.add(error);
+
+                                    return error;
+                                }
+                            }else{
+                                TError error = new TError(name, "Semántico", "El índice es menor a 0", 0, 0);
+                                LError.add(error);
+
+                                return error;
+                            }
+                        }
+                        else if(expr instanceof ListStruct){
+                            int ind1 = Integer.parseInt(((Vec)i1).getValues()[0].toString());
+                            Object a[] = {"null"};
+                            
+                            if(ind1>list.size()){
+                                for(int i=list.size(); i<ind1; i++){
+                                    list.add(new Vec(a));
+                                };
+                                
+                                int ind2 = Integer.parseInt(((Vec2)i2).getValues()[0].toString());
+                                if(((Vec2)i2).getValues()[0] instanceof Integer && ind2>0){
+                                    LinkedList<Object> v = new LinkedList<>();
+                                    for(int i=0; i<ind2; i++){
+                                        v.add(new Vec(a));
+                                    }
+                                    v.set(ind2-1, (ListStruct)expr);
+                                    list.set(ind1-1, new ListStruct(v));
+                                    ((ListStruct)environment.get(name).getValue()).setValues(list);
+                                }else{
+                                    TError error = new TError(name, "Semántico", "El índice no es integer mayor a 0", 0, 0);
+                                    LError.add(error);
+
+                                    return error;
+                                }
+                            }else if(ind1<=list.size()&&ind1>0){
+                                int ind2 = Integer.parseInt(((Vec2)i2).getValues()[0].toString());
+                                if(((Vec2)i2).getValues()[0] instanceof Integer && ind2>0){
+                                    LinkedList<Object> v = new LinkedList<>();
+                                    for(int i=0; i<ind2; i++){
+                                        v.add(new Vec(a));
+                                    }
+                                    v.set(ind2-1, (ListStruct)expr);
+                                    list.set(ind1-1, new ListStruct(v));
+                                    ((ListStruct)environment.get(name).getValue()).setValues(list);
+                                }else{
+                                    TError error = new TError(name, "Semántico", "El índice no es integer mayor a 0", 0, 0);
+                                    LError.add(error);
+
+                                    return error;
+                                }
+                            }else{
+                                TError error = new TError(name, "Semántico", "El índice es menor a 0", 0, 0);
+                                LError.add(error);
+
+                                return error;
+                            }
+                        }
+                        else{
+                            TError error = new TError(name, "Semántico", "La expresión debe ser vector de un valor", 0, 0);
+                            LError.add(error);
+
+                            return error;
+                        }
+                    }
+                    else if((i1 instanceof Vec2 && i2 instanceof Vec) && (((Vec2)i1).getValues().length==1 &&((Vec)i2).getValues().length==1)
+                       && (((Vec2)i1).getValues()[0] instanceof Integer && ((Vec)i2).getValues()[0] instanceof Integer)){
+                        Object expr = exp.execute(environment, LError);
+                        LinkedList<Object> list = new LinkedList<>();
+                        list.addAll(((ListStruct)environment.get(name).getValue()).getValues());
+                        if(expr instanceof Vec && ((Vec)expr).getValues().length==1){
+                            int ind1 = Integer.parseInt(((Vec2)i1).getValues()[0].toString());
+                            
+                            if(ind1>list.size()){
+                                for(int i=list.size(); i<ind1; i++){
+                                    Object a[] = {"null"};
+                                    list.add(new Vec(a));
+                                };
+                                    
+                                Object val[] = {Boolean.parseBoolean("false")};
+                                int ind2 = Integer.parseInt(((Vec)i2).getValues()[0].toString());
+                                if(((Vec)i2).getValues()[0] instanceof Integer && ind2>0){
+                                    Object result[] = Casteo.llenar(val, ((Vec)expr).getValues()[0], ind2);
+                                    list.set(ind1-1, new Vec(result));
+                                    ((ListStruct)environment.get(name).getValue()).setValues(list);
+                                }else{
+                                    TError error = new TError(name, "Semántico", "El índice no es integer mayor a 0", 0, 0);
+                                    LError.add(error);
+
+                                    return error;
+                                }
+                            }else if(ind1<=list.size()&&ind1>0){
+                                Object l = list.get(ind1-1);
+                                if(l instanceof Vec){
+                                    Object val[] = ((Vec)l).getValues();
+                                    int ind2 = Integer.parseInt(((Vec)i2).getValues()[0].toString());
+                                    
+                                    if(((Vec)i2).getValues()[0] instanceof Integer && ind2>0){
+                                        Object result[] = Casteo.llenar(val, ((Vec)expr).getValues()[0], ind2);
+                                        list.set(ind1-1, new Vec(result));
+                                        ((ListStruct)environment.get(name).getValue()).setValues(list);
+                                    }else{
+                                        TError error = new TError(name, "Semántico", "El índice no es integer mayor a 0", 0, 0);
+                                        LError.add(error);
+
+                                        return error;
+                                    }
+                                }
+                                else{
+                                    TError error = new TError(name, "Semántico", "No se puede modificar porque el valor no es vector", 0, 0);
+                                    LError.add(error);
+
+                                    return error;
+                                }
+                            }else{
+                                TError error = new TError(name, "Semántico", "El índice es menor a 0", 0, 0);
+                                LError.add(error);
+
+                                return error;
+                            }
+                        }
+                        else if(expr instanceof ListStruct && ((ListStruct)expr).getValues().size()==1){
+                            int ind1 = Integer.parseInt(((Vec2)i1).getValues()[0].toString());
+                            Object a[] = {"null"};
+                            
+                            if(ind1>list.size()){
+                                for(int i=list.size(); i<ind1; i++){
+                                    list.add(new Vec(a));
+                                };
+                                
+                                int ind2 = Integer.parseInt(((Vec)i2).getValues()[0].toString());
+                                if(((Vec)i2).getValues()[0] instanceof Integer && ind2>0){
+                                    LinkedList<Object> v = new LinkedList<>();
+                                    for(int i=0; i<ind2; i++){
+                                        v.add(new Vec(a));
+                                    }
+                                    v.set(ind2-1, (ListStruct)expr);
+                                    list.set(ind1-1, new ListStruct(v));
+                                    ((ListStruct)environment.get(name).getValue()).setValues(list);
+                                }else{
+                                    TError error = new TError(name, "Semántico", "El índice no es integer mayor a 0", 0, 0);
+                                    LError.add(error);
+
+                                    return error;
+                                }
+                            }else if(ind1<=list.size()&&ind1>0){
+                                int ind2 = Integer.parseInt(((Vec)i2).getValues()[0].toString());
+                                if(((Vec)i2).getValues()[0] instanceof Integer && ind2>0){
+                                    LinkedList<Object> v = new LinkedList<>();
+                                    for(int i=0; i<ind2; i++){
+                                        v.add(new Vec(a));
+                                    }
+                                    v.set(ind2-1, (ListStruct)expr);
+                                    list.set(ind1-1, new ListStruct(v));
+                                    ((ListStruct)environment.get(name).getValue()).setValues(list);
+                                }else{
+                                    TError error = new TError(name, "Semántico", "El índice no es integer mayor a 0", 0, 0);
+                                    LError.add(error);
+
+                                    return error;
+                                }
+                            }else{
+                                TError error = new TError(name, "Semántico", "El índice es menor a 0", 0, 0);
+                                LError.add(error);
+
+                                return error;
+                            }
+                        }
+                        else{
+                            TError error = new TError(name, "Semántico", "Error en la expresión", 0, 0);
+                            LError.add(error);
+
+                            return error;
+                        } 
+                    }
+                    else{
+                        TError error = new TError(name, "Semántico", "Los índices deben ser vectores de un valor integer", 0, 0);
+                        LError.add(error);
+
+                        return error;
+                    }
+                }
+            }
+        }else{
+            TError error = new TError(name, "Semántico", "La variable no existe", 0, 0);
+            LError.add(error);
+
+            return error;
         }
         
         return "asignación correcta\n";
