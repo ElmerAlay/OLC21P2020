@@ -42,7 +42,7 @@ terminal nulo, verdadero, falso, uminus;
 terminal pyc, asign, colon;
 terminal String numero, flotante, cadena, id;
 
-non terminal INICIO, E, ASIGN, INST, LINST, LCOR, LPARAM, LLAMAD;
+non terminal INICIO, E, ASIGN, INST, LINST, LCOR, LPARAM, LLAMAD, MAT;
 
 precedence left  or;
 precedence left  and;
@@ -323,6 +323,9 @@ E ::=   E:op1 plus E:op2    {:
     |   LLAMAD:llam {:
                         RESULT = (AST)llam;
                     :}
+    |   MAT:mat {:
+                    RESULT = (AST)mat;
+                :}
 ;
 
 LCOR    ::= LCOR:lcor icor E:exp fcor   {:
@@ -413,7 +416,16 @@ ASIGN   ::= id:n asign E:exp    {:
                                             nd.addChildren((AST)exp);
 
                                             RESULT = nd;
-                                        :}                        
+                                        :}
+        |   MAT:mat asign E:exp {:
+                                    AST nd = new AST();
+                                    nd.setLabel("MATASIGN");
+                                    nd.setIdNode(Parser.cont++);
+                                    nd.addChildren((AST)mat);
+                                    nd.addChildren((AST)exp);
+
+                                    RESULT = nd;
+                                :}
 ;
 
 LLAMAD  ::= id:val ipar LPARAM:lparam fpar  {:
@@ -443,4 +455,49 @@ LLAMAD  ::= id:val ipar LPARAM:lparam fpar  {:
 
                                 RESULT = nd;   
                             :}
+;
+
+MAT ::= id:val icor E:exp1 colon E:exp2 fcor  {:
+                                            AST n = new AST();
+                                            n.setLabel("Ref");
+                                            n.setIdNode(Parser.cont++);
+                                            n.setValue(val);
+
+                                            AST nd = new AST();
+                                            nd.setLabel("MAT1");
+                                            nd.setIdNode(Parser.cont++);
+                                            nd.addChildren(n);
+                                            nd.addChildren((AST)exp1);
+                                            nd.addChildren((AST)exp2);
+
+                                            RESULT = nd;
+                                        :}
+    |   id:val icor E:exp1 colon fcor  {:
+                                            AST n = new AST();
+                                            n.setLabel("Ref");
+                                            n.setIdNode(Parser.cont++);
+                                            n.setValue(val);
+
+                                            AST nd = new AST();
+                                            nd.setLabel("MAT2");
+                                            nd.setIdNode(Parser.cont++);
+                                            nd.addChildren(n);
+                                            nd.addChildren((AST)exp1);
+
+                                            RESULT = nd;
+                                        :}
+    |   id:val icor colon E:exp2 fcor  {:
+                                            AST n = new AST();
+                                            n.setLabel("Ref");
+                                            n.setIdNode(Parser.cont++);
+                                            n.setValue(val);
+
+                                            AST nd = new AST();
+                                            nd.setLabel("MAT3");
+                                            nd.setIdNode(Parser.cont++);
+                                            nd.addChildren(n);
+                                            nd.addChildren((AST)exp2);
+
+                                            RESULT = nd;
+                                        :}
 ;

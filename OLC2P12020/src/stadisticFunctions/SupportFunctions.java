@@ -34,4 +34,12 @@ public class SupportFunctions {
 
         return v;
     }
+    
+    public static boolean esMultiplo(int n1,int n2){;
+	return n1%n2==0;
+    }
+    
+    public static int mapLexiMat(int fila, int columna, int tam){
+        return columna*tam+fila;
+    }
 }

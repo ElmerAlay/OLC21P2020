@@ -5,6 +5,7 @@ import abstracto.*;
 import java.util.LinkedList;
 import symbols.Environment;
 import symbols.ListStruct;
+import symbols.Mat;
 import symbols.Vec;
 
 /**
@@ -42,6 +43,24 @@ public class Print implements ASTNode{
         return output;
     }
     
+    public String printMatriz(Mat matriz, String output){
+        Object ma[][] = matriz.getValues();
+        output += "\t";
+        for(int i=0; i<matriz.col;i++){
+            output += "[" + (i+1) + ",]\t";
+        }
+        output += "\n";
+        for(int i=0; i<matriz.row;i++){
+            output += "[" + (i+1) + ",]\t";
+            for(int j=0; j<matriz.col;j++){
+                output += ma[i][j].toString() + "\t";
+            }
+            output += "\n";
+        }
+        
+        return output;
+    }
+    
     @Override
     public Object execute(Environment environment, LinkedList<TError> LError) {
         Object op = exp.execute(environment, LError);
@@ -56,6 +75,12 @@ public class Print implements ASTNode{
         else if(op instanceof ListStruct){
             String output = "";
             MainWindow.output += printList(((ListStruct)op).getValues(), output);
+            return output;
+        }
+        //verificamos si la expresión es una matriz
+        else if(op instanceof Mat){
+            String output = "";
+            MainWindow.output += printMatriz(((Mat)op), output);
             return output;
         }
         

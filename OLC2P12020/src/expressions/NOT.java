@@ -3,6 +3,7 @@ package expressions;
 import abstracto.*;
 import java.util.LinkedList;
 import symbols.Environment;
+import symbols.Mat;
 import symbols.Vec;
 
 /**
@@ -52,7 +53,37 @@ public class NOT implements ASTNode{
                 return error;
             }
         }
-         
+        else if(op instanceof Mat){
+            Mat mat1 = (Mat)op;
+            int con1=0;
+            Object o1[] = new Object[mat1.row*mat1.col];
+                
+            for(int i=0;i<mat1.col;i++){
+                for(int j=0;j<mat1.row;j++){
+                    o1[con1] = mat1.getValues()[j][i];
+                    con1++;
+                }
+            }
+                
+            Object res = new NOT(new Constant(new Vec(o1))).execute(environment, LError);
+            Object result[][] = new Object[mat1.row][mat1.col];
+            con1 = 0;
+            if(res instanceof Vec){
+                for(int i=0;i<mat1.col;i++){
+                    for(int j=0;j<mat1.row;j++){
+                        result[j][i] = ((Vec)res).getValues()[con1];
+                        con1++;
+                    }
+                }
+                return new Mat(result, mat1.row, mat1.col); 
+            }else{
+                TError error = new TError("!", "Semántico", "Error al aplicar not a la matriz", 0, 0);
+                LError.add(error);
+
+                return error;
+            }
+        } 
+        
         TError error = new TError("!", "Semántico", "no se puede comparar lógicamente esos 2 tipos de datos", 0, 0);
         LError.add(error);
         

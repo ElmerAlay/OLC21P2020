@@ -91,12 +91,19 @@ public class Casteo {
             for(int i=0; i<val.length;i++){
                 if(v instanceof String || val[0] instanceof String){
                     val[i] = val[i].toString();
+                    val[index-1] = v.toString();
                 }else{
                     if(v instanceof Float || val[0] instanceof Float){
                         if(val[i] instanceof Boolean){
                             val[i]=Boolean.parseBoolean(val[i].toString())?Float.parseFloat("1.0"):Float.parseFloat("0.0");
                         }else{
                             val[i] = Float.parseFloat(val[i].toString());
+                        }
+                        
+                        if(v instanceof Boolean){
+                            val[index-1]=Boolean.parseBoolean(v.toString())?Float.parseFloat("1.0"):Float.parseFloat("0.0");
+                        }else{
+                            val[index-1] =Float.parseFloat(v.toString());
                         }
                     }else if((v instanceof Integer && (val[0] instanceof Integer||val[0] instanceof Boolean)) ||
                              (v instanceof Boolean && val[0] instanceof Integer)){
@@ -105,12 +112,18 @@ public class Casteo {
                         }else{
                             val[i] = Integer.parseInt(val[i].toString());
                         }
+                        if(v instanceof Boolean){
+                            val[index-1]=Boolean.parseBoolean(v.toString())?1:0;
+                        }else{
+                            val[index-1] =Integer.parseInt(v.toString());
+                        }
                     }else if(v instanceof Boolean && val[0] instanceof Boolean){
                         val[i] = Boolean.parseBoolean(val[i].toString());
+                        val[index-1]=Boolean.parseBoolean(v.toString());
                     }
                 } 
             }
-            val[index-1] = v;
+            
             return val;
         }else{
             Object val2[] = new Object[index];
@@ -133,25 +146,45 @@ public class Casteo {
             for(int i=0; i<val.length; i++){
                 if(val2[0] instanceof String){
                     val2[i] = val[i].toString();
+                    val2[index-1] = v.toString();
                 }else{
                     if(val2[0] instanceof Float){
                         if(val[i] instanceof Boolean){
                             val2[i]=Boolean.parseBoolean(val[i].toString())?Float.parseFloat("1.0"):Float.parseFloat("0.0");
-                        }else
+                        }else{
                             val2[i] = Float.parseFloat(val[i].toString());
+                        }
+                        if(v instanceof Boolean){
+                            val2[index-1]=Boolean.parseBoolean(v.toString())?Float.parseFloat("1.0"):Float.parseFloat("0.0");
+                        }else{
+                            val2[index-1] =Float.parseFloat(v.toString());
+                        }
                     }else if(val2[0] instanceof Integer){
                         if(val[i] instanceof Boolean){
                             val2[i]=Boolean.parseBoolean(val[i].toString())?1:0;
-                        }else
+                        }else{
                             val2[i] = Integer.parseInt(val[i].toString());
-                    }else if(val2[0] instanceof Boolean)
+                        }
+                        if(v instanceof Boolean){
+                            val2[index-1]=Boolean.parseBoolean(v.toString())?1:0;
+                        }else{
+                            val2[index-1] =Integer.parseInt(v.toString());
+                        }
+                    }else if(val2[0] instanceof Boolean){
                         val2[i] = Boolean.parseBoolean(val[i].toString());
+                        val2[index-1]=Boolean.parseBoolean(v.toString());
+                    }
                 }
             }
             
-            val2[index-1] = v;
-            
             return val2;
         }
+    }
+    
+    public static Object[] convertFloat(Object[] v){
+        for(int i=0; i<v.length; i++){
+            v[i] = Float.parseFloat(v[i].toString());
+        }
+        return v;
     }
 }

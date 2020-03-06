@@ -6,6 +6,7 @@ import java.util.LinkedList;
 import symbols.Casteo;
 import symbols.Environment;
 import symbols.ListStruct;
+import symbols.Mat;
 import symbols.Symbol;
 import symbols.Type;
 import symbols.Vec;
@@ -641,6 +642,48 @@ public class StructAssig implements ASTNode{
 
                         return error;
                     }
+                }
+            }
+            else if(symbol.getValue() instanceof Mat){
+                Mat mat = (Mat)symbol.getValue();
+                //Verifico que la lista de índices sólo traiga un valor
+                if(indexes.size()==1){
+                    //Verifico que el índice sea un vector de tipo integer de un sólo valor que no se pase del límite de la matriz
+                    Object index = indexes.remove(0).execute(environment, LError);
+                    if(index instanceof Vec && ((Vec)index).getValues().length==1 &&
+                            ((Vec)index).getValues()[0] instanceof Integer && 
+                                Integer.parseInt((((Vec)index).getValues()[0]).toString())<=(mat.row*mat.col) &&
+                                   Integer.parseInt((((Vec)index).getValues()[0]).toString())>0){
+                        int ind = Integer.parseInt((((Vec)index).getValues()[0]).toString());
+                        //Verifico que la expresion sea un vector de un sólo valor
+                        if(value instanceof Vec && ((Vec)value).getValues().length==1){
+                            int cont = 0;
+                            for(int i=0; i<mat.col; i++){
+                                for(int j=0; j<mat.row; j++){
+                                    if(cont==(ind-1)){
+                                        mat.getValues()[j][i] = ((Vec)value).getValues()[0];
+                                        ((Mat)environment.get(name).getValue()).setValues(mat.getValues());
+                                    }
+                                    cont++;
+                                }
+                            }
+                        }else{
+                            TError error = new TError(name, "Semántico", "La expresión a asignar no es correcta", 0, 0);
+                            LError.add(error);
+
+                            return error;
+                        }
+                    }else{
+                        TError error = new TError(name, "Semántico", "Error en el índice de la matriz", 0, 0);
+                        LError.add(error);
+                        
+                        return error; 
+                    }
+                }else{
+                    TError error = new TError(name, "Semántico", "Una matriz no puede tener más de un índice", 0, 0);
+                    LError.add(error);
+                    
+                    return error;
                 }
             }
         }else{

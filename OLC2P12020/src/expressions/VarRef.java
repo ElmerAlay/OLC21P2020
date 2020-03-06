@@ -4,6 +4,7 @@ import abstracto.*;
 import java.util.LinkedList;
 import symbols.Environment;
 import symbols.ListStruct;
+import symbols.Mat;
 import symbols.Vec;
 
 /**
@@ -28,6 +29,8 @@ public class VarRef implements ASTNode{
                 return new Vec(((Vec)environment.get(name).getValue()).getValues());   
             }else if(environment.get(name).getValue() instanceof ListStruct){  //Verifico que la variable sea de tipo lista
                 return new ListStruct(((ListStruct)environment.get(name).getValue()).getValues());
+            }else if(environment.get(name).getValue() instanceof Mat){  //Verifico que la variable sea de tipo matriz
+                return (Mat)environment.get(name).getValue();
             }
         }
         

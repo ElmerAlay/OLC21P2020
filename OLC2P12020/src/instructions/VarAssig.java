@@ -4,6 +4,7 @@ import abstracto.*;
 import java.util.LinkedList;
 import symbols.Environment;
 import symbols.ListStruct;
+import symbols.Mat;
 import symbols.Symbol;
 import symbols.Type;
 import symbols.Vec;
@@ -54,7 +55,8 @@ public class VarAssig implements ASTNode{
                 environment.get(name).setValue(new Vec(result)); //De lo contrario actualizo su valor en la tabla
                 environment.get(name).setType(type);
             }
-        }else if(value instanceof ListStruct){
+        }
+        else if(value instanceof ListStruct){
             type.setTypeObject("Lista");
             type.setTypes(Type.Types.LISTA);
             LinkedList<Object> result = ((ListStruct)value).getValues();
@@ -65,6 +67,18 @@ public class VarAssig implements ASTNode{
                 environment.get(name).setValue(new ListStruct(result)); //De lo contrario actualizo su valor en la tabla
                 environment.get(name).setType(type);
             }
+        }
+        else if(value instanceof Mat){
+            type.setTypeObject("Matriz");
+            type.setTypes(Type.Types.MATRIZ);
+            
+            if(environment.get(name) == null){ //Significa que no encontró una variable con ese nombre registrado    
+                environment.put(new Symbol(type, name, (Mat)value)); //Entonces lo agregamos a la tabla de simbolos
+            }else {
+                environment.get(name).setValue((Mat)value); //De lo contrario actualizo su valor en la tabla
+                environment.get(name).setType(type);
+            }
+            
         }
         
         return "asignación correcta\n";

@@ -19,6 +19,9 @@ public class Constant implements ASTNode{
 
     @Override
     public Object execute(Environment environment, LinkedList<TError> LError) {
+        if(value instanceof Vec)
+            return (Vec)value;
+        
         Object val[] = { value };
         return new Vec(val);
     }

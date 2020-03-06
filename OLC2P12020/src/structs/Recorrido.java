@@ -123,6 +123,28 @@ public class Recorrido {
                     LinkedList<ASTNode> lparam = new LinkedList<>();
                     lparam = getParam(root.getChildren().get(1), lparam);
                     return new CallFunc(root.getChildren().get(0).getValue(), lparam);
+                }else if(root.getLabel().equals("MAT2")){
+                    ASTNode exp1 = getExpression(root.getChildren().get(1));
+                    return new MatRef2(root.getChildren().get(0).getValue(), exp1);
+                }else if(root.getLabel().equals("MAT3")){
+                    ASTNode exp1 = getExpression(root.getChildren().get(1));
+                    return new MatRef3(root.getChildren().get(0).getValue(), exp1);
+                }else if(root.getLabel().equals("MATASIGN") && root.getChildren().get(0).getLabel().equals("MAT1")){
+                    String name = root.getChildren().get(0).getChildren().get(0).getValue();
+                    ASTNode ind1 = getExpression(root.getChildren().get(0).getChildren().get(1));
+                    ASTNode ind2 = getExpression(root.getChildren().get(0).getChildren().get(2));
+                    ASTNode exp = getExpression(root.getChildren().get(1));
+                    return new MatAssig1(name,ind1,ind2, exp);
+                }else if(root.getLabel().equals("MATASIGN") && root.getChildren().get(0).getLabel().equals("MAT2")){
+                    String name = root.getChildren().get(0).getChildren().get(0).getValue();
+                    ASTNode ind1 = getExpression(root.getChildren().get(0).getChildren().get(1));
+                    ASTNode exp = getExpression(root.getChildren().get(1));
+                    return new MatAssig2(name,ind1, exp);
+                }else if(root.getLabel().equals("MATASIGN") && root.getChildren().get(0).getLabel().equals("MAT3")){
+                    String name = root.getChildren().get(0).getChildren().get(0).getValue();
+                    ASTNode ind1 = getExpression(root.getChildren().get(0).getChildren().get(1));
+                    ASTNode exp = getExpression(root.getChildren().get(1));
+                    return new MatAssig3(name,ind1, exp);
                 }
             case 3:
                 if(root.getLabel().equals("ASIGN")){
@@ -130,6 +152,10 @@ public class Recorrido {
                     LinkedList<ASTNode> indexes = new LinkedList<>();
                     indexes = getCor(root.getChildren().get(1), indexes);
                     return new StructAssig(root.getChildren().get(0).getValue(), op1, indexes);
+                }else if(root.getLabel().equals("MAT1")){
+                    ASTNode exp1 = getExpression(root.getChildren().get(1));
+                    ASTNode exp2 = getExpression(root.getChildren().get(2));
+                    return new MatRef(root.getChildren().get(0).getValue(), exp1, exp2);
                 }
         }
         

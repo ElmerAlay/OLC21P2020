@@ -12,7 +12,8 @@ public class Type {
         STRING,
         BOOLEANO,
         VOID,
-        LISTA
+        LISTA,
+        MATRIZ
     };
     
     private Types types;

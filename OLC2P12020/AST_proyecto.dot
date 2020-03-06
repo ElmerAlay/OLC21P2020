@@ -1,146 +1,161 @@
 digraph G { node[shape=oval, style=filled, collor=coral]; edge[color=chartreuse3]; rankdir=UD 
 
-"47" [label="INICIO"]
-"46" [label="LINST"]
-"47" -> "46"
-"46" [label="LINST"]
-"38" [label="LINST"]
-"46" -> "38"
-"38" [label="LINST"]
-"26" [label="LINST"]
-"38" -> "26"
-"26" [label="LINST"]
-"17" [label="LINST"]
-"26" -> "17"
-"17" [label="LINST"]
-"8" [label="LINST"]
-"17" -> "8"
-"8" [label="LINST"]
-"7" [label="ASIGN"]
-"8" -> "7"
-"7" [label="ASIGN"]
-"6" [label="ID_lista"]
-"7" -> "6"
-"7" [label="ASIGN"]
-"5" [label="Llam"]
-"7" -> "5"
-"5" [label="Llam"]
-"4" [label="Ref_list"]
-"5" -> "4"
-"5" [label="Llam"]
-"3" [label="LPARAM"]
-"5" -> "3"
-"3" [label="LPARAM"]
-"1" [label="LPARAM"]
-"3" -> "1"
-"1" [label="LPARAM"]
-"0" [label="Integer_1"]
-"1" -> "0"
-"3" [label="LPARAM"]
-"2" [label="Integer_2"]
-"3" -> "2"
-"17" [label="LINST"]
-"16" [label="ASIGN"]
-"17" -> "16"
-"16" [label="ASIGN"]
-"15" [label="ID_lista"]
-"16" -> "15"
-"16" [label="ASIGN"]
-"13" [label="LCOR"]
-"16" -> "13"
-"13" [label="LCOR"]
-"10" [label="LCOR"]
-"13" -> "10"
-"10" [label="LCOR"]
-"9" [label="Integer_2"]
-"10" -> "9"
-"13" [label="LCOR"]
-"12" [label="LCOR2"]
-"13" -> "12"
-"12" [label="LCOR2"]
-"11" [label="Integer_2"]
-"12" -> "11"
-"16" [label="ASIGN"]
-"14" [label="String_hola"]
-"16" -> "14"
-"26" [label="LINST"]
-"25" [label="ASIGN"]
-"26" -> "25"
-"25" [label="ASIGN"]
-"24" [label="ID_lista"]
-"25" -> "24"
-"25" [label="ASIGN"]
-"22" [label="LCOR"]
-"25" -> "22"
-"22" [label="LCOR"]
-"19" [label="LCOR"]
-"22" -> "19"
-"19" [label="LCOR"]
-"18" [label="Integer_2"]
-"19" -> "18"
-"22" [label="LCOR"]
-"21" [label="LCOR2"]
-"22" -> "21"
-"21" [label="LCOR2"]
-"20" [label="Integer_1"]
-"21" -> "20"
-"25" [label="ASIGN"]
-"23" [label="True_true"]
-"25" -> "23"
-"38" [label="LINST"]
-"37" [label="ASIGN"]
-"38" -> "37"
-"37" [label="ASIGN"]
-"36" [label="ID_lista"]
-"37" -> "36"
-"37" [label="ASIGN"]
-"31" [label="LCOR"]
-"37" -> "31"
-"31" [label="LCOR"]
-"28" [label="LCOR"]
-"31" -> "28"
-"28" [label="LCOR"]
-"27" [label="Integer_4"]
-"28" -> "27"
-"31" [label="LCOR"]
-"30" [label="LCOR2"]
-"31" -> "30"
-"30" [label="LCOR2"]
-"29" [label="Integer_2"]
-"30" -> "29"
-"37" [label="ASIGN"]
-"35" [label="Llam"]
-"37" -> "35"
-"35" [label="Llam"]
-"34" [label="Ref_list"]
-"35" -> "34"
-"35" [label="Llam"]
-"33" [label="LPARAM"]
-"35" -> "33"
-"33" [label="LPARAM"]
-"32" [label="Integer_3"]
-"33" -> "32"
-"46" [label="LINST"]
-"45" [label="Llam"]
-"46" -> "45"
-"45" [label="Llam"]
-"44" [label="Ref_print"]
-"45" -> "44"
-"45" [label="Llam"]
-"43" [label="LPARAM"]
-"45" -> "43"
-"43" [label="LPARAM"]
-"42" [label="Struct"]
-"43" -> "42"
-"42" [label="Struct"]
-"41" [label="Ref_lista"]
-"42" -> "41"
-"42" [label="Struct"]
-"40" [label="LCOR2"]
-"42" -> "40"
-"40" [label="LCOR2"]
-"39" [label="Integer_4"]
-"40" -> "39"
+"156" [label="INICIO"]
+"155" [label="LINST"]
+"156" -> "155"
+"155" [label="LINST"]
+"150" [label="LINST"]
+"155" -> "150"
+"150" [label="LINST"]
+"137" [label="LINST"]
+"150" -> "137"
+"137" [label="LINST"]
+"126" [label="LINST"]
+"137" -> "126"
+"126" [label="LINST"]
+"125" [label="ASIGN"]
+"126" -> "125"
+"125" [label="ASIGN"]
+"124" [label="ID_vec1"]
+"125" -> "124"
+"125" [label="ASIGN"]
+"123" [label="Llam"]
+"125" -> "123"
+"123" [label="Llam"]
+"122" [label="Ref_c"]
+"123" -> "122"
+"123" [label="Llam"]
+"121" [label="LPARAM"]
+"123" -> "121"
+"121" [label="LPARAM"]
+"119" [label="LPARAM"]
+"121" -> "119"
+"119" [label="LPARAM"]
+"117" [label="LPARAM"]
+"119" -> "117"
+"117" [label="LPARAM"]
+"115" [label="LPARAM"]
+"117" -> "115"
+"115" [label="LPARAM"]
+"113" [label="LPARAM"]
+"115" -> "113"
+"113" [label="LPARAM"]
+"111" [label="LPARAM"]
+"113" -> "111"
+"111" [label="LPARAM"]
+"109" [label="LPARAM"]
+"111" -> "109"
+"109" [label="LPARAM"]
+"107" [label="LPARAM"]
+"109" -> "107"
+"107" [label="LPARAM"]
+"105" [label="LPARAM"]
+"107" -> "105"
+"105" [label="LPARAM"]
+"104" [label="Integer_1"]
+"105" -> "104"
+"107" [label="LPARAM"]
+"106" [label="Integer_2"]
+"107" -> "106"
+"109" [label="LPARAM"]
+"108" [label="Integer_3"]
+"109" -> "108"
+"111" [label="LPARAM"]
+"110" [label="Integer_4"]
+"111" -> "110"
+"113" [label="LPARAM"]
+"112" [label="Integer_5"]
+"113" -> "112"
+"115" [label="LPARAM"]
+"114" [label="Integer_6"]
+"115" -> "114"
+"117" [label="LPARAM"]
+"116" [label="Integer_7"]
+"117" -> "116"
+"119" [label="LPARAM"]
+"118" [label="Integer_8"]
+"119" -> "118"
+"121" [label="LPARAM"]
+"120" [label="Integer_9"]
+"121" -> "120"
+"137" [label="LINST"]
+"136" [label="ASIGN"]
+"137" -> "136"
+"136" [label="ASIGN"]
+"135" [label="ID_var1"]
+"136" -> "135"
+"136" [label="ASIGN"]
+"134" [label="Llam"]
+"136" -> "134"
+"134" [label="Llam"]
+"133" [label="Ref_matrix"]
+"134" -> "133"
+"134" [label="Llam"]
+"132" [label="LPARAM"]
+"134" -> "132"
+"132" [label="LPARAM"]
+"130" [label="LPARAM"]
+"132" -> "130"
+"130" [label="LPARAM"]
+"128" [label="LPARAM"]
+"130" -> "128"
+"128" [label="LPARAM"]
+"127" [label="Ref_vec1"]
+"128" -> "127"
+"130" [label="LPARAM"]
+"129" [label="Integer_3"]
+"130" -> "129"
+"132" [label="LPARAM"]
+"131" [label="Integer_3"]
+"132" -> "131"
+"150" [label="LINST"]
+"149" [label="ASIGN"]
+"150" -> "149"
+"149" [label="ASIGN"]
+"148" [label="ID_var1"]
+"149" -> "148"
+"149" [label="ASIGN"]
+"147" [label="|"]
+"149" -> "147"
+"147" [label="|"]
+"141" [label="( )"]
+"147" -> "141"
+"141" [label="( )"]
+"140" [label="<"]
+"141" -> "140"
+"140" [label="<"]
+"138" [label="Integer_4"]
+"140" -> "138"
+"140" [label="<"]
+"139" [label="Ref_var1"]
+"140" -> "139"
+"147" [label="|"]
+"146" [label="!"]
+"147" -> "146"
+"146" [label="!"]
+"145" [label="( )"]
+"146" -> "145"
+"145" [label="( )"]
+"144" [label="<"]
+"145" -> "144"
+"144" [label="<"]
+"142" [label="Integer_4"]
+"144" -> "142"
+"144" [label="<"]
+"143" [label="Ref_var1"]
+"144" -> "143"
+"155" [label="LINST"]
+"154" [label="Llam"]
+"155" -> "154"
+"154" [label="Llam"]
+"153" [label="Ref_print"]
+"154" -> "153"
+"154" [label="Llam"]
+"152" [label="LPARAM"]
+"154" -> "152"
+"152" [label="LPARAM"]
+"151" [label="Ref_var1"]
+"152" -> "151"
 
 }
 

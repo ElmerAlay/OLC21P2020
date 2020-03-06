@@ -3,6 +3,7 @@ package expressions;
 import abstracto.*;
 import java.util.LinkedList;
 import symbols.Environment;
+import symbols.Mat;
 import symbols.Vec;
 
 /**
@@ -136,6 +137,128 @@ public class LTE implements ASTNode{
             //Por último es el caso en el que los vectores son de distinto tamaño
             else{
                 TError error = new TError("<=", "Semántico", "no se pueden comparar 2 vectores de distinto tamaño", 0, 0);
+                LError.add(error);
+
+                return error;
+            }
+        }
+        else if(op1 instanceof Mat && op2 instanceof Mat){
+            Mat mat1 = (Mat)op1;
+            Mat mat2 = (Mat)op2;
+            
+            //Comparo que sean del mismo tamaño
+            if(mat1.row==mat2.row && mat1.col==mat2.col){
+                int con1=0, con2=0;
+                Object o1[] = new Object[mat1.row*mat1.col], o2[] = new Object[mat2.row*mat2.col];
+                for(int i=0;i<mat1.col;i++){
+                    for(int j=0;j<mat1.row;j++){
+                        o1[con1] = mat1.getValues()[j][i];
+                        con1++;
+                    }
+                }
+                for(int i=0;i<mat2.col;i++){
+                    for(int j=0;j<mat2.row;j++){
+                        o2[con2] = mat2.getValues()[j][i];
+                        con2++;
+                    }
+                }
+                Object res = new Equals(new Constant(new Vec(o1)), new Constant(new Vec(o2))).execute(environment, LError);
+                Object result[][] = new Object[mat1.row][mat1.col];
+                con1 = 0;
+                if(res instanceof Vec){
+                    for(int i=0;i<mat1.col;i++){
+                        for(int j=0;j<mat1.row;j++){
+                            result[j][i] = ((Vec)res).getValues()[con1];
+                            con1++;
+                        }
+                    }
+                    return new Mat(result, mat1.row, mat1.col); 
+                }else{
+                    TError error = new TError("<=", "Semántico", "Error al comparar las matrices", 0, 0);
+                    LError.add(error);
+
+                    return error;
+                }
+            }else{
+                TError error = new TError("<=", "Semántico", "no se puede comparar las matrices porque no tienen las mismas dimensiones", 0, 0);
+                LError.add(error);
+
+                return error;
+            }
+        }
+        else if(op1 instanceof Mat && op2 instanceof Vec){
+            Mat mat1 = (Mat)op1;
+            Object vec[] = ((Vec)op2).getValues();
+            
+            //Comparo que sea igual a 1 el vector
+            if(vec.length==1){
+                int con1=0;
+                Object o1[] = new Object[mat1.row*mat1.col];
+                for(int i=0;i<mat1.col;i++){
+                    for(int j=0;j<mat1.row;j++){
+                        o1[con1] = mat1.getValues()[j][i];
+                        con1++;
+                    }
+                }
+                
+                Object res = new LTE(new Constant(new Vec(o1)), new Constant((Vec)op2)).execute(environment, LError);
+                Object result[][] = new Object[mat1.row][mat1.col];
+                con1 = 0;
+                if(res instanceof Vec){
+                    for(int i=0;i<mat1.col;i++){
+                        for(int j=0;j<mat1.row;j++){
+                            result[j][i] = ((Vec)res).getValues()[con1];
+                            con1++;
+                        }
+                    }
+                    return new Mat(result, mat1.row, mat1.col);
+                }else{
+                    TError error = new TError("<=", "Semántico", "Error al comparar la matriz con el vector", 0, 0);
+                    LError.add(error);
+
+                    return error;
+                }
+            }else{
+                TError error = new TError("<=", "Semántico", "no se puede comparar una matriz y un vector de más de un valor", 0, 0);
+                LError.add(error);
+
+                return error;
+            }
+        }
+        else if(op1 instanceof Vec && op2 instanceof Mat){
+            Mat mat1 = (Mat)op2;
+            Object vec[] = ((Vec)op1).getValues();
+            
+            //Comparo que sea igual a 1 el vector
+            if(vec.length==1){
+                int con1=0;
+                Object o1[] = new Object[mat1.row*mat1.col];
+                for(int i=0;i<mat1.col;i++){
+                    for(int j=0;j<mat1.row;j++){
+                        o1[con1] = mat1.getValues()[j][i];
+                        con1++;
+                    }
+                }
+                
+                Object res = new LTE(new Constant((Vec)op1), new Constant(new Vec(o1))).execute(environment, LError);
+                Object result[][] = new Object[mat1.row][mat1.col];
+                con1 = 0;
+                if(res instanceof Vec){
+                    for(int i=0;i<mat1.col;i++){
+                        for(int j=0;j<mat1.row;j++){
+                            result[j][i] = ((Vec)res).getValues()[con1];
+                            con1++;
+                        }
+                    }
+                    return new Mat(result, mat1.row, mat1.col);
+                }else{
+                    TError error = new TError("<=", "Semántico", "Error al comparar la matriz con el vector", 0, 0);
+                    LError.add(error);
+
+                    return error;
+                }
+            }else{
+                TError error = new TError("<=", "Semántico", "no se puede comparar una matriz y un vector de más de un valor", 0, 0);
                 LError.add(error);
 
                 return error;

@@ -5,6 +5,7 @@ import abstracto.TError;
 import java.util.LinkedList;
 import symbols.Environment;
 import symbols.ListStruct;
+import symbols.Mat;
 import symbols.Vec;
 
 /**
@@ -45,6 +46,43 @@ public class StructRef implements ASTNode{
                 }
                 else{
                     TError error = new TError(name, "Semántico", "Error de índices en la lista", 0, 0);
+                    LError.add(error);
+                    return error;
+                }
+            }
+            //Verifico si el símbolo es una matriz
+            else if(environment.get(name).getValue() instanceof Mat){
+                //Verifico que la lista de índices sea de tamaño 1
+                if(indexes.size()==1){
+                    Object o = indexes.remove(0).execute(environment, LError);
+                    //Verifico que o sea un vector de tipo integer de un sólo valor
+                    if(o instanceof Vec && ((Vec)o).getValues().length==1 && ((Vec)o).getValues()[0] instanceof Integer){
+                        int index = Integer.parseInt((((Vec)o).getValues()[0]).toString());
+                        //Verifico que el index esté dentro del tamaño de la matriz
+                        Mat mat = (Mat)environment.get(name).getValue();
+                        if(index<=mat.col*mat.row && index>0){
+                            int cont = 0;
+                            for(int i=0; i<mat.col; i++){
+                                for(int j=0; j<mat.row; j++){
+                                    if(cont==(index-1)){
+                                        Object result[] = {mat.getValues()[j][i]};
+                                        return new Vec(result);
+                                    }
+                                    cont++;
+                                }
+                            }
+                        }else{
+                            TError error = new TError(name, "Semántico", "El índice sobrepasa el tamaño del vector o es negativo", 0, 0);
+                            LError.add(error);
+                            return error;
+                        }
+                    }else{
+                        TError error = new TError(name, "Semántico", "El índice debe ser un vector de tipo integer de tamaño 1", 0, 0);
+                        LError.add(error);
+                        return error;
+                    } 
+                }else{
+                    TError error = new TError(name, "Semántico", "La variable es de tipo matriz, pero tiene más de un índice para acceder", 0, 0);
                     LError.add(error);
                     return error;
                 }
