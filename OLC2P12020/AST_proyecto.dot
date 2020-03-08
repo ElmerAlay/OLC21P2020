@@ -1,103 +1,169 @@
 digraph G { node[shape=oval, style=filled, collor=coral]; edge[color=chartreuse3]; rankdir=UD 
 
-"140" [label="INICIO"]
-"139" [label="LINST"]
-"140" -> "139"
-"139" [label="LINST"]
+"143" [label="INICIO"]
+"142" [label="LINST"]
+"143" -> "142"
+"142" [label="LINST"]
 "134" [label="LINST"]
-"139" -> "134"
+"142" -> "134"
 "134" [label="LINST"]
-"128" [label="LINST"]
-"134" -> "128"
-"128" [label="LINST"]
-"117" [label="LINST"]
-"128" -> "117"
-"117" [label="LINST"]
-"116" [label="ASIGN"]
-"117" -> "116"
-"116" [label="ASIGN"]
-"115" [label="ID_vec1"]
-"116" -> "115"
-"116" [label="ASIGN"]
-"114" [label="Llam"]
-"116" -> "114"
-"114" [label="Llam"]
-"113" [label="Ref_c"]
-"114" -> "113"
-"114" [label="Llam"]
-"112" [label="LPARAM"]
-"114" -> "112"
-"112" [label="LPARAM"]
-"110" [label="LPARAM"]
-"112" -> "110"
-"110" [label="LPARAM"]
-"108" [label="LPARAM"]
-"110" -> "108"
-"108" [label="LPARAM"]
-"107" [label="String_hola"]
+"126" [label="LINST"]
+"134" -> "126"
+"126" [label="LINST"]
+"118" [label="LINST"]
+"126" -> "118"
+"118" [label="LINST"]
+"113" [label="LINST"]
+"118" -> "113"
+"113" [label="LINST"]
+"109" [label="LINST"]
+"113" -> "109"
+"109" [label="LINST"]
+"98" [label="LINST"]
+"109" -> "98"
+"98" [label="LINST"]
+"97" [label="ASIGN"]
+"98" -> "97"
+"97" [label="ASIGN"]
+"96" [label="ID_vec1"]
+"97" -> "96"
+"97" [label="ASIGN"]
+"95" [label="Llam"]
+"97" -> "95"
+"95" [label="Llam"]
+"94" [label="Ref_c"]
+"95" -> "94"
+"95" [label="Llam"]
+"93" [label="LPARAM"]
+"95" -> "93"
+"93" [label="LPARAM"]
+"91" [label="LPARAM"]
+"93" -> "91"
+"91" [label="LPARAM"]
+"89" [label="LPARAM"]
+"91" -> "89"
+"89" [label="LPARAM"]
+"88" [label="String_hola"]
+"89" -> "88"
+"91" [label="LPARAM"]
+"90" [label="String_que"]
+"91" -> "90"
+"93" [label="LPARAM"]
+"92" [label="String_tal"]
+"93" -> "92"
+"109" [label="LINST"]
+"108" [label="ASIGN"]
+"109" -> "108"
+"108" [label="ASIGN"]
+"107" [label="ID_mat1"]
 "108" -> "107"
-"110" [label="LPARAM"]
-"109" [label="String_que"]
-"110" -> "109"
-"112" [label="LPARAM"]
-"111" [label="String_tal"]
+"108" [label="ASIGN"]
+"106" [label="Llam"]
+"108" -> "106"
+"106" [label="Llam"]
+"105" [label="Ref_matrix"]
+"106" -> "105"
+"106" [label="Llam"]
+"104" [label="LPARAM"]
+"106" -> "104"
+"104" [label="LPARAM"]
+"102" [label="LPARAM"]
+"104" -> "102"
+"102" [label="LPARAM"]
+"100" [label="LPARAM"]
+"102" -> "100"
+"100" [label="LPARAM"]
+"99" [label="Ref_vec1"]
+"100" -> "99"
+"102" [label="LPARAM"]
+"101" [label="Integer_3"]
+"102" -> "101"
+"104" [label="LPARAM"]
+"103" [label="Integer_2"]
+"104" -> "103"
+"113" [label="LINST"]
+"112" [label="ASIGN"]
+"113" -> "112"
+"112" [label="ASIGN"]
+"111" [label="ID_mat2"]
 "112" -> "111"
-"128" [label="LINST"]
-"127" [label="ASIGN"]
-"128" -> "127"
-"127" [label="ASIGN"]
-"126" [label="ID_mat1"]
-"127" -> "126"
-"127" [label="ASIGN"]
+"112" [label="ASIGN"]
+"110" [label="Ref_mat1"]
+"112" -> "110"
+"118" [label="LINST"]
+"117" [label="Llam"]
+"118" -> "117"
+"117" [label="Llam"]
+"116" [label="Ref_print"]
+"117" -> "116"
+"117" [label="Llam"]
+"115" [label="LPARAM"]
+"117" -> "115"
+"115" [label="LPARAM"]
+"114" [label="Ref_mat2"]
+"115" -> "114"
+"126" [label="LINST"]
 "125" [label="Llam"]
-"127" -> "125"
+"126" -> "125"
 "125" [label="Llam"]
-"124" [label="Ref_matrix"]
+"124" [label="Ref_print"]
 "125" -> "124"
 "125" [label="Llam"]
 "123" [label="LPARAM"]
 "125" -> "123"
 "123" [label="LPARAM"]
-"121" [label="LPARAM"]
-"123" -> "121"
-"121" [label="LPARAM"]
-"119" [label="LPARAM"]
-"121" -> "119"
-"119" [label="LPARAM"]
-"118" [label="Ref_vec1"]
-"119" -> "118"
-"121" [label="LPARAM"]
-"120" [label="Integer_3"]
-"121" -> "120"
-"123" [label="LPARAM"]
-"122" [label="Integer_2"]
+"122" [label="Llam"]
 "123" -> "122"
+"122" [label="Llam"]
+"121" [label="Ref_ncol"]
+"122" -> "121"
+"122" [label="Llam"]
+"120" [label="LPARAM"]
+"122" -> "120"
+"120" [label="LPARAM"]
+"119" [label="Ref_mat2"]
+"120" -> "119"
 "134" [label="LINST"]
-"133" [label="ASIGN"]
+"133" [label="Llam"]
 "134" -> "133"
-"133" [label="ASIGN"]
-"132" [label="ID_mat2"]
+"133" [label="Llam"]
+"132" [label="Ref_print"]
 "133" -> "132"
-"133" [label="ASIGN"]
-"131" [label="+"]
+"133" [label="Llam"]
+"131" [label="LPARAM"]
 "133" -> "131"
-"131" [label="+"]
-"129" [label="Ref_mat1"]
-"131" -> "129"
-"131" [label="+"]
-"130" [label="String_ 1"]
+"131" [label="LPARAM"]
+"130" [label="Llam"]
 "131" -> "130"
-"139" [label="LINST"]
+"130" [label="Llam"]
+"129" [label="Ref_nrow"]
+"130" -> "129"
+"130" [label="Llam"]
+"128" [label="LPARAM"]
+"130" -> "128"
+"128" [label="LPARAM"]
+"127" [label="Ref_mat2"]
+"128" -> "127"
+"142" [label="LINST"]
+"141" [label="Llam"]
+"142" -> "141"
+"141" [label="Llam"]
+"140" [label="Ref_print"]
+"141" -> "140"
+"141" [label="Llam"]
+"139" [label="LPARAM"]
+"141" -> "139"
+"139" [label="LPARAM"]
 "138" [label="Llam"]
 "139" -> "138"
 "138" [label="Llam"]
-"137" [label="Ref_print"]
+"137" [label="Ref_nrow"]
 "138" -> "137"
 "138" [label="Llam"]
 "136" [label="LPARAM"]
 "138" -> "136"
 "136" [label="LPARAM"]
-"135" [label="Ref_mat2"]
+"135" [label="Ref_vec1"]
 "136" -> "135"
 
 }

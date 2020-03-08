@@ -49,4 +49,18 @@ public class SupportFunctions {
         
         return mapLexArr(indexes, tam, dim-1)*tam[dim-1]+indexes[dim-1];
     }
+    
+    public static String type(Object vec){
+        String result = "";
+        
+        if(vec instanceof String)
+            result = "STRING";
+        else if (vec instanceof Float)
+            result = "NUMERICO";
+        else if (vec instanceof Integer)
+            result = "INTEGER";
+        else if (vec instanceof Boolean)
+            result = "BOOLEAN";
+        return result;
+    }
 }
