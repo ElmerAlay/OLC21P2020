@@ -2,6 +2,7 @@ package instructions;
 
 import abstracto.*;
 import java.util.LinkedList;
+import symbols.Arr;
 import symbols.Environment;
 import symbols.ListStruct;
 import symbols.Mat;
@@ -70,12 +71,44 @@ public class VarAssig implements ASTNode{
         }
         else if(value instanceof Mat){
             type.setTypeObject("Matriz");
-            type.setTypes(Type.Types.MATRIZ);
+            //Modificamos el tipo primitivo 
+            if(((Mat)value).getValues()[0][0] instanceof String)
+                type.setTypes(Type.Types.STRING);
+            else if (((Mat)value).getValues()[0][0] instanceof Float)
+                type.setTypes(Type.Types.NUMERICO);
+            else if (((Mat)value).getValues()[0][0] instanceof Integer)
+                type.setTypes(Type.Types.INTEGER);
+            else if (((Mat)value).getValues()[0][0] instanceof Boolean)
+                type.setTypes(Type.Types.BOOLEANO);
             
             if(environment.get(name) == null){ //Significa que no encontró una variable con ese nombre registrado    
                 environment.put(new Symbol(type, name, (Mat)value)); //Entonces lo agregamos a la tabla de simbolos
             }else {
                 environment.get(name).setValue((Mat)value); //De lo contrario actualizo su valor en la tabla
+                environment.get(name).setType(type);
+            }
+            
+        }
+        else if(value instanceof Arr){
+            type.setTypeObject("Arreglo");
+            if(((Arr)value).getData().get(0) instanceof ListStruct)
+                type.setTypes(Type.Types.LISTA);
+            else{
+                //Modificamos el tipo primitivo 
+                if(((Arr)value).getData().get(0) instanceof String)
+                    type.setTypes(Type.Types.STRING);
+                else if (((Arr)value).getData().get(0) instanceof Float)
+                    type.setTypes(Type.Types.NUMERICO);
+                else if (((Arr)value).getData().get(0) instanceof Integer)
+                    type.setTypes(Type.Types.INTEGER);
+                else if (((Arr)value).getData().get(0) instanceof Boolean)
+                    type.setTypes(Type.Types.BOOLEANO);
+            }
+            
+            if(environment.get(name) == null){ //Significa que no encontró una variable con ese nombre registrado    
+                environment.put(new Symbol(type, name, (Arr)value)); //Entonces lo agregamos a la tabla de simbolos
+            }else {
+                environment.get(name).setValue((Arr)value); //De lo contrario actualizo su valor en la tabla
                 environment.get(name).setType(type);
             }
             

@@ -2,6 +2,7 @@ package expressions;
 
 import abstracto.*;
 import java.util.LinkedList;
+import symbols.Arr;
 import symbols.Environment;
 import symbols.ListStruct;
 import symbols.Mat;
@@ -31,6 +32,8 @@ public class VarRef implements ASTNode{
                 return new ListStruct(((ListStruct)environment.get(name).getValue()).getValues());
             }else if(environment.get(name).getValue() instanceof Mat){  //Verifico que la variable sea de tipo matriz
                 return (Mat)environment.get(name).getValue();
+            }else if(environment.get(name).getValue() instanceof Arr){  //Verifico que la variable sea de tipo arreglo
+                return (Arr)environment.get(name).getValue();
             }
         }
         

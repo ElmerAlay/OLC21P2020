@@ -42,4 +42,11 @@ public class SupportFunctions {
     public static int mapLexiMat(int fila, int columna, int tam){
         return columna*tam+fila;
     }
+    
+    public static int mapLexArr(int indexes[], int tam[], int dim){
+        if(dim==2)
+            return indexes[0]*tam[1] + indexes[1];
+        
+        return mapLexArr(indexes, tam, dim-1)*tam[dim-1]+indexes[dim-1];
+    }
 }

@@ -65,6 +65,8 @@ public class CallFunc implements ASTNode{
             return new C(lparam).execute(environment, LError);
         }else if(name.equals("matrix") && lparam.size()==3){
             return new Matrix(lparam).execute(environment, LError);
+        }else if(name.equals("array") && lparam.size()==2){
+            return new ArrayFunc(lparam).execute(environment, LError);
         }
         
         TError error = new TError(name, "Semántico", "Error de argumentos en la función", 0, 0);
