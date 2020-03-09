@@ -43,6 +43,12 @@ public class Recorrido {
                     return new Constant(true);
                 else if(root.getLabel().equals("False"))
                     return new Constant(false);
+                else if(root.getLabel().equals("BREAK"))
+                    return new Break();
+                else if(root.getLabel().equals("CONTINUE"))
+                    return new Continue();
+                /*else if(root.getLabel().equals("RETURN"))
+                    return new Return(exp);*/
                 else if(root.getLabel().equals("Ref"))
                     return new VarRef(root.getValue());
             case 1:
@@ -145,6 +151,18 @@ public class Recorrido {
                     ASTNode ind1 = getExpression(root.getChildren().get(0).getChildren().get(1));
                     ASTNode exp = getExpression(root.getChildren().get(1));
                     return new MatAssig3(name,ind1, exp);
+                }else if(root.getLabel().equals("IF")){
+                    ASTNode cond = getExpression(root.getChildren().get(0));
+                    LinkedList<ASTNode> lexpt = new LinkedList<>();
+                    lexpt = getInstruccions(root.getChildren().get(1), lexpt);
+                    return new If(cond, lexpt);
+                }else if(root.getLabel().equals("SWITCH")){
+                    ASTNode exp = getExpression(root.getChildren().get(0));
+                    LinkedList<CASE> lcase = new LinkedList<>();
+                    lcase = getLCASE(exp, root.getChildren().get(1), lcase);
+                    LinkedList<ASTNode> linstf = new LinkedList<>();
+                    linstf = getInstruccions(root.getChildren().get(2), linstf);
+                    return new SWITCH(exp, lcase, linstf);
                 }
             case 3:
                 if(root.getLabel().equals("ASIGN")){
@@ -156,6 +174,43 @@ public class Recorrido {
                     ASTNode exp1 = getExpression(root.getChildren().get(1));
                     ASTNode exp2 = getExpression(root.getChildren().get(2));
                     return new MatRef(root.getChildren().get(0).getValue(), exp1, exp2);
+                }else if(root.getLabel().equals("TERN")){
+                    ASTNode cond = getExpression(root.getChildren().get(0));
+                    ASTNode expT = getExpression(root.getChildren().get(1));
+                    ASTNode expF = getExpression(root.getChildren().get(2));
+                    return new Tern(cond, expT, expF);
+                }else if(root.getLabel().equals("IF") && root.getChildren().get(2).getLabel().equals("LINST")){
+                    ASTNode cond = getExpression(root.getChildren().get(0));
+                    LinkedList<ASTNode> lexpt = new LinkedList<>();
+                    LinkedList<ASTNode> lexpf = new LinkedList<>();
+                    lexpt = getInstruccions(root.getChildren().get(1), lexpt);
+                    lexpf = getInstruccions(root.getChildren().get(2), lexpf);
+                    return new If(cond, lexpt, lexpf);
+                }else if(root.getLabel().equals("IF") && root.getChildren().get(2).getLabel().equals("EI")){
+                    ASTNode cond = getExpression(root.getChildren().get(0));
+                    LinkedList<ASTNode> lexpt = new LinkedList<>();
+                    LinkedList<ASTNode> lei = new LinkedList<>();
+                    lexpt = getInstruccions(root.getChildren().get(1), lexpt);
+                    lei = getLEI(root.getChildren().get(2), lei);
+                    return new If(cond, lexpt, lei, null);
+                }else if(root.getLabel().equals("SWITCH")){
+                    ASTNode exp = getExpression(root.getChildren().get(0));
+                    LinkedList<CASE> lcase = new LinkedList<>();
+                    lcase = getLCASE(exp, root.getChildren().get(1), lcase);
+                    LinkedList<ASTNode> linstf = new LinkedList<>();
+                    linstf = getInstruccions(root.getChildren().get(2), linstf);
+                    return new SWITCH(exp, lcase, linstf);
+                }
+            case 4:
+                if(root.getLabel().equals("IF")){
+                    ASTNode cond = getExpression(root.getChildren().get(0));
+                    LinkedList<ASTNode> lexpt = new LinkedList<>();
+                    LinkedList<ASTNode> lei = new LinkedList<>();
+                    LinkedList<ASTNode> lexpf = new LinkedList<>();
+                    lexpt = getInstruccions(root.getChildren().get(1), lexpt);
+                    lei = getLEI(root.getChildren().get(2), lei);
+                    lexpf = getInstruccions(root.getChildren().get(3), lexpf);
+                    return new If(cond, lexpt, lei,lexpf);
                 }
         }
         
@@ -231,6 +286,49 @@ public class Recorrido {
                     lparam.add(getExpression(root.getChildren().get(1)));
                     
                     return lparam;
+                }
+        }
+        return null;
+    }
+    
+    private LinkedList<ASTNode> getLEI(AST root, LinkedList<ASTNode> lei){
+        switch(root.getChildren().size()){
+            case 1:
+                if(root.getLabel().equals("EI")){
+                    lei.add(getExpression(root.getChildren().get(0)));
+                    
+                    return lei;
+                }
+            case 2:
+                if(root.getLabel().equals("EI")){
+                    lei = getLEI(root.getChildren().get(0), lei);
+                    lei.add(getExpression(root.getChildren().get(1)));
+                    
+                    return lei;
+                }
+        }
+        return null;
+    }
+    
+    private LinkedList<CASE> getLCASE(ASTNode expT, AST root, LinkedList<CASE> lcase){
+        switch(root.getChildren().size()){
+            case 2:
+                if(root.getLabel().equals("LCASE")){
+                    LinkedList<ASTNode> linst = new LinkedList<>();
+                    linst = getInstruccions(root.getChildren().get(1), linst);
+                    ASTNode exp = getExpression(root.getChildren().get(0));
+                    lcase.add(new CASE(expT, exp, linst));
+                    
+                    return lcase;
+                }
+            case 3:
+                if(root.getLabel().equals("LCASE")){
+                    lcase = getLCASE(expT, root.getChildren().get(0), lcase);
+                    LinkedList<ASTNode> linst = new LinkedList<>();
+                    linst = getInstruccions(root.getChildren().get(2), linst);
+                    lcase.add(new CASE(expT, getExpression(root.getChildren().get(1)), linst));
+                    
+                    return lcase;
                 }
         }
         return null;

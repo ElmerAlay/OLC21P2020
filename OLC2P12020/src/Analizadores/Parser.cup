@@ -35,15 +35,19 @@ action code
 
 
 terminal plus, minus, mul, div, pot, mod;
-terminal ipar, fpar, icor, fcor;
+terminal ipar, fpar, icor, fcor, illa, flla;
+terminal si, sino, swit, caso;
 terminal gt, lt, gte, lte, eq, neq;
 terminal or, and, not;
+terminal tern;
+terminal retrn, brek, cont, def;
 terminal nulo, verdadero, falso, uminus;
-terminal pyc, asign, colon;
+terminal pyc, asign, colon, dp;
 terminal String numero, flotante, cadena, id;
 
-non terminal INICIO, E, ASIGN, INST, LINST, LCOR, LPARAM, LLAMAD, MAT;
+non terminal INICIO, E, ASIGN, INST, LINST, LCOR, LPARAM, LLAMAD, MAT, IF, EI, LEI, SWITCH, LCASE, TRANS;
 
+precedence left tern;
 precedence left  or;
 precedence left  and;
 precedence right not;
@@ -98,6 +102,18 @@ INST    ::= ASIGN:asig  pyc {:
         |   LLAMAD:llamad   {:
                                 RESULT = (AST)llamad;
                             :}
+        |   IF:i_f  {:
+                        RESULT = (AST)i_f;
+                    :}
+        |   SWITCH:switc_h  {:
+                                RESULT = (AST)switc_h;
+                            :}
+        |   TRANS:t pyc {:
+                            RESULT = (AST)t;
+                        :}
+        |   TRANS:t {:
+                        RESULT = (AST)t;
+                    :}
 ;
 
 E ::=   E:op1 plus E:op2    {:
@@ -326,6 +342,16 @@ E ::=   E:op1 plus E:op2    {:
     |   MAT:mat {:
                     RESULT = (AST)mat;
                 :}
+    |   E:cond tern E:expTrue dp E:expFalse {:
+                                                AST nd = new AST();
+                                                nd.setLabel("TERN");
+                                                nd.setIdNode(Parser.cont++);
+                                                nd.addChildren((AST)cond);
+                                                nd.addChildren((AST)expTrue);
+                                                nd.addChildren((AST)expFalse);
+                                                
+                                                RESULT = (AST)nd;
+                                            :}
 ;
 
 LCOR    ::= LCOR:lcor icor E:exp fcor   {:
@@ -497,6 +523,146 @@ MAT ::= id:val icor E:exp1 colon E:exp2 fcor  {:
                                             nd.setIdNode(Parser.cont++);
                                             nd.addChildren(n);
                                             nd.addChildren((AST)exp2);
+
+                                            RESULT = nd;
+                                        :}
+;
+
+TRANS   ::= retrn   {:
+                        AST nd = new AST();
+                        nd.setLabel("RETURN");
+                        nd.setIdNode(Parser.cont++);
+                        nd.setValue("return");
+
+                        RESULT = nd;
+                    :}  
+        |   brek    {:
+                        AST nd = new AST();
+                        nd.setLabel("BREAK");
+                        nd.setIdNode(Parser.cont++);
+                        nd.setValue("break");
+
+                        RESULT = nd;
+                    :}
+        |   cont    {:
+                        AST nd = new AST();
+                        nd.setLabel("CONTINUE");
+                        nd.setIdNode(Parser.cont++);
+                        nd.setValue("continue");
+
+                        RESULT = nd;
+                    :}
+;
+
+IF  ::= si ipar E:cond fpar illa LINST:linst flla   {:
+                                                        AST nd = new AST();
+                                                        nd.setLabel("IF");
+                                                        nd.setIdNode(Parser.cont++);
+                                                        nd.addChildren((AST)cond);
+                                                        nd.addChildren((AST)linst);
+
+                                                        RESULT = nd;
+                                                    :}
+    |   si ipar E:cond fpar illa LINST:linstt flla sino illa LINST:linstf flla  {:
+                                                                                    AST nd = new AST();
+                                                                                    nd.setLabel("IF");
+                                                                                    nd.setIdNode(Parser.cont++);
+                                                                                    nd.addChildren((AST)cond);
+                                                                                    nd.addChildren((AST)linstt);
+                                                                                    nd.addChildren((AST)linstf);
+
+                                                                                    RESULT = nd;
+                                                                                :}
+    |   si ipar E:cond fpar illa LINST:linstt flla LEI:lei sino illa LINST:linstf flla  {:
+                                                                                            AST nd = new AST();
+                                                                                            nd.setLabel("IF");
+                                                                                            nd.setIdNode(Parser.cont++);
+                                                                                            nd.addChildren((AST)cond);
+                                                                                            nd.addChildren((AST)linstt);
+                                                                                            nd.addChildren((AST)lei);
+                                                                                            nd.addChildren((AST)linstf);
+
+                                                                                            RESULT = nd;
+                                                                                        :}
+    |   si ipar E:cond fpar illa LINST:linstt flla LEI:lei  {:
+                                                                AST nd = new AST();
+                                                                nd.setLabel("IF");
+                                                                nd.setIdNode(Parser.cont++);
+                                                                nd.addChildren((AST)cond);
+                                                                nd.addChildren((AST)linstt);
+                                                                nd.addChildren((AST)lei);
+
+                                                                RESULT = nd;
+                                                            :}                                                                                        
+;
+
+LEI ::= LEI:lei EI:ei   {:
+                            AST nd = new AST();
+                            nd.setLabel("EI");
+                            nd.setIdNode(Parser.cont++);
+                            nd.addChildren((AST)lei);
+                            nd.addChildren((AST)ei);
+
+                            RESULT = nd;
+                        :}
+    |   EI:ei   {:
+                    AST nd = new AST();
+                    nd.setLabel("EI");
+                    nd.setIdNode(Parser.cont++);
+                    nd.addChildren((AST)ei);
+
+                    RESULT = nd;
+                :}
+;
+
+EI  ::= sino si ipar E:cond fpar illa LINST:linst flla  {:
+                                                            AST nd = new AST();
+                                                            nd.setLabel("IF");
+                                                            nd.setIdNode(Parser.cont++);
+                                                            nd.addChildren((AST)cond);
+                                                            nd.addChildren((AST)linst);
+
+                                                            RESULT = nd;
+                                                        :}
+;
+
+SWITCH  ::= swit ipar E:exp fpar illa LCASE:lcase def dp LINST:linstf flla {:
+                                                                                AST nd = new AST();
+                                                                                nd.setLabel("SWITCH");
+                                                                                nd.setIdNode(Parser.cont++);
+                                                                                nd.addChildren((AST)exp);
+                                                                                nd.addChildren((AST)lcase);
+                                                                                nd.addChildren((AST)linstf);
+
+                                                                                RESULT = nd;
+                                                                            :}
+        |   swit ipar E:exp fpar illa LCASE:lcase flla  {:
+                                                            AST nd = new AST();
+                                                            nd.setLabel("SWITCH");
+                                                            nd.setIdNode(Parser.cont++);
+                                                            nd.addChildren((AST)exp);
+                                                            nd.addChildren((AST)lcase);                                                                                                                 
+
+                                                            RESULT = nd;
+                                                        :}
+;
+
+LCASE   ::= LCASE:lcase caso E:exp dp LINST:linst  {:
+                                                        AST nd = new AST();
+                                                        nd.setLabel("LCASE");
+                                                        nd.setIdNode(Parser.cont++);
+                                                        nd.addChildren((AST)lcase);
+                                                        nd.addChildren((AST)exp);
+                                                        nd.addChildren((AST)linst);
+
+                                                        RESULT = nd;
+                                                    :}
+        |   caso E:exp dp LINST:linst  {:
+                                            AST nd = new AST();
+                                            nd.setLabel("LCASE");
+                                            nd.setIdNode(Parser.cont++);
+                                            nd.addChildren((AST)exp);
+                                            nd.addChildren((AST)linst);
 
                                             RESULT = nd;
                                         :}

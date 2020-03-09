@@ -35,6 +35,16 @@ comentariomulti =   "#*" ~"*#"
     "null"              { return new Symbol(Simbolo.nulo, yycolumn, yyline, yytext().toLowerCase()); }
     "true"              { return new Symbol(Simbolo.verdadero, yycolumn, yyline, yytext().toLowerCase()); }
     "false"             { return new Symbol(Simbolo.falso, yycolumn, yyline, yytext().toLowerCase()); }
+    
+    "if"                { return new Symbol(Simbolo.si, yycolumn, yyline, yytext().toLowerCase()); }
+    "else"              { return new Symbol(Simbolo.sino, yycolumn, yyline, yytext().toLowerCase()); }
+    "switch"            { return new Symbol(Simbolo.swit, yycolumn, yyline, yytext().toLowerCase()); }
+    "case"              { return new Symbol(Simbolo.caso, yycolumn, yyline, yytext().toLowerCase()); }
+
+    "return"            { return new Symbol(Simbolo.retrn, yycolumn, yyline, yytext().toLowerCase()); }
+    "continue"          { return new Symbol(Simbolo.cont, yycolumn, yyline, yytext().toLowerCase()); }
+    "break"             { return new Symbol(Simbolo.brek, yycolumn, yyline, yytext().toLowerCase()); }
+    "default"           { return new Symbol(Simbolo.def, yycolumn, yyline, yytext().toLowerCase()); }
 
     "+"                 { return new Symbol(Simbolo.plus, yycolumn, yyline, yytext().toLowerCase()); }
     "-"                 { return new Symbol(Simbolo.minus, yycolumn, yyline, yytext().toLowerCase()); }
@@ -47,6 +57,8 @@ comentariomulti =   "#*" ~"*#"
     ")"                 { return new Symbol(Simbolo.fpar, yycolumn, yyline, yytext().toLowerCase()); }
     "["                 { return new Symbol(Simbolo.icor, yycolumn, yyline, yytext().toLowerCase()); }
     "]"                 { return new Symbol(Simbolo.fcor, yycolumn, yyline, yytext().toLowerCase()); }
+    "{"                 { return new Symbol(Simbolo.illa, yycolumn, yyline, yytext().toLowerCase()); }
+    "}"                 { return new Symbol(Simbolo.flla, yycolumn, yyline, yytext().toLowerCase()); }
 
     ">"                 { return new Symbol(Simbolo.gt, yycolumn, yyline, yytext().toLowerCase()); }
     "<"                 { return new Symbol(Simbolo.lt, yycolumn, yyline, yytext().toLowerCase()); }
@@ -54,6 +66,7 @@ comentariomulti =   "#*" ~"*#"
     "<="                { return new Symbol(Simbolo.lte, yycolumn, yyline, yytext().toLowerCase()); }
     "=="                { return new Symbol(Simbolo.eq, yycolumn, yyline, yytext().toLowerCase()); }
     "!="                { return new Symbol(Simbolo.neq, yycolumn, yyline, yytext().toLowerCase()); }
+    "?"                 { return new Symbol(Simbolo.tern, yycolumn, yyline, yytext().toLowerCase()); }
 
     "&"                 { return new Symbol(Simbolo.and, yycolumn, yyline, yytext().toLowerCase()); }
     "|"                 { return new Symbol(Simbolo.or, yycolumn, yyline, yytext().toLowerCase()); }
@@ -62,6 +75,7 @@ comentariomulti =   "#*" ~"*#"
     "="                 { return new Symbol(Simbolo.asign, yycolumn, yyline, yytext().toLowerCase()); }
     ";"                 { return new Symbol(Simbolo.pyc, yycolumn, yyline, yytext().toLowerCase()); }
     ","                 { return new Symbol(Simbolo.colon, yycolumn, yyline, yytext().toLowerCase()); }
+    ":"                 { return new Symbol(Simbolo.dp, yycolumn, yyline, yytext().toLowerCase()); }
 
     \"                  { 
                             yybegin(STRING); 
