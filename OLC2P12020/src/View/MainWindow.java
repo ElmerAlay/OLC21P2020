@@ -178,8 +178,6 @@ public class MainWindow extends javax.swing.JFrame {
             
             Recorrido re = new Recorrido(global, LError, lInst);
             re.Resultado(parser.root);
-            //txt_console.setText(((Vec)global.get("var1").getValue()).getValues()[3].toString()+"\n");
-            //txt_console.setText(LError.getLast().getLexema()+" "+LError.getFirst().getDescripcion()+"\n");
             txt_console.setText(output);
             output = "";
             

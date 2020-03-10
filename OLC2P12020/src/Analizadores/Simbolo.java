@@ -13,43 +13,47 @@ public class Simbolo {
   public static final int plus = 2;
   public static final int mod = 7;
   public static final int flla = 13;
-  public static final int neq = 23;
+  public static final int neq = 27;
   public static final int minus = 3;
-  public static final int gte = 20;
-  public static final int gt = 18;
-  public static final int dp = 39;
-  public static final int nulo = 32;
+  public static final int gte = 24;
+  public static final int gt = 22;
+  public static final int dp = 43;
+  public static final int nulo = 36;
+  public static final int do_ = 19;
   public static final int icor = 10;
   public static final int ipar = 8;
   public static final int illa = 12;
   public static final int si = 14;
-  public static final int def = 31;
-  public static final int numero = 40;
-  public static final int retrn = 28;
+  public static final int def = 35;
+  public static final int whil = 18;
+  public static final int numero = 44;
+  public static final int retrn = 32;
   public static final int EOF = 0;
-  public static final int pyc = 36;
-  public static final int uminus = 35;
-  public static final int verdadero = 33;
+  public static final int pyc = 40;
+  public static final int uminus = 39;
+  public static final int verdadero = 37;
   public static final int error = 1;
-  public static final int lt = 19;
-  public static final int tern = 27;
-  public static final int or = 24;
-  public static final int lte = 21;
-  public static final int colon = 38;
+  public static final int lt = 23;
+  public static final int tern = 31;
+  public static final int or = 28;
+  public static final int lte = 25;
+  public static final int colon = 42;
   public static final int pot = 6;
-  public static final int cont = 30;
-  public static final int id = 43;
-  public static final int falso = 34;
+  public static final int cont = 34;
+  public static final int id = 47;
+  public static final int falso = 38;
   public static final int caso = 17;
-  public static final int asign = 37;
-  public static final int and = 25;
-  public static final int not = 26;
-  public static final int eq = 22;
+  public static final int asign = 41;
+  public static final int and = 29;
+  public static final int for_ = 20;
+  public static final int not = 30;
+  public static final int eq = 26;
   public static final int div = 5;
-  public static final int flotante = 41;
-  public static final int brek = 29;
+  public static final int flotante = 45;
+  public static final int brek = 33;
+  public static final int in_ = 21;
   public static final int swit = 16;
-  public static final int cadena = 42;
+  public static final int cadena = 46;
   public static final int fcor = 11;
   public static final int sino = 15;
   public static final String[] terminalNames = new String[] {
@@ -71,6 +75,10 @@ public class Simbolo {
   "sino",
   "swit",
   "caso",
+  "whil",
+  "do_",
+  "for_",
+  "in_",
   "gt",
   "lt",
   "gte",

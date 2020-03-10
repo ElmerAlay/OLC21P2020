@@ -36,7 +36,7 @@ action code
 
 terminal plus, minus, mul, div, pot, mod;
 terminal ipar, fpar, icor, fcor, illa, flla;
-terminal si, sino, swit, caso;
+terminal si, sino, swit, caso, whil, do_, for_, in_;
 terminal gt, lt, gte, lte, eq, neq;
 terminal or, and, not;
 terminal tern;
@@ -45,7 +45,7 @@ terminal nulo, verdadero, falso, uminus;
 terminal pyc, asign, colon, dp;
 terminal String numero, flotante, cadena, id;
 
-non terminal INICIO, E, ASIGN, INST, LINST, LCOR, LPARAM, LLAMAD, MAT, IF, EI, LEI, SWITCH, LCASE, TRANS;
+non terminal INICIO, E, ASIGN, INST, LINST, LCOR, LPARAM, LLAMAD, MAT, IF, EI, LEI, SWITCH, LCASE, TRANS, WHILE, DO, FOR;
 
 precedence left tern;
 precedence left  or;
@@ -108,12 +108,27 @@ INST    ::= ASIGN:asig  pyc {:
         |   SWITCH:switc_h  {:
                                 RESULT = (AST)switc_h;
                             :}
+        |   WHILE:whil_e    {:
+                                RESULT = (AST)whil_e;
+                            :}
+        |   FOR:fo_r    {:
+                                RESULT = (AST)fo_r;
+                            :}
+        |   DO:doWhile  {:
+                            RESULT = (AST)doWhile;
+                        :}
+        |   DO:doWhile pyc  {:
+                                RESULT = (AST)doWhile;
+                            :}
         |   TRANS:t pyc {:
                             RESULT = (AST)t;
                         :}
         |   TRANS:t {:
                         RESULT = (AST)t;
                     :}
+        |   error pyc   {:
+                            RESULT = error;
+                        :}
 ;
 
 E ::=   E:op1 plus E:op2    {:
@@ -666,4 +681,43 @@ LCASE   ::= LCASE:lcase caso E:exp dp LINST:linst  {:
 
                                             RESULT = nd;
                                         :}
+;
+
+WHILE   ::= whil ipar E:cond fpar illa LINST:linst flla {:
+                                                            AST nd = new AST();
+                                                            nd.setLabel("WHILE");
+                                                            nd.setIdNode(Parser.cont++);
+                                                            nd.addChildren((AST)cond);
+                                                            nd.addChildren((AST)linst);
+
+                                                            RESULT = nd;
+                                                        :}
+;
+
+DO  ::= do_ illa LINST:linst flla whil ipar E:cond fpar {:
+                                                            AST nd = new AST();
+                                                            nd.setLabel("DO");
+                                                            nd.setIdNode(Parser.cont++);
+                                                            nd.addChildren((AST)linst);
+                                                            nd.addChildren((AST)cond);
+
+                                                            RESULT = nd;
+                                                        :}
+;
+
+FOR ::= for_ ipar id:var in_ E:exp fpar illa LINST:linst flla   {:
+                                                                    AST ch1 = new AST();
+                                                                    ch1.setLabel("ID");
+                                                                    ch1.setIdNode(Parser.cont++);
+                                                                    ch1.setValue(var);
+
+                                                                    AST nd = new AST();
+                                                                    nd.setLabel("FOR");
+                                                                    nd.setIdNode(Parser.cont++);
+                                                                    nd.addChildren(ch1);
+                                                                    nd.addChildren((AST)exp);
+                                                                    nd.addChildren((AST)linst);
+
+                                                                    RESULT = nd;
+                                                                :}
 ;

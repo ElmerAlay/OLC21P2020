@@ -16,11 +16,13 @@ public class SWITCH implements ASTNode{
     private LinkedList<ASTNode> linstf;
 
     public SWITCH(ASTNode exp, LinkedList<CASE> lcase) {
+        super();
         this.exp = exp;
         this.lcase = lcase;
     }
 
     public SWITCH(ASTNode exp, LinkedList<CASE> lcase, LinkedList<ASTNode> linstf) {
+        super();
         this.exp = exp;
         this.lcase = lcase;
         this.linstf = linstf;

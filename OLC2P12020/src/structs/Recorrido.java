@@ -163,6 +163,16 @@ public class Recorrido {
                     LinkedList<ASTNode> linstf = new LinkedList<>();
                     linstf = getInstruccions(root.getChildren().get(2), linstf);
                     return new SWITCH(exp, lcase, linstf);
+                }else if(root.getLabel().equals("WHILE")){
+                    ASTNode cond = getExpression(root.getChildren().get(0));
+                    LinkedList<ASTNode> lexpt = new LinkedList<>();
+                    lexpt = getInstruccions(root.getChildren().get(1), lexpt);
+                    return new While(cond, lexpt);
+                }else if(root.getLabel().equals("DO")){
+                    ASTNode cond = getExpression(root.getChildren().get(1));
+                    LinkedList<ASTNode> lexpt = new LinkedList<>();
+                    lexpt = getInstruccions(root.getChildren().get(0), lexpt);
+                    return new DoWhile(cond, lexpt);
                 }
             case 3:
                 if(root.getLabel().equals("ASIGN")){
@@ -200,6 +210,11 @@ public class Recorrido {
                     LinkedList<ASTNode> linstf = new LinkedList<>();
                     linstf = getInstruccions(root.getChildren().get(2), linstf);
                     return new SWITCH(exp, lcase, linstf);
+                }else if(root.getLabel().equals("FOR")){
+                    ASTNode exp = getExpression(root.getChildren().get(1));
+                    LinkedList<ASTNode> linst = new LinkedList<>();
+                    linst = getInstruccions(root.getChildren().get(2), linst);
+                    return new For(root.getChildren().get(0).getValue() ,exp, linst);
                 }
             case 4:
                 if(root.getLabel().equals("IF")){

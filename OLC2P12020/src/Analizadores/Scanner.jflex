@@ -40,6 +40,10 @@ comentariomulti =   "#*" ~"*#"
     "else"              { return new Symbol(Simbolo.sino, yycolumn, yyline, yytext().toLowerCase()); }
     "switch"            { return new Symbol(Simbolo.swit, yycolumn, yyline, yytext().toLowerCase()); }
     "case"              { return new Symbol(Simbolo.caso, yycolumn, yyline, yytext().toLowerCase()); }
+    "while"             { return new Symbol(Simbolo.whil, yycolumn, yyline, yytext().toLowerCase()); }
+    "do"                { return new Symbol(Simbolo.do_, yycolumn, yyline, yytext().toLowerCase()); }
+    "for"               { return new Symbol(Simbolo.for_, yycolumn, yyline, yytext().toLowerCase()); }
+    "in"                { return new Symbol(Simbolo.in_, yycolumn, yyline, yytext().toLowerCase()); }
 
     "return"            { return new Symbol(Simbolo.retrn, yycolumn, yyline, yytext().toLowerCase()); }
     "continue"          { return new Symbol(Simbolo.cont, yycolumn, yyline, yytext().toLowerCase()); }
