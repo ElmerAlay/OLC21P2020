@@ -1,11 +1,14 @@
 package analizadores;
 import java_cup.runtime.Symbol; 
+import abstracto.TError;
+import java.util.LinkedList;
 
 %% 
 
 %{
     StringBuilder NuevoString = new StringBuilder();
     char NuevoChar;
+    public LinkedList<TError> TablaEL = new LinkedList<TError>();
 %}
 
 %class Lexer
@@ -96,7 +99,9 @@ comentariomulti =   "#*" ~"*#"
     [ \t\r\n\f]         {}
     /* Cualquier Otro */
     .                   { 
-                          System.out.println("El caracter '"+yytext()+"' no pertenece al lenguaje.");
+                            System.out.println("El caracter '"+yytext()+"' no pertenece al lenguaje.");
+                            TError error = new TError(yytext(),"Léxico","Símbolo no reconocido",yyline,yycolumn);
+                            TablaEL.add(error);
                         }
 }
 
@@ -114,6 +119,8 @@ comentariomulti =   "#*" ~"*#"
     [\r|\n|\r\n]        { 
                             yybegin(YYINITIAL);
                             System.out.println("String sin finalizar."); 
+                            TError error = new TError(yytext(),"Léxico","Símbolo no reconocido",yyline,yycolumn);
+                            TablaEL.add(error);
                         }
     .                   { NuevoString.append(yytext()); }
 }

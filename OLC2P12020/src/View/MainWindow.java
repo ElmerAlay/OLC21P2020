@@ -1,32 +1,40 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package View;
 
 import abstracto.*;
 import analizadores.Lexer;
 import analizadores.Parser;
+import java.awt.Desktop;
 import structs.Graficar;
 import structs.Recorrido;
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.StringReader;
 import java.util.LinkedList;
 import symbols.Environment;
-import symbols.Vec;
-import expressions.*;
-import instructions.StructAssig;
-import instructions.VarAssig;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.Scanner;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.util.Enumeration;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTabbedPane;
+import javax.swing.JTextArea;
+import javax.swing.JTextPane;
+import javax.swing.JViewport;
+import javax.swing.event.CaretEvent;
+import javax.swing.event.CaretListener;
+import symbols.Symbol;
 
 /**
  *
@@ -38,15 +46,70 @@ public class MainWindow extends javax.swing.JFrame {
     private LinkedList<ASTNode> lInst;
     private String fileName = "";
     public static String output = "";
+    private NumeroLinea numeroLinea;
+    private int cont;
     
     /**
      * Creates new form MainWindow
      */
     public MainWindow() {
         initComponents();
+        cont = 2;
         txt_console.setEditable(false);
+        numeroLinea = new NumeroLinea(jTextArea1);
+        jScrollPane1.setRowHeaderView(numeroLinea);
+        lbl_ncolumn.setText("Columna: 0");
+        
+        jTextArea1.addCaretListener(new CaretListener() {
+            @Override
+            public void caretUpdate(CaretEvent e) {
+                JTextArea editArea = (JTextArea)e.getSource();
+                int columna = 1;
+                int linea = 1;
+                try {
+                    int caretpos = editArea.getCaretPosition();
+                    linea= editArea.getLineOfOffset(caretpos);
+                    columna = caretpos - editArea.getLineStartOffset(linea);
+
+                    // Ya que las líneas las cuenta desde la 0
+                    linea += 1;
+                } catch(Exception ex) { }
+                    // Actualizamos el estado
+                    actualizarEstado(columna);
+            }
+        });
+    }
+    
+    private void createPestaña(){
+        JTextArea area = new JTextArea();
+        JScrollPane scrollPane = new JScrollPane(area);
+        NumeroLinea nl = new NumeroLinea(area);;
+        scrollPane.setRowHeaderView( nl );
+        pestañas.add( "pestaña " + (cont++) ,scrollPane);
+        
+        area.addCaretListener(new CaretListener() {
+            @Override
+            public void caretUpdate(CaretEvent e) {
+                JTextArea editArea = (JTextArea)e.getSource();
+                int columna = 1;
+                int linea = 1;
+                try {
+                    int caretpos = editArea.getCaretPosition();
+                    linea= editArea.getLineOfOffset(caretpos);
+                    columna = caretpos - editArea.getLineStartOffset(linea);
+
+                    // Ya que las líneas las cuenta desde la 0
+                    linea += 1;
+                } catch(Exception ex) { }
+                    // Actualizamos el estado
+                    actualizarEstado(columna);
+            }
+        });
     }
 
+    private void actualizarEstado(int columna) {
+        lbl_ncolumn.setText("Columna: " + columna);
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -56,9 +119,11 @@ public class MainWindow extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        btn_ast1 = new javax.swing.JButton();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        jTextPane2 = new javax.swing.JTextPane();
+        jTabbedPane2 = new javax.swing.JTabbedPane();
         btn_Run = new javax.swing.JButton();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        txt_input = new javax.swing.JTextArea();
         jSeparator1 = new javax.swing.JSeparator();
         jScrollPane2 = new javax.swing.JScrollPane();
         txt_console = new javax.swing.JTextArea();
@@ -66,6 +131,24 @@ public class MainWindow extends javax.swing.JFrame {
         btn_save = new javax.swing.JButton();
         btn_saveAs = new javax.swing.JButton();
         btn_clean = new javax.swing.JButton();
+        btn_errorReport = new javax.swing.JButton();
+        btn_ts = new javax.swing.JButton();
+        btn_ast = new javax.swing.JButton();
+        btn_newPage = new javax.swing.JButton();
+        pestañas = new javax.swing.JTabbedPane();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTextArea1 = new javax.swing.JTextArea();
+        lbl_ncolumn = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
+
+        btn_ast1.setText("AST");
+        btn_ast1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_ast1ActionPerformed(evt);
+            }
+        });
+
+        jScrollPane4.setViewportView(jTextPane2);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -75,10 +158,6 @@ public class MainWindow extends javax.swing.JFrame {
                 btn_RunActionPerformed(evt);
             }
         });
-
-        txt_input.setColumns(20);
-        txt_input.setRows(5);
-        jScrollPane1.setViewportView(txt_input);
 
         txt_console.setBackground(new java.awt.Color(0, 0, 0));
         txt_console.setColumns(20);
@@ -115,6 +194,45 @@ public class MainWindow extends javax.swing.JFrame {
             }
         });
 
+        btn_errorReport.setText("Reporte");
+        btn_errorReport.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_errorReportActionPerformed(evt);
+            }
+        });
+
+        btn_ts.setText("TS");
+        btn_ts.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_tsActionPerformed(evt);
+            }
+        });
+
+        btn_ast.setText("AST");
+        btn_ast.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_astActionPerformed(evt);
+            }
+        });
+
+        btn_newPage.setText("+");
+        btn_newPage.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_newPageActionPerformed(evt);
+            }
+        });
+
+        jTextArea1.setColumns(20);
+        jTextArea1.setRows(5);
+        jScrollPane1.setViewportView(jTextArea1);
+
+        pestañas.addTab("Pestaña 1", jScrollPane1);
+
+        lbl_ncolumn.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+
+        jLabel1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jLabel1.setText("Console");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -122,9 +240,6 @@ public class MainWindow extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 714, Short.MAX_VALUE)
-                    .addComponent(jSeparator1, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(btn_open)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -135,8 +250,25 @@ public class MainWindow extends javax.swing.JFrame {
                         .addComponent(btn_clean)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btn_Run)
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addContainerGap())
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btn_ts)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btn_errorReport)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btn_ast)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btn_newPage)
+                        .addGap(47, 47, 47))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(pestañas, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jSeparator1, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(lbl_ncolumn, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jScrollPane2))
+                        .addContainerGap())
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(588, 588, 588))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -148,21 +280,36 @@ public class MainWindow extends javax.swing.JFrame {
                         .addComponent(btn_save, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(btn_saveAs, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(btn_clean, javax.swing.GroupLayout.DEFAULT_SIZE, 43, Short.MAX_VALUE)
-                        .addComponent(btn_Run, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(btn_clean, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btn_Run, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btn_errorReport, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btn_ast, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btn_ts, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btn_newPage, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 308, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(pestañas, javax.swing.GroupLayout.DEFAULT_SIZE, 221, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(lbl_ncolumn)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(16, Short.MAX_VALUE))
+                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 1, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(13, 13, 13)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 115, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void btn_RunActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_RunActionPerformed
+        deleteFile("D:\\Documents\\Universidad\\Compiladores 2\\Proyecto1\\Reportes\\Errores\\index.html");
+        deleteFile("D:\\Documents\\Universidad\\Compiladores 2\\Proyecto1\\Reportes\\Errores\\index2.html");
+        
+        JScrollPane sp = (JScrollPane)pestañas.getSelectedComponent();
+        JViewport viewport = sp.getViewport();
+        JTextArea txt_input = (JTextArea)viewport.getComponent(0);
+        
         String input = txt_input.getText();
         Lexer scanner = new Lexer(new BufferedReader(new StringReader(input)));
         Parser parser = new Parser(scanner);
@@ -176,51 +323,25 @@ public class MainWindow extends javax.swing.JFrame {
             LError = new LinkedList<>();
             lInst = new LinkedList<>();
             
+            LError.addAll(scanner.TablaEL);
+            LError.addAll(parser.TablaES);
+            
             Recorrido re = new Recorrido(global, LError, lInst);
             re.Resultado(parser.root);
             txt_console.setText(output);
             output = "";
-            
-            for(int i=0; i<LError.size(); i++){
-                System.out.println(LError.get(i).getLexema() + " : " + LError.get(i).getDescripcion());
-            }
-        }catch(Exception e){
-            
-        }
-        
-        /*global = new Environment(null);
-        LError = new LinkedList<>();
-        Addition a = new Addition(new Constant(5), new Constant(Float.parseFloat("4.6")));
-        VarAssig var1 = new VarAssig("var1", a);
-        var1.execute(global, LError);
-        LinkedList<ASTNode> l = new LinkedList<>();
-        l.add(new Constant(4));
-        StructAssig asig = new StructAssig("var1", new Constant(true), l);
-        asig.execute(global, LError);
-        l.add(new Constant(2));
-        StructAssig asig2 = new StructAssig("var1", new Constant(5), l);
-        asig2.execute(global, LError);
-        
-        a = new Addition(new VarRef("var1"), new Constant(new Float("5.5")));
-        var1 = new VarAssig("var1", a);
-        var1.execute(global, LError);
-        int tam = ((Vec)global.get("var1").getValue()).getValues().length;
-        Object v[] = ((Vec)global.get("var1").getValue()).getValues();
-        
-        System.out.println("Tamaño:" + tam + " Tipo: " + global.get("var1").getType().getTypes());
-        for(int i = 0; i < tam; i++){
-            //txt_console.setText(v[i].toString() + " ");
-            System.out.println(v[i].toString());
-        }
-        
-        for(int i=0; i<LError.size(); i++){
-            System.out.println(LError.get(i).getLexema() + " : " + LError.get(i).getDescripcion());
-        }*/
+            this.createFileErrorReports(LError);
+            createFileSymbolTable(global.getTable());
+        }catch(Exception e){}
     }//GEN-LAST:event_btn_RunActionPerformed
 
     private void btn_openActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_openActionPerformed
         JFileChooser fc = new JFileChooser("D:\\Documents\\Universidad\\Compiladores 2\\Proyecto1\\Entradas");
         FileNameExtensionFilter filter = new FileNameExtensionFilter("Archivos del lenguaje Arit... *.arit", "arit");
+        
+        JScrollPane sp = (JScrollPane)pestañas.getSelectedComponent();
+        JViewport viewport = sp.getViewport();
+        JTextArea txt_input = (JTextArea)viewport.getComponent(0);
         
         fc.setFileFilter(filter);
         int seleccion = fc.showOpenDialog(txt_input);
@@ -247,6 +368,10 @@ public class MainWindow extends javax.swing.JFrame {
     }//GEN-LAST:event_btn_openActionPerformed
 
     private void btn_saveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_saveActionPerformed
+        JScrollPane sp = (JScrollPane)pestañas.getSelectedComponent();
+        JViewport viewport = sp.getViewport();
+        JTextArea txt_input = (JTextArea)viewport.getComponent(0);
+        
         if(fileName.equals("")){
             saveFile();
         }else{
@@ -268,11 +393,39 @@ public class MainWindow extends javax.swing.JFrame {
     }//GEN-LAST:event_btn_saveAsActionPerformed
 
     private void btn_cleanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_cleanActionPerformed
+        JScrollPane sp = (JScrollPane)pestañas.getSelectedComponent();
+        JViewport viewport = sp.getViewport();
+        JTextArea txt_input = (JTextArea)viewport.getComponent(0);
+        
         txt_input.setText("");
         fileName = "";
     }//GEN-LAST:event_btn_cleanActionPerformed
 
+    private void btn_errorReportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_errorReportActionPerformed
+        openBrowser("file:///D:/Documents/Universidad/Compiladores%202/Proyecto1/Reportes/Errores/index.html");
+    }//GEN-LAST:event_btn_errorReportActionPerformed
+
+    private void btn_tsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_tsActionPerformed
+        openBrowser("file:///D:/Documents/Universidad/Compiladores%202/Proyecto1/Reportes/Errores/index2.html");
+    }//GEN-LAST:event_btn_tsActionPerformed
+
+    private void btn_astActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_astActionPerformed
+        new ASTView("D:\\Documents\\Universidad\\Compiladores 2\\Proyecto1\\OLC21P2020\\OLC2P12020\\AST_proyecto.png").setVisible(true);
+    }//GEN-LAST:event_btn_astActionPerformed
+
+    private void btn_ast1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_ast1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btn_ast1ActionPerformed
+
+    private void btn_newPageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_newPageActionPerformed
+        createPestaña();
+    }//GEN-LAST:event_btn_newPageActionPerformed
+
     private void saveFile(){
+        JScrollPane sp = (JScrollPane)pestañas.getSelectedComponent();
+        JViewport viewport = sp.getViewport();
+        JTextArea txt_input = (JTextArea)viewport.getComponent(0);
+        
         JFileChooser fc = new JFileChooser("D:\\Documents\\Universidad\\Compiladores 2\\Proyecto1\\Entradas");
         FileNameExtensionFilter filter = new FileNameExtensionFilter("Archivos del lenguaje Arit... *.arit", "arit");
         
@@ -289,6 +442,233 @@ public class MainWindow extends javax.swing.JFrame {
             fileName = fc.getSelectedFile().getAbsolutePath();
         }catch(IOException ex){
             ex.printStackTrace();
+        }
+    }
+    
+    private void deleteFile(String ruta){
+        File fichero = new File(ruta);
+
+        if (fichero.delete())
+            System.out.println("El fichero ha sido borrado satisfactoriamente");
+        else
+            System.out.println("El fichero no pudó ser borrado");
+    }
+    
+    private void createFileErrorReports(LinkedList<TError> LError){
+        BufferedWriter bw = null;
+        FileWriter fw = null;
+
+        try {
+            String data = "<!DOCTYPE html>\n" +
+                        "<html lang=\"en\">\n" +
+                            "<head>\n" +
+                            "	<title>Reporte de Errores</title>\n" +
+                            "	<meta charset=\"UTF-8\">\n" +
+                            "	<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n" +
+                            "<!--===============================================================================================-->	\n" +
+                            "	<link rel=\"icon\" type=\"image/png\" href=\"images/icons/favicon.ico\"/>\n" +
+                            "<!--===============================================================================================-->\n" +
+                            "	<link rel=\"stylesheet\" type=\"text/css\" href=\"vendor/bootstrap/css/bootstrap.min.css\">\n" +
+                            "<!--===============================================================================================-->\n" +
+                            "	<link rel=\"stylesheet\" type=\"text/css\" href=\"fonts/font-awesome-4.7.0/css/font-awesome.min.css\">\n" +
+                            "<!--===============================================================================================-->\n" +
+                            "	<link rel=\"stylesheet\" type=\"text/css\" href=\"vendor/animate/animate.css\">\n" +
+                            "<!--===============================================================================================-->\n" +
+                            "	<link rel=\"stylesheet\" type=\"text/css\" href=\"vendor/select2/select2.min.css\">\n" +
+                            "<!--===============================================================================================-->\n" +
+                            "	<link rel=\"stylesheet\" type=\"text/css\" href=\"vendor/perfect-scrollbar/perfect-scrollbar.css\">\n" +
+                            "<!--===============================================================================================-->\n" +
+                            "	<link rel=\"stylesheet\" type=\"text/css\" href=\"css/util.css\">\n" +
+                            "	<link rel=\"stylesheet\" type=\"text/css\" href=\"css/main.css\">\n" +
+                            "<!--===============================================================================================-->\n" +
+                            "</head>\n" +
+                            "<body>\n" +
+                            "	<div class=\"limiter\">\n" +
+                            "		<div class=\"container-table100\">\n" +
+                            "			<div class=\"wrap-table100\">\n" +
+                            "				<div class=\"table100\">\n" +
+                            "					<h1 align=center >Reporte de Errores</h1>\n" +
+                            "					<br>\n" +
+                            "					<table>\n" +
+                            "						<thead>\n" +
+                            "							<tr class=\"table100-head\">\n" +
+                            "								<th class=\"column1\">Lexema</th>\n" +
+                            "								<th class=\"column2\">Descripción</th>\n" +
+                            "								<th class=\"column3\">Tipo</th>\n" +
+                            "								<th class=\"column4\">Fila</th>\n" +
+                            "								<th class=\"column5\">Columna</th>\n" +
+                            "							</tr>\n" +
+                            "						</thead>\n" +
+                            "						<tbody>\n";
+            File file = new File("D:\\Documents\\Universidad\\Compiladores 2\\Proyecto1\\Reportes\\Errores\\index.html");
+            // Si el archivo no existe, se crea!
+            if (!file.exists()) {
+                file.createNewFile();
+            }   
+                // flag true, indica adjuntar información al archivo.
+                fw = new FileWriter(file.getAbsoluteFile(), true);
+                bw = new BufferedWriter(fw);
+                bw.write(data);
+                String data2 = "";
+                for(int i=0; i<LError.size(); i++){
+                    data2 += "<tr>\n" +
+"									<td class=\"column1\">"+LError.get(i).getLexema()+"</td>\n" +
+"									<td class=\"column2\">"+LError.get(i).getDescripcion()+"</td>\n" +
+"									<td class=\"column3\">"+LError.get(i).getTipo()+"</td>\n" +
+"									<td class=\"column4\">"+LError.get(i).getLinea()+"</td>\n" +
+"									<td class=\"column5\">"+LError.get(i).getColumna()+"</td>\n" +
+"								</tr>\n";
+                }
+                data2 += "</tbody>\n" +
+                            "					</table>\n" +
+                            "				</div>\n" +
+                            "			</div>\n" +
+                            "		</div>\n" +
+                            "	</div>\n" +
+                            "\n" +
+                            "\n" +
+                            "	\n" +
+                            "\n" +
+                            "<!--===============================================================================================-->	\n" +
+                            "	<script src=\"vendor/jquery/jquery-3.2.1.min.js\"></script>\n" +
+                            "<!--===============================================================================================-->\n" +
+                            "	<script src=\"vendor/bootstrap/js/popper.js\"></script>\n" +
+                            "	<script src=\"vendor/bootstrap/js/bootstrap.min.js\"></script>\n" +
+                            "<!--===============================================================================================-->\n" +
+                            "	<script src=\"vendor/select2/select2.min.js\"></script>\n" +
+                            "<!--===============================================================================================-->\n" +
+                            "	<script src=\"js/main.js\"></script>\n" +
+                            "\n" +
+                            "</body>\n" +
+                            "</html>";
+            bw.write(data2);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                            //Cierra instancias de FileWriter y BufferedWriter
+                if (bw != null)
+                    bw.close();
+                if (fw != null)
+                    fw.close();
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        }
+    }
+    
+    private void createFileSymbolTable(Map<String, Symbol> table) {
+        BufferedWriter bw = null;
+        FileWriter fw = null;
+
+        try {
+            String data = "<!DOCTYPE html>\n" +
+                        "<html lang=\"en\">\n" +
+                            "<head>\n" +
+                            "	<title>Tabla de Simbolos</title>\n" +
+                            "	<meta charset=\"UTF-8\">\n" +
+                            "	<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n" +
+                            "<!--===============================================================================================-->	\n" +
+                            "	<link rel=\"icon\" type=\"image/png\" href=\"images/icons/favicon.ico\"/>\n" +
+                            "<!--===============================================================================================-->\n" +
+                            "	<link rel=\"stylesheet\" type=\"text/css\" href=\"vendor/bootstrap/css/bootstrap.min.css\">\n" +
+                            "<!--===============================================================================================-->\n" +
+                            "	<link rel=\"stylesheet\" type=\"text/css\" href=\"fonts/font-awesome-4.7.0/css/font-awesome.min.css\">\n" +
+                            "<!--===============================================================================================-->\n" +
+                            "	<link rel=\"stylesheet\" type=\"text/css\" href=\"vendor/animate/animate.css\">\n" +
+                            "<!--===============================================================================================-->\n" +
+                            "	<link rel=\"stylesheet\" type=\"text/css\" href=\"vendor/select2/select2.min.css\">\n" +
+                            "<!--===============================================================================================-->\n" +
+                            "	<link rel=\"stylesheet\" type=\"text/css\" href=\"vendor/perfect-scrollbar/perfect-scrollbar.css\">\n" +
+                            "<!--===============================================================================================-->\n" +
+                            "	<link rel=\"stylesheet\" type=\"text/css\" href=\"css/util.css\">\n" +
+                            "	<link rel=\"stylesheet\" type=\"text/css\" href=\"css/main.css\">\n" +
+                            "<!--===============================================================================================-->\n" +
+                            "</head>\n" +
+                            "<body>\n" +
+                            "	<div class=\"limiter\">\n" +
+                            "		<div class=\"container-table100\">\n" +
+                            "			<div class=\"wrap-table100\">\n" +
+                            "				<div class=\"table100\">\n" +
+                            "					<h1 align=center >Tabla de Simbolos</h1>\n" +
+                            "					<br>\n" +
+                            "					<table>\n" +
+                            "						<thead>\n" +
+                            "							<tr class=\"table100-head\">\n" +
+                            "								<th class=\"column1\">Id</th>\n" +
+                            "								<th class=\"column2\">Tipo</th>\n" +
+                            "								<th class=\"column3\">Tipo Objeto</th>\n" +
+                            "								<th class=\"column4\">Ámbito</th>\n" +
+                            "							</tr>\n" +
+                            "						</thead>\n" +
+                            "						<tbody>\n";
+            File file = new File("D:\\Documents\\Universidad\\Compiladores 2\\Proyecto1\\Reportes\\Errores\\index2.html");
+            // Si el archivo no existe, se crea!
+            if (!file.exists()) {
+                file.createNewFile();
+            }   
+                // flag true, indica adjuntar información al archivo.
+                fw = new FileWriter(file.getAbsoluteFile(), true);
+                bw = new BufferedWriter(fw);
+                bw.write(data);
+                String data2 = "";
+                Iterator it = table.keySet().iterator();
+                while(it.hasNext()){
+                    Object key = it.next();
+                    data2 += "<tr>\n" +
+"									<td class=\"column1\">"+table.get(key).getId()+"</td>\n" +
+"									<td class=\"column2\">"+table.get(key).getType().getTypes().toString()+"</td>\n" +
+"									<td class=\"column3\">"+table.get(key).getType().getTypeObject()+"</td>\n" +
+"									<td class=\"column4\">"+ "global "+"</td>\n" +
+"								</tr>\n";
+                }
+                data2 += "</tbody>\n" +
+                            "					</table>\n" +
+                            "				</div>\n" +
+                            "			</div>\n" +
+                            "		</div>\n" +
+                            "	</div>\n" +
+                            "\n" +
+                            "\n" +
+                            "	\n" +
+                            "\n" +
+                            "<!--===============================================================================================-->	\n" +
+                            "	<script src=\"vendor/jquery/jquery-3.2.1.min.js\"></script>\n" +
+                            "<!--===============================================================================================-->\n" +
+                            "	<script src=\"vendor/bootstrap/js/popper.js\"></script>\n" +
+                            "	<script src=\"vendor/bootstrap/js/bootstrap.min.js\"></script>\n" +
+                            "<!--===============================================================================================-->\n" +
+                            "	<script src=\"vendor/select2/select2.min.js\"></script>\n" +
+                            "<!--===============================================================================================-->\n" +
+                            "	<script src=\"js/main.js\"></script>\n" +
+                            "\n" +
+                            "</body>\n" +
+                            "</html>";
+            bw.write(data2);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                            //Cierra instancias de FileWriter y BufferedWriter
+                if (bw != null)
+                    bw.close();
+                if (fw != null)
+                    fw.close();
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        }
+    }
+    
+    private void openBrowser(String ruta){
+        if(java.awt.Desktop.isDesktopSupported()){
+            java.awt.Desktop desktop = java.awt.Desktop.getDesktop();
+            if(desktop.isSupported(java.awt.Desktop.Action.BROWSE)){
+                try{
+                    java.net.URI uri = new java.net.URI(ruta);
+                    desktop.browse(uri);
+                }catch(URISyntaxException | IOException ex){}
+            }
         }
     }
     
@@ -323,20 +703,33 @@ public class MainWindow extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new MainWindow().setVisible(true);
+                
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btn_Run;
+    private javax.swing.JButton btn_ast;
+    private javax.swing.JButton btn_ast1;
     private javax.swing.JButton btn_clean;
+    private javax.swing.JButton btn_errorReport;
+    private javax.swing.JButton btn_newPage;
     private javax.swing.JButton btn_open;
     private javax.swing.JButton btn_save;
     private javax.swing.JButton btn_saveAs;
+    private javax.swing.JButton btn_ts;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JTabbedPane jTabbedPane2;
+    private javax.swing.JTextArea jTextArea1;
+    private javax.swing.JTextPane jTextPane2;
+    private javax.swing.JLabel lbl_ncolumn;
+    private javax.swing.JTabbedPane pestañas;
     private javax.swing.JTextArea txt_console;
-    private javax.swing.JTextArea txt_input;
     // End of variables declaration//GEN-END:variables
+
 }

@@ -7,6 +7,8 @@ package analizadores;
 
 import structs.AST;
 import java_cup.runtime.*;
+import abstracto.TError;
+import java.util.LinkedList;
 import java_cup.runtime.XMLElement;
 
 /** CUP v0.11b 20160615 (GIT 4ac7450) generated parser.
@@ -696,6 +698,7 @@ public class Parser extends java_cup.runtime.lr_parser {
 
     public static AST root; //representa la raíz del árbol AST de la gramática
     public static int cont = 0;    //Contador para llevar control de los id´s de los nodos
+    public LinkedList<TError> TablaES = new LinkedList<TError>(); //Para manejar los errores sintácticos
 
     //Método para recuperación de errores
     public void syntax_error(Symbol s){
@@ -705,6 +708,9 @@ public class Parser extends java_cup.runtime.lr_parser {
 
         System.out.println("!!!! Error sintáctico recuperado !!!!!");
         System.out.println("Lexema: " + lexema + " fila: " + fila + " columna: " + columna);
+
+        TError error = new TError(lexema,"Sintáctico","No se esperaba ese caracter",fila,columna);
+        TablaES.add(error);
     }
 
     //Método cuando ya no es posible la recuperación de errores
@@ -794,7 +800,8 @@ class CUP$Parser$actions {
                                         nd.setLabel("LINST");
                                         nd.setIdNode(Parser.cont++);
                                         nd.addChildren((AST)linst);
-                                        nd.addChildren((AST)inst);
+                                        if(!((AST)inst).getLabel().equals("error"))
+                                            nd.addChildren((AST)inst);
 
                                         RESULT = nd;
                                     
@@ -813,7 +820,8 @@ class CUP$Parser$actions {
                             AST nd = new AST();
                             nd.setLabel("LINST");
                             nd.setIdNode(Parser.cont++);
-                            nd.addChildren((AST)inst);
+                            if(!((AST)inst).getLabel().equals("error"))
+                                nd.addChildren((AST)inst);
 
                             RESULT = nd;
                         
@@ -997,7 +1005,6 @@ class CUP$Parser$actions {
                                 AST nd = new AST();
                                 nd.setLabel("error");
                                 nd.setIdNode(Parser.cont++);
-                                nd.setValue("error");
 
                                 RESULT = nd;
                         

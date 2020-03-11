@@ -2,6 +2,7 @@ package instructions;
 
 import abstracto.ASTNode;
 import abstracto.TError;
+import analizadores.Simbolo;
 import static com.oracle.nio.BufferSecrets.instance;
 import expressions.Constant;
 import java.util.LinkedList;
@@ -50,8 +51,35 @@ public class For implements ASTNode{
                 }
             }else if(op instanceof ListStruct){
                 for(int i=0;i<((ListStruct)op).getValues().size(); i++){
-                    Constant c = new Constant(((ListStruct)op).getValues().get(i));
-                    new VarAssig(id, c).execute(environment, LError);
+                    if(((ListStruct)op).getValues().get(i) instanceof ListStruct){
+                        Type type = new Type(Type.Types.LISTA, "Lista");
+                        LinkedList<Object> l = ((ListStruct)((ListStruct)op).getValues().get(i)).getValues();
+                        if(environment.get(id) == null) //Significa que no encontró una variable con ese nombre registrado    
+                            environment.put(new Symbol(type, id, new ListStruct(l))); //Entonces lo agregamos a la tabla de simbolos
+                        else {
+                            environment.get(id).setValue(new ListStruct(l)); //De lo contrario actualizo su valor en la tabla
+                            environment.get(id).setType(type);
+                        }
+                    }
+                    if(((ListStruct)op).getValues().get(i) instanceof Vec){
+                        Object res[] = ((Vec)((ListStruct)op).getValues().get(i)).getValues();
+                        Type type = new Type(null, "Vector");
+                        if(res[0] instanceof String)
+                            type.setTypes(Type.Types.STRING);
+                        else if (res[0] instanceof Float)
+                            type.setTypes(Type.Types.NUMERICO);
+                        else if (res[0] instanceof Integer)
+                            type.setTypes(Type.Types.INTEGER);
+                        else if (res[0] instanceof Boolean)
+                            type.setTypes(Type.Types.BOOLEANO);
+                        
+                        if(environment.get(id) == null){ //Significa que no encontró una variable con ese nombre registrado
+                            environment.put(new Symbol(type, id, new Vec(res))); //Entonces lo agregamos a la tabla de simbolos
+                        }else {
+                            environment.get(id).setValue(new Vec(res)); //De lo contrario actualizo su valor en la tabla
+                            environment.get(id).setType(type);
+                        }
+                    }
                     for(ASTNode ins: linst){
                         result = ins.execute(environment, LError);
                         if(((String)result).equals("break")){

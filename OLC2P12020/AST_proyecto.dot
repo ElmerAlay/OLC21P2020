@@ -1,32 +1,167 @@
 digraph G { node[shape=oval, style=filled, collor=coral]; edge[color=chartreuse3]; rankdir=UD 
 
-"49" [label="INICIO"]
-"48" [label="LINST"]
-"49" -> "48"
-"48" [label="LINST"]
-"43" [label="LINST"]
-"48" -> "43"
-"43" [label="LINST"]
-"42" [label="ASIGN"]
-"43" -> "42"
-"42" [label="ASIGN"]
-"41" [label="ID_a"]
-"42" -> "41"
-"42" [label="ASIGN"]
-"40" [label="Integer_8"]
-"42" -> "40"
-"48" [label="LINST"]
-"47" [label="Llam"]
-"48" -> "47"
-"47" [label="Llam"]
-"46" [label="Ref_print"]
-"47" -> "46"
-"47" [label="Llam"]
-"45" [label="LPARAM"]
-"47" -> "45"
-"45" [label="LPARAM"]
-"44" [label="Ref_a"]
-"45" -> "44"
+"150" [label="INICIO"]
+"149" [label="LINST"]
+"150" -> "149"
+"149" [label="LINST"]
+"144" [label="LINST"]
+"149" -> "144"
+"144" [label="LINST"]
+"143" [label="IF"]
+"144" -> "143"
+"143" [label="IF"]
+"98" [label="<"]
+"143" -> "98"
+"98" [label="<"]
+"96" [label="Integer_5"]
+"98" -> "96"
+"98" [label="<"]
+"97" [label="Integer_4"]
+"98" -> "97"
+"143" [label="IF"]
+"102" [label="LINST"]
+"143" -> "102"
+"102" [label="LINST"]
+"101" [label="ASIGN"]
+"102" -> "101"
+"101" [label="ASIGN"]
+"100" [label="ID_var1"]
+"101" -> "100"
+"101" [label="ASIGN"]
+"99" [label="Integer_2"]
+"101" -> "99"
+"143" [label="IF"]
+"111" [label="EI"]
+"143" -> "111"
+"111" [label="EI"]
+"110" [label="IF"]
+"111" -> "110"
+"110" [label="IF"]
+"105" [label="<"]
+"110" -> "105"
+"105" [label="<"]
+"103" [label="Integer_4"]
+"105" -> "103"
+"105" [label="<"]
+"104" [label="Integer_5"]
+"105" -> "104"
+"110" [label="IF"]
+"109" [label="LINST"]
+"110" -> "109"
+"109" [label="LINST"]
+"108" [label="ASIGN"]
+"109" -> "108"
+"108" [label="ASIGN"]
+"107" [label="ID_var1"]
+"108" -> "107"
+"108" [label="ASIGN"]
+"106" [label="String_Come chocolate"]
+"108" -> "106"
+"143" [label="IF"]
+"142" [label="LINST"]
+"143" -> "142"
+"142" [label="LINST"]
+"127" [label="LINST"]
+"142" -> "127"
+"127" [label="LINST"]
+"115" [label="LINST"]
+"127" -> "115"
+"115" [label="LINST"]
+"114" [label="ASIGN"]
+"115" -> "114"
+"114" [label="ASIGN"]
+"113" [label="ID_var1"]
+"114" -> "113"
+"114" [label="ASIGN"]
+"112" [label="Integer_3"]
+"114" -> "112"
+"127" [label="LINST"]
+"126" [label="Llam"]
+"127" -> "126"
+"126" [label="Llam"]
+"125" [label="Ref_print"]
+"126" -> "125"
+"126" [label="Llam"]
+"124" [label="LPARAM"]
+"126" -> "124"
+"124" [label="LPARAM"]
+"123" [label="Llam"]
+"124" -> "123"
+"123" [label="Llam"]
+"122" [label="Ref_c"]
+"123" -> "122"
+"123" [label="Llam"]
+"121" [label="LPARAM"]
+"123" -> "121"
+"121" [label="LPARAM"]
+"119" [label="LPARAM"]
+"121" -> "119"
+"119" [label="LPARAM"]
+"117" [label="LPARAM"]
+"119" -> "117"
+"117" [label="LPARAM"]
+"116" [label="Numerico_2.0"]
+"117" -> "116"
+"119" [label="LPARAM"]
+"118" [label="False_false"]
+"119" -> "118"
+"121" [label="LPARAM"]
+"120" [label="Integer_4"]
+"121" -> "120"
+"142" [label="LINST"]
+"141" [label="Llam"]
+"142" -> "141"
+"141" [label="Llam"]
+"140" [label="Ref_print"]
+"141" -> "140"
+"141" [label="Llam"]
+"139" [label="LPARAM"]
+"141" -> "139"
+"139" [label="LPARAM"]
+"138" [label="Llam"]
+"139" -> "138"
+"138" [label="Llam"]
+"137" [label="Ref_list"]
+"138" -> "137"
+"138" [label="Llam"]
+"136" [label="LPARAM"]
+"138" -> "136"
+"136" [label="LPARAM"]
+"129" [label="LPARAM"]
+"136" -> "129"
+"129" [label="LPARAM"]
+"128" [label="Ref_var1"]
+"129" -> "128"
+"136" [label="LPARAM"]
+"135" [label="Llam"]
+"136" -> "135"
+"135" [label="Llam"]
+"134" [label="Ref_list"]
+"135" -> "134"
+"135" [label="Llam"]
+"133" [label="LPARAM"]
+"135" -> "133"
+"133" [label="LPARAM"]
+"131" [label="LPARAM"]
+"133" -> "131"
+"131" [label="LPARAM"]
+"130" [label="Integer_1"]
+"131" -> "130"
+"133" [label="LPARAM"]
+"132" [label="Integer_2"]
+"133" -> "132"
+"149" [label="LINST"]
+"148" [label="Llam"]
+"149" -> "148"
+"148" [label="Llam"]
+"147" [label="Ref_print"]
+"148" -> "147"
+"148" [label="Llam"]
+"146" [label="LPARAM"]
+"148" -> "146"
+"146" [label="LPARAM"]
+"145" [label="Ref_var1"]
+"146" -> "145"
 
 }
 

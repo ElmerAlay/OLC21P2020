@@ -234,12 +234,20 @@ public class Recorrido {
     
     private LinkedList<ASTNode> getInstruccions(AST root, LinkedList<ASTNode> lInst){
         switch(root.getChildren().size()){
+            case 0:
+                if(root.getLabel().equals("LINST")){
+                    Object v[] = {true};
+                    lInst.add(new Constant(new Vec(v)));
+                    return lInst;
+                }
             case 1:
                 if(root.getLabel().equals("INICIO")){
                     return getInstruccions(root.getChildren().get(0), lInst);
-                }else if(root.getLabel().equals("LINST")){
+                }else if(root.getLabel().equals("LINST") && !root.getChildren().get(0).getLabel().equals("LINST")){
                     lInst.add(getExpression(root.getChildren().get(0)));
                     return lInst;
+                }else if(root.getLabel().equals("LINST") && root.getChildren().get(0).getLabel().equals("LINST")){
+                    return getInstruccions(root.getChildren().get(0), lInst);
                 }
             case 2:
                 if(root.getLabel().equals("LINST")){
