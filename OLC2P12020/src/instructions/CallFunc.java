@@ -2,11 +2,17 @@ package instructions;
 
 import NativeFunctions.*;
 import abstracto.*;
+import charts.Bar;
+import charts.Dispersion;
+import charts.Histogram;
+import charts.Line;
+import charts.Pie;
 import java.util.LinkedList;
 import stadisticFunctions.Mean;
 import stadisticFunctions.Median;
 import stadisticFunctions.Mode;
 import symbols.Environment;
+import symbols.Vec;
 
 /**
  *
@@ -75,6 +81,18 @@ public class CallFunc implements ASTNode{
             return new NCol(lparam.remove(0)).execute(environment, LError);
         }else if(name.equals("nrow") && lparam.size()==1){
             return new NRow(lparam.remove(0)).execute(environment, LError);
+        }else if(name.equals("pie") && lparam.size()==3){
+            return new Pie(lparam).execute(environment, LError);
+        }else if(name.equals("barplot") && lparam.size()==5){
+            return new Bar(lparam).execute(environment, LError);
+        }else if(name.equals("plot") && lparam.get(4).execute(environment, LError) instanceof Vec &&
+                (((Vec)lparam.get(4).execute(environment, LError)).getValues()[0] instanceof Integer ||((Vec)lparam.get(4).execute(environment, LError)).getValues()[0] instanceof Float) 
+                && lparam.size()==5){
+            return new Dispersion(lparam).execute(environment, LError);
+        }else if(name.equals("plot") && lparam.size()==5){
+            return new Line(lparam).execute(environment, LError);
+        }else if(name.equals("hist") && lparam.size()==3){
+            return new Histogram(lparam).execute(environment, LError);
         }
         
         TError error = new TError(name, "Semántico", "Error de argumentos en la función", 0, 0);

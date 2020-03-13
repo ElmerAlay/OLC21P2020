@@ -28,7 +28,7 @@ import java.util.LinkedList;
 
 numero      =   [0-9]+
 flotante    =   {numero}\.{numero}
-id          =   [a-zA-Z]([_.a-zA-Z]|{numero})* | "."("."|[_a-zA-Z])(("."|[_a-zA-Z])|{numero})*
+id          =   [a-zA-Z]([_.a-zA-Z]|{numero})* | "."(("."|[_a-zA-Z])(("."|[_a-zA-Z])|{numero})*)*
 comentariolinea =   "#" ~"\n"
 comentariomulti =   "#*" ~"*#"
 

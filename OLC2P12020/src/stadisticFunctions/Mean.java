@@ -57,11 +57,14 @@ public class Mean implements ASTNode{
             Object exp2 = lexp.get(1).execute(environment, LError);
             
             //Verificamos que sean vectores
-            if(exp instanceof Vec && exp instanceof Vec){
+            if(exp instanceof Vec && exp2 instanceof Vec){
                 Object trim[] = ((Vec)exp2).getValues();
                 
                 //Verificar que trim sea de tamaño 1
                 if(trim.length==1){
+                    if(trim[0] instanceof Integer || trim[0] instanceof Float){
+                        
+                    }
                     float mean = Float.parseFloat("0.0");
                     Object values[] = ((Vec)exp).getValues();
                     int cont = 0;

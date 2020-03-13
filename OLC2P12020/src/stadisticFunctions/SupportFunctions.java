@@ -63,4 +63,22 @@ public class SupportFunctions {
             result = "BOOLEAN";
         return result;
     }
+    
+    public static double getMax(Object vec[], int op){
+        double max, min;
+        min=max=Double.parseDouble(vec[0].toString());
+ 
+	for(int i = 0; i < vec.length; i++){
+            if(min>Double.parseDouble(vec[i].toString()))
+		min=Double.parseDouble(vec[i].toString());
+            
+            if(max<Double.parseDouble(vec[i].toString()))
+		max=Double.parseDouble(vec[i].toString());
+	}
+        
+        if(op==1)
+            return max;
+        else
+            return min;
+    }
 }
