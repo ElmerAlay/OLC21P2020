@@ -14,11 +14,15 @@ public class Addition implements ASTNode{
      
     private ASTNode op1;
     private ASTNode op2;
+    private int row;
+    private int column;
     
-    public Addition(ASTNode op1, ASTNode op2){
+    public Addition(ASTNode op1, ASTNode op2, int row, int column){
         super();
         this.op1 = op1;
         this.op2 = op2;
+        this.row = row;
+        this.column = column;
     }
     
     @Override
@@ -36,15 +40,15 @@ public class Addition implements ASTNode{
                 if(vec1[0] instanceof String || vec2[0] instanceof String){
                     Object result[] = { ("" + vec1[0] + vec2[0]) };
                     return new Vec(result);
-                }else if((vec1[0] instanceof Float && (vec2[0] instanceof Float || vec2[0] instanceof Integer)) || 
-                         (vec2[0] instanceof Float && (vec1[0] instanceof Float || vec1[0] instanceof Integer))){
-                    Object result[] = { Float.parseFloat(vec1[0].toString()) + Float.parseFloat(vec2[0].toString()) };
+                }else if((vec1[0] instanceof Double && (vec2[0] instanceof Double || vec2[0] instanceof Integer)) || 
+                         (vec2[0] instanceof Double && (vec1[0] instanceof Double || vec1[0] instanceof Integer))){
+                    Object result[] = { Double.parseDouble(vec1[0].toString()) + Double.parseDouble(vec2[0].toString()) };
                     return new Vec(result);
                 }else if((vec1[0] instanceof Integer && vec2[0] instanceof Integer)){
                     Object result[] = {Integer.parseInt(vec1[0].toString()) + Integer.parseInt(vec2[0].toString())};
                     return new Vec(result);
                 }else{
-                    TError error = new TError("+", "Semántico", "no se puede sumar esos 2 tipos de datos", 0, 0);
+                    TError error = new TError("+", "Semántico", "no se puede sumar esos 2 tipos de datos", row, column);
                     LError.add(error);
 
                     return error;
@@ -59,9 +63,9 @@ public class Addition implements ASTNode{
                 for(int i=0; i<vec1.length; i++){
                     if(vec1[i] instanceof String || vec2[i] instanceof String){
                         result[i] = "" + vec1[i] + vec2[i];
-                    }else if((vec1[i] instanceof Float && (vec2[i] instanceof Float || vec2[i] instanceof Integer)) || 
-                             (vec2[i] instanceof Float && (vec1[i] instanceof Float || vec1[i] instanceof Integer))){
-                        result[i] = Float.parseFloat(vec1[i].toString()) + Float.parseFloat(vec2[i].toString());
+                    }else if((vec1[i] instanceof Double && (vec2[i] instanceof Double || vec2[i] instanceof Integer)) || 
+                             (vec2[i] instanceof Double && (vec1[i] instanceof Double || vec1[i] instanceof Integer))){
+                        result[i] = Double.parseDouble(vec1[i].toString()) + Double.parseDouble(vec2[i].toString());
                     }else if((vec1[i] instanceof Integer && vec2[i] instanceof Integer)){
                         result[i] = Integer.parseInt(vec1[i].toString()) + Integer.parseInt(vec2[i].toString());
                     }else {
@@ -74,7 +78,7 @@ public class Addition implements ASTNode{
                 if(flag){
                     return new Vec(result);
                 }else{
-                    TError error = new TError("+", "Semántico", "no se puede sumar esos 2 tipos de datos", 0, 0);
+                    TError error = new TError("+", "Semántico", "no se puede sumar esos 2 tipos de datos", row, column);
                     LError.add(error);
 
                     return error;
@@ -89,9 +93,9 @@ public class Addition implements ASTNode{
                 for(int i=0; i<vec2.length; i++){
                     if(vec1[0] instanceof String || vec2[i] instanceof String){
                         result[i] = "" + vec1[0] + vec2[i];
-                    }else if((vec1[0] instanceof Float && (vec2[i] instanceof Float || vec2[i] instanceof Integer)) || 
-                             (vec2[i] instanceof Float && (vec1[0] instanceof Float || vec1[0] instanceof Integer))){
-                        result[i] = Float.parseFloat(vec1[0].toString()) + Float.parseFloat(vec2[i].toString());
+                    }else if((vec1[0] instanceof Double && (vec2[i] instanceof Double || vec2[i] instanceof Integer)) || 
+                             (vec2[i] instanceof Double && (vec1[0] instanceof Double || vec1[0] instanceof Integer))){
+                        result[i] = Double.parseDouble(vec1[0].toString()) + Double.parseDouble(vec2[i].toString());
                     }else if((vec1[0] instanceof Integer && vec2[i] instanceof Integer)){
                         result[i] = Integer.parseInt(vec1[0].toString()) + Integer.parseInt(vec2[i].toString());
                     }else {
@@ -104,7 +108,7 @@ public class Addition implements ASTNode{
                 if(flag){
                     return new Vec(result);
                 }else{
-                    TError error = new TError("+", "Semántico", "no se puede sumar esos 2 tipos de datos", 0, 0);
+                    TError error = new TError("+", "Semántico", "no se puede sumar esos 2 tipos de datos", row, column);
                     LError.add(error);
 
                     return error;
@@ -119,9 +123,9 @@ public class Addition implements ASTNode{
                 for(int i=0; i<vec1.length; i++){
                     if(vec1[0] instanceof String || vec2[0] instanceof String){
                         result[i] = "" + vec1[i] + vec2[0];
-                    }else if((vec1[0] instanceof Float && (vec2[0] instanceof Float || vec2[0] instanceof Integer)) || 
-                             (vec2[0] instanceof Float && (vec1[0] instanceof Float || vec1[0] instanceof Integer))){
-                        result[i] = Float.parseFloat(vec1[i].toString()) + Float.parseFloat(vec2[0].toString());
+                    }else if((vec1[0] instanceof Double && (vec2[0] instanceof Double || vec2[0] instanceof Integer)) || 
+                             (vec2[0] instanceof Double && (vec1[0] instanceof Double || vec1[0] instanceof Integer))){
+                        result[i] = Double.parseDouble(vec1[i].toString()) + Double.parseDouble(vec2[0].toString());
                     }else if((vec1[0] instanceof Integer && vec2[0] instanceof Integer)){
                         result[i] = Integer.parseInt(vec1[i].toString()) + Integer.parseInt(vec2[0].toString());
                     }else {
@@ -134,7 +138,7 @@ public class Addition implements ASTNode{
                 if(flag){
                     return new Vec(result);
                 }else{
-                    TError error = new TError("+", "Semántico", "no se puede sumar esos 2 tipos de datos", 0, 0);
+                    TError error = new TError("+", "Semántico", "no se puede sumar esos 2 tipos de datos", row, column);
                     LError.add(error);
 
                     return error;
@@ -142,7 +146,7 @@ public class Addition implements ASTNode{
             }
             //Por último es el caso en el que los vectores son de distinto tamaño
             else{
-                TError error = new TError("+", "Semántico", "no se puede sumar esos 2 vectores de distinto tamaño", 0, 0);
+                TError error = new TError("+", "Semántico", "no se puede sumar esos 2 vectores de distinto tamaño", row, column);
                 LError.add(error);
 
                 return error;
@@ -168,7 +172,7 @@ public class Addition implements ASTNode{
                         con2++;
                     }
                 }
-                Object res = new Addition(new Constant(new Vec(o1)), new Constant(new Vec(o2))).execute(environment, LError);
+                Object res = new Addition(new Constant(new Vec(o1)), new Constant(new Vec(o2)), row, column).execute(environment, LError);
                 Object result[][] = new Object[mat1.row][mat1.col];
                 con1 = 0;
                 if(res instanceof Vec){
@@ -180,13 +184,13 @@ public class Addition implements ASTNode{
                     }
                     return new Mat(result, mat1.row, mat1.col); 
                 }else{
-                    TError error = new TError("+", "Semántico", "Error al sumar las matrices", 0, 0);
+                    TError error = new TError("+", "Semántico", "Error al sumar las matrices", row, column);
                     LError.add(error);
 
                     return error;
                 }
             }else{
-                TError error = new TError("+", "Semántico", "no se puede sumar las matrices porque no tienen las mismas dimensiones", 0, 0);
+                TError error = new TError("+", "Semántico", "no se puede sumar las matrices porque no tienen las mismas dimensiones", row, column);
                 LError.add(error);
 
                 return error;
@@ -207,7 +211,7 @@ public class Addition implements ASTNode{
                     }
                 }
                 
-                Object res = new Addition(new Constant(new Vec(o1)), new Constant((Vec)op2)).execute(environment, LError);
+                Object res = new Addition(new Constant(new Vec(o1)), new Constant((Vec)op2), row, column).execute(environment, LError);
                 Object result[][] = new Object[mat1.row][mat1.col];
                 con1 = 0;
                 if(res instanceof Vec){
@@ -219,13 +223,13 @@ public class Addition implements ASTNode{
                     }
                     return new Mat(result, mat1.row, mat1.col);
                 }else{
-                    TError error = new TError("+", "Semántico", "Error al sumar la matriz con el vector", 0, 0);
+                    TError error = new TError("+", "Semántico", "Error al sumar la matriz con el vector", row, column);
                     LError.add(error);
 
                     return error;
                 }
             }else{
-                TError error = new TError("+", "Semántico", "no se puede sumar una matriz y un vector de más de un valor", 0, 0);
+                TError error = new TError("+", "Semántico", "no se puede sumar una matriz y un vector de más de un valor", row, column);
                 LError.add(error);
 
                 return error;
@@ -246,7 +250,7 @@ public class Addition implements ASTNode{
                     }
                 }
                 
-                Object res = new Addition(new Constant((Vec)op1), new Constant(new Vec(o1))).execute(environment, LError);
+                Object res = new Addition(new Constant((Vec)op1), new Constant(new Vec(o1)), row, column).execute(environment, LError);
                 Object result[][] = new Object[mat1.row][mat1.col];
                 con1 = 0;
                 if(res instanceof Vec){
@@ -258,13 +262,13 @@ public class Addition implements ASTNode{
                     }
                     return new Mat(result, mat1.row, mat1.col);
                 }else{
-                    TError error = new TError("+", "Semántico", "Error al sumar la matriz con el vector", 0, 0);
+                    TError error = new TError("+", "Semántico", "Error al sumar la matriz con el vector", row, column);
                     LError.add(error);
 
                     return error;
                 }
             }else{
-                TError error = new TError("+", "Semántico", "no se puede sumar una matriz y un vector de más de un valor", 0, 0);
+                TError error = new TError("+", "Semántico", "no se puede sumar una matriz y un vector de más de un valor", row, column);
                 LError.add(error);
 
                 return error;
@@ -272,7 +276,7 @@ public class Addition implements ASTNode{
         }
         
      
-        TError error = new TError("+", "Semántico", "no se puede sumar esos 2 tipos de variables", 0, 0);
+        TError error = new TError("+", "Semántico", "no se puede sumar esos 2 tipos de variables", row, column);
         LError.add(error);
         
         return error;

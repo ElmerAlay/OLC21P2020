@@ -22,12 +22,16 @@ public class StructAssig implements ASTNode{
     private String name;
     private ASTNode exp;
     private LinkedList<ASTNode> indexes;
+    private int row;
+    private int column;
 
-    public StructAssig(String name, ASTNode exp, LinkedList<ASTNode> indexes) {
+    public StructAssig(String name, ASTNode exp, LinkedList<ASTNode> indexes, int row, int column) {
         super();
         this.name = name;
         this.exp = exp;
         this.indexes = indexes;
+        this.row = row;
+        this.column = column;
     }
     
     @Override
@@ -40,240 +44,47 @@ public class StructAssig implements ASTNode{
             
             //Verificamos que sea vector
             if(symbol.getValue() instanceof Vec){
-                
-                //Verificamos que la expresión sea un vector y sea de tamaño 1
-                if(value instanceof Vec && ((Vec)value).getValues().length==1){
-                    Object val = ((Vec)value).getValues()[0];                
-                    
-                    //Verificamos que la lista de índices sólo tenga un objeto
-                    if(indexes.size()==1){
-                        Object index = indexes.remove(0).execute(environment, LError); //Guardo el índice en una variable
-
-                        //Verificar que el índice sea un vector de tamaño 1
-                        if(index instanceof Vec && ((Vec)index).getValues().length==1){
-                            Object ind[] = ((Vec)index).getValues();    //Guardo en una varibale el índice 
-
-                            //Verificamos que su índice sea de tipo integer
-                            if(ind[0] instanceof Integer){
-                                int tVec = ((Vec)symbol.getValue()).getValues().length; //Guardo en una variable el tamaño de la variable vector a asignar el valor
-
-                                //Verificamos que si el tamaño del vector es igual a 1 y el índice también es igual a 1
-                                if(tVec == 1 && Integer.parseInt(ind[0].toString()) == 1){
-                                        //Hacemos el casteo
-                                        if(val instanceof String){
-                                            Object values []= ((Vec)symbol.getValue()).getValues();
-                                            values[Integer.parseInt(ind[0].toString())-1] = val.toString();
-                                            ((Vec)environment.get(name).getValue()).setValues(values);
-                                            environment.get(name).setType(new Type(Type.Types.STRING, "Vector"));
-                                        }else if(val instanceof Float){
-                                            Object values []= ((Vec)symbol.getValue()).getValues();
-                                            values[Integer.parseInt(ind[0].toString())-1] = Float.parseFloat(val.toString());
-                                            ((Vec)environment.get(name).getValue()).setValues(values);
-                                            environment.get(name).setType(new Type(Type.Types.NUMERICO, "Vector"));
-                                        }else if(val instanceof Integer){
-                                            Object values []= ((Vec)symbol.getValue()).getValues();
-                                            values[Integer.parseInt(ind[0].toString())-1] = Integer.parseInt(val.toString());
-                                            ((Vec)environment.get(name).getValue()).setValues(values);
-                                            environment.get(name).setType(new Type(Type.Types.INTEGER, "Vector"));
-                                        }else if(val instanceof Boolean){
-                                            Object values []= ((Vec)symbol.getValue()).getValues();
-                                            values[Integer.parseInt(ind[0].toString())-1] = Boolean.parseBoolean(val.toString());
-                                            ((Vec)environment.get(name).getValue()).setValues(values);
-                                            environment.get(name).setType(new Type(Type.Types.BOOLEANO, "Vector"));
-                                        }else{
-                                            TError error = new TError(name, "Semántico", "La expresión no es de tipo primitivo", 0, 0);
-                                            LError.add(error);
-
-                                            return error;
-                                        }
-                                }else{
-                                    //Verificamos que el índice esté entre 1 y el tamaño del vector
-                                    if(Integer.parseInt(ind[0].toString()) > 0 && Integer.parseInt(ind[0].toString()) <= tVec){
-                                        //Hacemos la comparación para el casteo
-                                        //Verifico si el tipo de dato del vector es String
-                                        if(symbol.getType().getTypes() == Type.Types.STRING || val instanceof String){
-                                            Object values []= ((Vec)symbol.getValue()).getValues();
-                                            for(int i = 0; i< values.length; i++){
-                                                values[i] = values[i].toString();   //Convierto todos los valores al tipo de dato String
-                                            }
-                                            values[Integer.parseInt(ind[0].toString())-1] = val.toString();
-                                            ((Vec)environment.get(name).getValue()).setValues(values);
-                                            environment.get(name).setType(new Type(Type.Types.STRING, "Vector"));
-                                        }else{
-                                            //Verifico si el tipo de dato de la expresión es float
-                                            if(val instanceof Float || symbol.getType().getTypes() == Type.Types.NUMERICO){
-                                                Object values []= ((Vec)symbol.getValue()).getValues();
-                                                for(int i = 0; i< values.length; i++){
-                                                    if(values[i] instanceof Boolean)
-                                                        values[i] = Boolean.parseBoolean(values[i].toString()) ? Float.parseFloat("1.0") : Float.parseFloat("0.0"); //Convierto todos los valores al tipo de dato float 
-                                                    else
-                                                        values[i] = Float.parseFloat(values[i].toString());   //Convierto todos los valores al tipo de dato float
-                                                }
-
-                                                if(val instanceof Boolean && Boolean.parseBoolean(val.toString()))
-                                                    values[Integer.parseInt(ind[0].toString())-1] = Float.parseFloat("1.0");
-                                                else if(value instanceof Boolean && !Boolean.parseBoolean(value.toString()))
-                                                    values[Integer.parseInt(ind[0].toString())-1] = Float.parseFloat("0.0");
-                                                else
-                                                    values[Integer.parseInt(ind[0].toString())-1] = Float.parseFloat(val.toString());
-
-                                                ((Vec)environment.get(name).getValue()).setValues(values);
-                                                environment.get(name).setType(new Type(Type.Types.NUMERICO, "Vector"));
-                                            }
-                                            //Verifico si el tipo de dato de la expresión es integer y el del vector es booleano o integer
-                                            else if((val instanceof Integer && (symbol.getType().getTypes() == Type.Types.BOOLEANO || symbol.getType().getTypes() == Type.Types.INTEGER)) ||
-                                                    (val instanceof Boolean && symbol.getType().getTypes() == Type.Types.INTEGER)){
-                                                Object values []= ((Vec)symbol.getValue()).getValues();
-                                                for(int i = 0; i< values.length; i++){
-                                                    if(values[i] instanceof Boolean)
-                                                        values[i] = Boolean.parseBoolean(values[i].toString()) ? 1 : 0; //Convierto todos los valores al tipo de dato integer
-                                                    else
-                                                        values[i] = Integer.parseInt(values[i].toString());
-                                                }
-
-                                                if(val instanceof Boolean && Boolean.parseBoolean(val.toString()))
-                                                    values[Integer.parseInt(ind[0].toString())-1] = 1;
-                                                else if(val instanceof Boolean && !Boolean.parseBoolean(val.toString()))
-                                                    values[Integer.parseInt(ind[0].toString())-1] = 0;
-                                                else
-                                                    values[Integer.parseInt(ind[0].toString())-1] = Integer.parseInt(val.toString());
-                                                
-                                                ((Vec)environment.get(name).getValue()).setValues(values);
-                                                environment.get(name).setType(new Type(Type.Types.INTEGER, "Vector"));
-                                            }
-                                            //Verifico si el tipo de dato de la expresión booleano y el del vector es booleano
-                                            else if(val instanceof Boolean && symbol.getType().getTypes() == Type.Types.BOOLEANO){
-                                                //Convierto la expresión a boolean y la almaceno en su lugar correspondiente
-                                                Object values []= ((Vec)symbol.getValue()).getValues();
-                                                values[Integer.parseInt(ind[0].toString())-1] = Boolean.parseBoolean(val.toString());
-                                                ((Vec)environment.get(name).getValue()).setValues(values);
-                                                environment.get(name).setType(new Type(Type.Types.BOOLEANO, "Vector"));
-                                            }else {
-                                                TError error = new TError(name, "Semántico", "La expresión no es de tipo primitivo", 0, 0);
-                                                LError.add(error);
-
-                                                return error;
-                                            }
-                                        }
-                                    }
-                                    //el índice es mayor al tamaño del vector
-                                    else {
-                                        //Hacemos la comparación para el casteo
-                                        //Verifico si el tipo de dato del vector es String o el de la expresión es string
-                                        if(symbol.getType().getTypes() == Type.Types.STRING || val instanceof String){
-                                            Object vals[] = new Object[Integer.parseInt(ind[0].toString())]; //Contiene el vector nuevo total
-                                            Object values []= ((Vec)symbol.getValue()).getValues(); //Contiene los valores del antiguo vector
-
-                                            for(int i = 0; i< values.length; i++){
-                                                vals[i] = values[i].toString();   //Convierto todos los valores al tipo de dato String
-                                            }
-
-                                            for(int i = values.length; i<Integer.parseInt(ind[0].toString()); i++){
-                                                vals[i] = "null";     //Llenamos los espacios sobrantes con el valor por defecto
-                                            }
-
-                                            vals[Integer.parseInt(ind[0].toString())-1] = val.toString();
-                                            ((Vec)environment.get(name).getValue()).setValues(vals);
-                                            environment.get(name).setType(new Type(Type.Types.STRING, "Vector"));
-                                        }else{
-                                            //Verifico si el tipo de dato de la expresión es float
-                                            if(symbol.getType().getTypes() == Type.Types.NUMERICO || val instanceof Float){
-                                                Object vals[] = new Object[Integer.parseInt(ind[0].toString())]; //Contiene el vector nuevo total
-                                                Object values []= ((Vec)symbol.getValue()).getValues(); //Contiene los valores del antiguo vector
-
-                                                for(int i = 0; i< values.length; i++){
-                                                    if(values[i] instanceof Boolean)
-                                                        vals[i] = Boolean.parseBoolean(values[i].toString()) ? Float.parseFloat("1.0") : Float.parseFloat("0.0"); //Convierto todos los valores al tipo de dato float 
-                                                    else
-                                                        vals[i] = Float.parseFloat(values[i].toString());   //Convierto todos los valores al tipo de dato float
-                                                }
-
-                                                for(int i = values.length; i<Integer.parseInt(ind[0].toString()); i++){
-                                                    vals[i] = Float.parseFloat("0.0");     //Llenamos los espacios sobrantes con el valor por defecto
-                                                }
-
-                                                if(val instanceof Boolean && Boolean.parseBoolean(val.toString()))
-                                                    vals[Integer.parseInt(ind[0].toString())-1] = Float.parseFloat("1.0");
-                                                else if(val instanceof Boolean && !Boolean.parseBoolean(val.toString()))
-                                                    vals[Integer.parseInt(ind[0].toString())-1] = Float.parseFloat("0.0");
-                                                else
-                                                    vals[Integer.parseInt(ind[0].toString())-1] = Float.parseFloat(val.toString());
-                                                ((Vec)environment.get(name).getValue()).setValues(vals);
-                                                environment.get(name).setType(new Type(Type.Types.NUMERICO, "Vector"));
-                                            }
-                                            //Verifico si el tipo de dato de la expresión es integer y el del vector es booleano o integer
-                                            else if((val instanceof Integer && (symbol.getType().getTypes() == Type.Types.BOOLEANO || symbol.getType().getTypes() == Type.Types.INTEGER)) ||
-                                                    (val instanceof Boolean && symbol.getType().getTypes() == Type.Types.INTEGER)){
-                                                Object vals[] = new Object[Integer.parseInt(ind[0].toString())]; //Contiene el vector nuevo total
-                                                Object values []= ((Vec)symbol.getValue()).getValues(); //Contiene los valores del antiguo vector
-
-                                                for(int i = 0; i< values.length; i++){
-                                                    if(values[i] instanceof Boolean)
-                                                        vals[i] = Boolean.parseBoolean(values[i].toString()) ? 1 : 0; //Convierto todos los valores al tipo de dato integer
-                                                    else
-                                                        vals[i] = Integer.parseInt(values[i].toString());
-                                                }
-
-                                                for(int i = values.length; i<Integer.parseInt(ind[0].toString()); i++){
-                                                    vals[i] = 0;     //Llenamos los espacios sobrantes con el valor por defecto
-                                                }
-
-                                                if(val instanceof Boolean && Boolean.parseBoolean(val.toString()))
-                                                    vals[Integer.parseInt(ind[0].toString())-1] = 1;
-                                                else if(val instanceof Boolean && !Boolean.parseBoolean(val.toString()))
-                                                    vals[Integer.parseInt(ind[0].toString())-1] = 0;
-                                                else
-                                                    vals[Integer.parseInt(ind[0].toString())-1] = Integer.parseInt(val.toString());
-                                                ((Vec)environment.get(name).getValue()).setValues(vals);
-                                                environment.get(name).setType(new Type(Type.Types.INTEGER, "Vector"));
-                                            }
-                                            //Verifico si el tipo de dato de la expresión booleano y el del vector es booleano
-                                            else if(val instanceof Boolean && symbol.getType().getTypes() == Type.Types.BOOLEANO){
-                                                Object vals[] = new Object[Integer.parseInt(ind[0].toString())]; //Contiene el vector nuevo total
-                                                Object values []= ((Vec)symbol.getValue()).getValues(); //Contiene los valores del antiguo vector
-
-                                                for(int i = 0; i< values.length; i++){
-                                                    vals[i] = Boolean.parseBoolean(values[i].toString());   //Convierto todos los valores al tipo de dato boolean
-                                                }
-
-                                                for(int i = values.length; i<Integer.parseInt(ind[0].toString()); i++){
-                                                    vals[i] = false;     //Llenamos los espacios sobrantes con el valor por defecto
-                                                }
-
-                                                vals[Integer.parseInt(ind[0].toString())-1] = Boolean.parseBoolean(val.toString());
-                                                ((Vec)environment.get(name).getValue()).setValues(vals);
-                                                environment.get(name).setType(new Type(Type.Types.BOOLEANO, "Vector"));
-                                            }else {
-                                                TError error = new TError(name, "Semántico", "La expresión no es de tipo primitivo", 0, 0);
-                                                LError.add(error);
-
-                                                return error;
-                                            }
-                                        }
-                                    }
-                                }
+                //Lista de índices sea igual a 1
+                if(indexes.size()==1){
+                    //El índice debe ser un vector de tipo integer de tamaño 1
+                    Object ind = indexes.get(0).execute(environment, LError);
+                    if(ind instanceof Vec && ((Vec)ind).getValues()[0] instanceof Integer && ((Vec)ind).getValues().length==1){
+                        //La expresión es un vector de tamaño 1
+                        if(value instanceof Vec && ((Vec)value).getValues().length==1){
+                            //El índice es menor o igual al tamaño del vector
+                            Object index[] = ((Vec)ind).getValues();
+                            int tamV = ((Vec)symbol.getValue()).getValues().length;
+                            if(Integer.parseInt(index[0].toString())<=tamV && Integer.parseInt(index[0].toString())>0){
+                                LinkedList<Object> list = new LinkedList<>();
+                                Object data[] = ((Vec)symbol.getValue()).getValues();
+                                data[Integer.parseInt(index[0].toString())-1] = ((Vec)value).getValues()[0];
+                                list.add(new Vec(data));
+                                ((Vec)environment.get(name).getValue()).setValues(((Vec)Casteo.cast(list)).getValues());
+                                environment.get(name).setType(Casteo.setType(((Vec)Casteo.cast(list)).getValues()[0]));
+                                return null;
+                            }else if(Integer.parseInt(index[0].toString())>tamV){
+                                Object result[] = Casteo.llenar(((Vec)symbol.getValue()).getValues(), ((Vec)value).getValues()[0], Integer.parseInt(index[0].toString()));
+                                ((Vec)environment.get(name).getValue()).setValues(result);
+                                environment.get(name).setType(Casteo.setType(result[0]));
+                                return null;
                             }else{
-                                TError error = new TError(name, "Semántico", "El índice debe ser de tipo integer", 0, 0);
+                                TError error = new TError(name, "Semántico", "Error en el índice del vector", row, column);
                                 LError.add(error);
-
                                 return error;
                             }
                         }else{
-                            TError error = new TError(name, "Semántico", "El índice debe ser de tipo vector y tener sólo un elemento", 0, 0);
+                            TError error = new TError(name, "Semántico", "El valor a asignar tiene más de un valor", row, column);
                             LError.add(error);
-
                             return error;
                         }
                     }else{
-                        TError error = new TError(name, "Semántico", "Un vector no puede tener más de un índice a la hora de modificar", 0, 0);
+                        TError error = new TError(name, "Semántico", "El indice debe ser de tipo integer y tener sólo un valor", row, column);
                         LError.add(error);
-
                         return error;
                     }
                 }else{
-                    TError error = new TError(name, "Semántico", "La expresión a asignar no es de tipo vector o es de tamaño mayor a 1", 0, 0);
+                    TError error = new TError(name, "Semántico", "Para modificar un vector sólo puede haber un índice", row, column);
                     LError.add(error);
-
                     return error;
                 }
             }
@@ -283,136 +94,99 @@ public class StructAssig implements ASTNode{
                     Object i1= indexes.remove(0).execute(environment, LError);
                     if(i1 instanceof Vec && ((Vec)i1).getValues().length==1){
                         Object ind[] = ((Vec)i1).getValues();
-                        Object expr = exp.execute(environment, LError);
-                        if(expr instanceof Vec && ((Vec)expr).getValues().length==1){
-                            LinkedList<Object> list = ((ListStruct)environment.get(name).getValue()).getValues();
-                            if(ind[0] instanceof Integer){
+                        if(ind[0] instanceof Integer){
+                            Object expr = exp.execute(environment, LError);
+                            if(expr instanceof Vec && ((Vec)expr).getValues().length==1){
+                                LinkedList<Object> list = ((ListStruct)environment.get(name).getValue()).getValues();
                                 if(Integer.parseInt(ind[0].toString())>list.size()){
-                                    for(int i=list.size(); i<Integer.parseInt(ind[0].toString()); i++){
-                                        Object v[] = {"null"};
-                                        list.add(new Vec(v));
-                                    }
-                                    list.set((Integer.parseInt(ind[0].toString())-1), ((Vec)expr));
-                                    ((ListStruct)environment.get(name).getValue()).setValues(list);
+                                    ((ListStruct)environment.get(name).getValue()).setValues(Casteo.llenarList(list, expr, Integer.parseInt(ind[0].toString())-1));
+                                    return null;
                                 }else if(Integer.parseInt(ind[0].toString())<=list.size() && Integer.parseInt(ind[0].toString())>0){
-                                    list.set((Integer.parseInt(ind[0].toString())-1), ((Vec)expr));
+                                    list.set((Integer.parseInt(ind[0].toString())-1), (expr));
                                     ((ListStruct)environment.get(name).getValue()).setValues(list);
+                                    return null;
                                 }else{
-                                    TError error = new TError(name, "Semántico", "El índice no es menor a 1", 0, 0);
+                                    TError error = new TError(name, "Semántico", "El índice es menor a 1", row, column);
                                     LError.add(error);
-
+                                    return error;
+                                }
+                            }
+                            else if(expr instanceof ListStruct && ((ListStruct)expr).getValues().size()==1){
+                                LinkedList<Object> list = new LinkedList<>();
+                                list.addAll(((ListStruct)environment.get(name).getValue()).getValues());
+                                if(Integer.parseInt(ind[0].toString())>list.size()){
+                                    ((ListStruct)environment.get(name).getValue()).setValues(Casteo.llenarList(list, expr, Integer.parseInt(ind[0].toString())-1));
+                                    return null;
+                                }else if(Integer.parseInt(ind[0].toString())<=list.size() && Integer.parseInt(ind[0].toString())>0){
+                                    list.set((Integer.parseInt(ind[0].toString())-1), (expr));
+                                    ((ListStruct)environment.get(name).getValue()).setValues(list);
+                                    return null;
+                                }else{
+                                    TError error = new TError(name, "Semántico", "El índice es menor a 1", row, column);
+                                    LError.add(error);
                                     return error;
                                 }
                             }
                             else{
-                                TError error = new TError(name, "Semántico", "El índice no es de tipo integer", 0, 0);
+                                TError error = new TError(name, "Semántico", "Para modificación tipo1 no se puede agregar más de un elemento", row, column);
                                 LError.add(error);
-
                                 return error;
                             }
-                        }
-                        else if(expr instanceof ListStruct && ((ListStruct)expr).getValues().size()==1){
-                            LinkedList<Object> list = new LinkedList<>();
-                            list.addAll(((ListStruct)environment.get(name).getValue()).getValues());
-                            if(ind[0] instanceof Integer){
-                                if(Integer.parseInt(ind[0].toString())>list.size()){
-                                    for(int i=list.size(); i<Integer.parseInt(ind[0].toString()); i++){
-                                        Object v[] = {"null"};
-                                        list.add(new Vec(v));
-                                    }
-                                    list.set((Integer.parseInt(ind[0].toString())-1), ((ListStruct)expr));
-                                    ((ListStruct)environment.get(name).getValue()).setValues(list);
-                                }else if(Integer.parseInt(ind[0].toString())<=list.size() && Integer.parseInt(ind[0].toString())>0){
-                                    list.set((Integer.parseInt(ind[0].toString())-1), ((ListStruct)expr));
-                                    ((ListStruct)environment.get(name).getValue()).setValues(list);
-                                }else{
-                                    TError error = new TError(name, "Semántico", "El índice no es menor a 1", 0, 0);
-                                    LError.add(error);
-
-                                    return error;
-                                }
-                            }else{
-                                TError error = new TError(name, "Semántico", "El índice no es de tipo integer", 0, 0);
-                                LError.add(error);
-
-                                return error;
-                            }
-                        }
-                        else{
-                            TError error = new TError(name, "Semántico", "Para modificación tipo1 no se puede agregar más de un elemento", 0, 0);
+                        }else{
+                            TError error = new TError(name, "Semántico", "El índice no es de tipo integer", row, column);
                             LError.add(error);
-
                             return error;
                         }
                     }
                     else if(i1 instanceof Vec2 && ((Vec2)i1).getValues().length==1){
                         Object ind[] = ((Vec2)i1).getValues();
-                        Object expr = exp.execute(environment, LError);
-                        if(expr instanceof Vec){
-                            LinkedList<Object> list = ((ListStruct)environment.get(name).getValue()).getValues();
-                            if(ind[0] instanceof Integer){
+                        if(ind[0] instanceof Integer){
+                            Object expr = exp.execute(environment, LError);
+                            if(expr instanceof Vec){
+                                LinkedList<Object> list = ((ListStruct)environment.get(name).getValue()).getValues();
                                 if(Integer.parseInt(ind[0].toString())>list.size()){
-                                    for(int i=list.size(); i<Integer.parseInt(ind[0].toString()); i++){
-                                        Object v[] = {"null"};
-                                        list.add(new Vec(v));
-                                    }
-                                    list.set((Integer.parseInt(ind[0].toString())-1), ((Vec)expr));
-                                    ((ListStruct)environment.get(name).getValue()).setValues(list);
+                                        ((ListStruct)environment.get(name).getValue()).setValues(Casteo.llenarList(list, expr, Integer.parseInt(ind[0].toString())-1));
+                                        return null;
                                 }else if(Integer.parseInt(ind[0].toString())<=list.size() && Integer.parseInt(ind[0].toString())>0){
-                                    list.set((Integer.parseInt(ind[0].toString())-1), ((Vec)expr));
-                                    ((ListStruct)environment.get(name).getValue()).setValues(list);
+                                        list.set((Integer.parseInt(ind[0].toString())-1), ((Vec)expr));
+                                        ((ListStruct)environment.get(name).getValue()).setValues(list);
+                                        return null;
                                 }else{
-                                    TError error = new TError(name, "Semántico", "El índice es menor a 1", 0, 0);
+                                    TError error = new TError(name, "Semántico", "El índice es menor a 1", row, column);
                                     LError.add(error);
-
+                                    return error;
+                                }
+                            }
+                            else if(expr instanceof ListStruct){
+                                LinkedList<Object> list = new LinkedList<>();
+                                list.addAll(((ListStruct)environment.get(name).getValue()).getValues());
+                                if(Integer.parseInt(ind[0].toString())>list.size()){
+                                    ((ListStruct)environment.get(name).getValue()).setValues(Casteo.llenarList(list, expr, Integer.parseInt(ind[0].toString())-1));
+                                    return null;
+                                }else if(Integer.parseInt(ind[0].toString())<=list.size() && Integer.parseInt(ind[0].toString())>0){
+                                    list.set((Integer.parseInt(ind[0].toString())-1), ((ListStruct)expr));
+                                    ((ListStruct)environment.get(name).getValue()).setValues(list);
+                                    return null;
+                                }else{
+                                    TError error = new TError(name, "Semántico", "El índice es menor a 1", row, column);
+                                    LError.add(error);
                                     return error;
                                 }
                             }
                             else{
-                                TError error = new TError(name, "Semántico", "El índice no es de tipo integer", 0, 0);
+                                TError error = new TError(name, "Semántico", "modificación tipo2, la expresión no es vector o lista", row, column);
                                 LError.add(error);
-
                                 return error;
                             }
-                        }
-                        else if(expr instanceof ListStruct){
-                            LinkedList<Object> list = new LinkedList<>();
-                            list.addAll(((ListStruct)environment.get(name).getValue()).getValues());
-                            if(ind[0] instanceof Integer){
-                                if(Integer.parseInt(ind[0].toString())>list.size()){
-                                    for(int i=list.size(); i<Integer.parseInt(ind[0].toString()); i++){
-                                        Object v[] = {"null"};
-                                        list.add(new Vec(v));
-                                    }
-                                    list.set((Integer.parseInt(ind[0].toString())-1), ((ListStruct)expr));
-                                    ((ListStruct)environment.get(name).getValue()).setValues(list);
-                                }else if(Integer.parseInt(ind[0].toString())<=list.size() && Integer.parseInt(ind[0].toString())>0){
-                                    list.set((Integer.parseInt(ind[0].toString())-1), ((ListStruct)expr));
-                                    ((ListStruct)environment.get(name).getValue()).setValues(list);
-                                }else{
-                                    TError error = new TError(name, "Semántico", "El índice no es menor a 1", 0, 0);
-                                    LError.add(error);
-
-                                    return error;
-                                }
-                            }else{
-                                TError error = new TError(name, "Semántico", "El índice no es de tipo integer", 0, 0);
-                                LError.add(error);
-
-                                return error;
-                            }
-                        }
-                        else{
-                            TError error = new TError(name, "Semántico", "modificación tipo2, la expresión no es vector o lista", 0, 0);
+                        }else{
+                            TError error = new TError(name, "Semántico", "El índice no es de tipo integer", row, column);
                             LError.add(error);
-
                             return error;
                         }
                     }
                     else{
-                        TError error = new TError(name, "Semántico", "El índice no es un vector de tamaño 1", 0, 0);
+                        TError error = new TError(name, "Semántico", "El índice no es un vector de tamaño 1", row, column);
                         LError.add(error);
-
                         return error; 
                     }
                 }
@@ -439,10 +213,10 @@ public class StructAssig implements ASTNode{
                                     Object result[] = Casteo.llenar(val, ((Vec)expr).getValues()[0], ind2);
                                     list.set(ind1-1, new Vec(result));
                                     ((ListStruct)environment.get(name).getValue()).setValues(list);
+                                    return null;
                                 }else{
-                                    TError error = new TError(name, "Semántico", "El índice no es integer mayor a 0", 0, 0);
+                                    TError error = new TError(name, "Semántico", "El índice no es integer mayor a 0", row, column);
                                     LError.add(error);
-
                                     return error;
                                 }
                             }else if(ind1<=list.size()&&ind1>0){
@@ -455,22 +229,20 @@ public class StructAssig implements ASTNode{
                                         Object result[] = Casteo.llenar(val, ((Vec)expr).getValues()[0], ind2);
                                         list.set(ind1-1, new Vec(result));
                                         ((ListStruct)environment.get(name).getValue()).setValues(list);
+                                        return null;
                                     }else{
-                                        TError error = new TError(name, "Semántico", "El índice no es integer mayor a 0", 0, 0);
+                                        TError error = new TError(name, "Semántico", "El índice no es integer mayor a 0", row, column);
                                         LError.add(error);
-
                                         return error;
                                     }
                                 }else{
-                                    TError error = new TError(name, "Semántico", "No se puede modificar porque el valor no es vector", 0, 0);
+                                    TError error = new TError(name, "Semántico", "No se puede modificar porque el valor no es vector", row, column);
                                     LError.add(error);
-
                                     return error;
                                 }
                             }else{
-                                TError error = new TError(name, "Semántico", "El índice es menor a 0", 0, 0);
+                                TError error = new TError(name, "Semántico", "El índice es menor a 0", row, column);
                                 LError.add(error);
-
                                 return error;
                             }
                         }
@@ -492,10 +264,10 @@ public class StructAssig implements ASTNode{
                                     v.set(ind2-1, (ListStruct)expr);
                                     list.set(ind1-1, new ListStruct(v));
                                     ((ListStruct)environment.get(name).getValue()).setValues(list);
+                                    return null;
                                 }else{
-                                    TError error = new TError(name, "Semántico", "El índice no es integer mayor a 0", 0, 0);
+                                    TError error = new TError(name, "Semántico", "El índice no es integer mayor a 0", row, column);
                                     LError.add(error);
-
                                     return error;
                                 }
                             }else if(ind1<=list.size()&&ind1>0){
@@ -508,23 +280,21 @@ public class StructAssig implements ASTNode{
                                     v.set(ind2-1, (ListStruct)expr);
                                     list.set(ind1-1, new ListStruct(v));
                                     ((ListStruct)environment.get(name).getValue()).setValues(list);
+                                    return null;
                                 }else{
-                                    TError error = new TError(name, "Semántico", "El índice no es integer mayor a 0", 0, 0);
+                                    TError error = new TError(name, "Semántico", "El índice no es integer mayor a 0", row, column);
                                     LError.add(error);
-
                                     return error;
                                 }
                             }else{
-                                TError error = new TError(name, "Semántico", "El índice es menor a 0", 0, 0);
+                                TError error = new TError(name, "Semántico", "El índice es menor a 0", row, column);
                                 LError.add(error);
-
                                 return error;
                             }
                         }
                         else{
-                            TError error = new TError(name, "Semántico", "La expresión debe ser vector de un valor", 0, 0);
+                            TError error = new TError(name, "Semántico", "La expresión debe ser vector de un valor", row, column);
                             LError.add(error);
-
                             return error;
                         }
                     }
@@ -548,10 +318,10 @@ public class StructAssig implements ASTNode{
                                     Object result[] = Casteo.llenar(val, ((Vec)expr).getValues()[0], ind2);
                                     list.set(ind1-1, new Vec(result));
                                     ((ListStruct)environment.get(name).getValue()).setValues(list);
+                                    return null;
                                 }else{
-                                    TError error = new TError(name, "Semántico", "El índice no es integer mayor a 0", 0, 0);
+                                    TError error = new TError(name, "Semántico", "El índice no es integer mayor a 0", row, column);
                                     LError.add(error);
-
                                     return error;
                                 }
                             }else if(ind1<=list.size()&&ind1>0){
@@ -564,23 +334,21 @@ public class StructAssig implements ASTNode{
                                         Object result[] = Casteo.llenar(val, ((Vec)expr).getValues()[0], ind2);
                                         list.set(ind1-1, new Vec(result));
                                         ((ListStruct)environment.get(name).getValue()).setValues(list);
+                                        return null;
                                     }else{
-                                        TError error = new TError(name, "Semántico", "El índice no es integer mayor a 0", 0, 0);
+                                        TError error = new TError(name, "Semántico", "El índice no es integer mayor a 0", row, column);
                                         LError.add(error);
-
                                         return error;
                                     }
                                 }
                                 else{
-                                    TError error = new TError(name, "Semántico", "No se puede modificar porque el valor no es vector", 0, 0);
+                                    TError error = new TError(name, "Semántico", "No se puede modificar porque el valor no es vector", row, column);
                                     LError.add(error);
-
                                     return error;
                                 }
                             }else{
-                                TError error = new TError(name, "Semántico", "El índice es menor a 0", 0, 0);
+                                TError error = new TError(name, "Semántico", "El índice es menor a 0", row, column);
                                 LError.add(error);
-
                                 return error;
                             }
                         }
@@ -602,10 +370,10 @@ public class StructAssig implements ASTNode{
                                     v.set(ind2-1, (ListStruct)expr);
                                     list.set(ind1-1, new ListStruct(v));
                                     ((ListStruct)environment.get(name).getValue()).setValues(list);
+                                    return null;
                                 }else{
-                                    TError error = new TError(name, "Semántico", "El índice no es integer mayor a 0", 0, 0);
+                                    TError error = new TError(name, "Semántico", "El índice no es integer mayor a 0", row, column);
                                     LError.add(error);
-
                                     return error;
                                 }
                             }else if(ind1<=list.size()&&ind1>0){
@@ -618,34 +386,32 @@ public class StructAssig implements ASTNode{
                                     v.set(ind2-1, (ListStruct)expr);
                                     list.set(ind1-1, new ListStruct(v));
                                     ((ListStruct)environment.get(name).getValue()).setValues(list);
+                                    return null;
                                 }else{
-                                    TError error = new TError(name, "Semántico", "El índice no es integer mayor a 0", 0, 0);
+                                    TError error = new TError(name, "Semántico", "El índice no es integer mayor a 0", row, column);
                                     LError.add(error);
-
                                     return error;
                                 }
                             }else{
-                                TError error = new TError(name, "Semántico", "El índice es menor a 0", 0, 0);
+                                TError error = new TError(name, "Semántico", "El índice es menor a 0", row, column);
                                 LError.add(error);
-
                                 return error;
                             }
                         }
                         else{
-                            TError error = new TError(name, "Semántico", "Error en la expresión", 0, 0);
+                            TError error = new TError(name, "Semántico", "Error en la expresión", row, column);
                             LError.add(error);
-
                             return error;
                         } 
                     }
                     else{
-                        TError error = new TError(name, "Semántico", "Los índices deben ser vectores de un valor integer", 0, 0);
+                        TError error = new TError(name, "Semántico", "Los índices deben ser vectores de un valor integer", row, column);
                         LError.add(error);
-
                         return error;
                     }
                 }
             }
+            //Verifico si la expresión es Matriz
             else if(symbol.getValue() instanceof Mat){
                 Mat mat = (Mat)symbol.getValue();
                 //Verifico que la lista de índices sólo traiga un valor
@@ -669,22 +435,20 @@ public class StructAssig implements ASTNode{
                                     cont++;
                                 }
                             }
+                            return null;
                         }else{
-                            TError error = new TError(name, "Semántico", "La expresión a asignar no es correcta", 0, 0);
+                            TError error = new TError(name, "Semántico", "La expresión a asignar no es correcta", row, column);
                             LError.add(error);
-
                             return error;
                         }
                     }else{
-                        TError error = new TError(name, "Semántico", "Error en el índice de la matriz", 0, 0);
+                        TError error = new TError(name, "Semántico", "Error en el índice de la matriz", row, column);
                         LError.add(error);
-                        
                         return error; 
                     }
                 }else{
-                    TError error = new TError(name, "Semántico", "Una matriz no puede tener más de un índice", 0, 0);
+                    TError error = new TError(name, "Semántico", "Una matriz no puede tener más de un índice", row, column);
                     LError.add(error);
-                    
                     return error;
                 }
             }
@@ -760,37 +524,44 @@ public class StructAssig implements ASTNode{
                             if(result instanceof Vec && value instanceof Vec){
                                 res.set(in, (Vec)value);
                                 ((Arr)environment.get(name).getValue()).setData(res);
+                                return null;
                             }else if(result instanceof ListStruct && value instanceof ListStruct){
                                 res.set(in, (ListStruct)value);
                                 ((Arr)environment.get(name).getValue()).setData(res);
+                                return null;
                             }else{
-                                TError error = new TError(name, "Semántico", "La expresión no es del tipo del arreglo", 0, 0);
+                                TError error = new TError(name, "Semántico", "La expresión no es del tipo del arreglo", row, column);
                                 LError.add(error);
                                 return error;
                             }
                         }else{
-                            TError error = new TError(name, "Semántico", "El índice sobrepasa el tamaño del arreglo", 0, 0);
+                            TError error = new TError(name, "Semántico", "El índice sobrepasa el tamaño del arreglo", row, column);
                             LError.add(error);
                             return error;
                         }
                     }else{
-                        TError error = new TError(name, "Semántico", "Los índices deben ser vectores de tipo integer y tamaño 1", 0, 0);
+                        TError error = new TError(name, "Semántico", "Los índices deben ser vectores de tipo integer y tamaño 1", row, column);
                         LError.add(error);
                         return error;
                     }
                 }else{
-                    TError error = new TError(name, "Semántico", "La variable es de tipo arreglo y el número de índices no es igual al de sus dimensiones", 0, 0);
+                    TError error = new TError(name, "Semántico", "La variable es de tipo arreglo y el número de índices no es igual al de sus dimensiones", row, column);
                     LError.add(error);
                     return error;
                 }
+            }else{
+                TError error = new TError(name, "Semántico", "No representa ninguna estructura", row, column);
+                LError.add(error);
+
+                return error;
             }
         }else{
-            TError error = new TError(name, "Semántico", "La variable no existe", 0, 0);
+            TError error = new TError(name, "Semántico", "La variable no existe", row, column);
             LError.add(error);
 
             return error;
         }
         
-        return "asignación correcta\n";
+        return null;
     }
 }

@@ -14,10 +14,14 @@ import symbols.Vec;
  */
 public class Line implements ASTNode{
     private LinkedList<ASTNode> largs;
+    private int row;
+    private int column;
 
-    public Line(LinkedList<ASTNode> largs) {
+    public Line(LinkedList<ASTNode> largs, int row, int column) {
         super();
         this.largs = largs;
+        this.row = row;
+        this.column = column;
     }
     @Override
     public Object execute(Environment environment, LinkedList<TError> LError) {
@@ -60,7 +64,7 @@ public class Line implements ASTNode{
                                 else{
                                     LineCharts line = new LineCharts(values, "o", xlab[0].toString(), ylab[0].toString(), main[0].toString());
                                     line.start();
-                                    TError error = new TError("plot", "Semántico", "El argumento type es incorrecto", 0, 0);
+                                    TError error = new TError("plot", "Semántico", "El argumento type es incorrecto", row, column);
                                     LError.add(error);
 
                                     return error; 
@@ -71,19 +75,19 @@ public class Line implements ASTNode{
                             }else{
                                 LineCharts line = new LineCharts(values, "o", xlab[0].toString(), ylab[0].toString(), main[0].toString());
                                 line.start();
-                                TError error = new TError("plot", "Semántico", "El argumento type es incorrecto", 0, 0);
+                                TError error = new TError("plot", "Semántico", "El argumento type es incorrecto", row, column);
                                 LError.add(error);
 
                                 return error;
                             }
                         }else{
-                            TError error = new TError("plot", "Semántico", "Algunos valores son negativos", 0, 0);
+                            TError error = new TError("plot", "Semántico", "Algunos valores son negativos", row, column);
                             LError.add(error);
 
                             return error; 
                         }
                     }else{
-                        TError error = new TError("plot", "Semántico", "Los valores no son de tipo numerico o integer", 0, 0);
+                        TError error = new TError("plot", "Semántico", "Los valores no son de tipo numerico o integer", row, column);
                         LError.add(error);
 
                         return error; 
@@ -125,7 +129,7 @@ public class Line implements ASTNode{
                                 else{
                                     LineCharts line = new LineCharts(values, "o", xlab[0].toString(), ylab[0].toString(), main[0].toString());
                                     line.start();
-                                    TError error = new TError("plot", "Semántico", "El argumento type es incorrecto", 0, 0);
+                                    TError error = new TError("plot", "Semántico", "El argumento type es incorrecto", row, column);
                                     LError.add(error);
 
                                     return error; 
@@ -136,37 +140,37 @@ public class Line implements ASTNode{
                             }else{
                                 LineCharts line = new LineCharts(values, "o", xlab[0].toString(), ylab[0].toString(), main[0].toString());
                                 line.start();
-                                TError error = new TError("plot", "Semántico", "El argumento type es incorrecto", 0, 0);
+                                TError error = new TError("plot", "Semántico", "El argumento type es incorrecto", row, column);
                                 LError.add(error);
 
                                 return error;
                             }
                         }else{
-                            TError error = new TError("plot", "Semántico", "Algunos valores son negativos", 0, 0);
+                            TError error = new TError("plot", "Semántico", "Algunos valores son negativos", row, column);
                             LError.add(error);
 
                             return error; 
                         }
                     }else{
-                        TError error = new TError("plot", "Semántico", "Los valores no son de tipo numerico o integer", 0, 0);
+                        TError error = new TError("plot", "Semántico", "Los valores no son de tipo numerico o integer", row, column);
                         LError.add(error);
 
                         return error; 
                     }
                 }else{
-                    TError error = new TError("plot", "Semántico", "Los valores no son vector", 0, 0);
+                    TError error = new TError("plot", "Semántico", "Los valores no son vector", row, column);
                     LError.add(error);
 
                     return error; 
                 }
             }else{
-                TError error = new TError("plot", "Semántico", "Los últimos tres argumentos deben ser de tipo string", 0, 0);
+                TError error = new TError("plot", "Semántico", "Los últimos tres argumentos deben ser de tipo string", row, column);
                 LError.add(error);
 
                 return error;
             }
         }
-        TError error = new TError("plot", "Semántico", "Algún argumento no es de tipo vector", 0, 0);
+        TError error = new TError("plot", "Semántico", "Algún argumento no es de tipo vector", row, column);
         LError.add(error);
 
         return error;

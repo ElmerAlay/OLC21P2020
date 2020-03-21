@@ -15,12 +15,16 @@ public class VecRef implements ASTNode{
     String name;
     private Object vec[];
     private LinkedList<ASTNode> indexes;
+    private int row;
+    private int column;
 
-    public VecRef(String name, Object[] vec, LinkedList<ASTNode> indexes) {
+    public VecRef(String name, Object[] vec, LinkedList<ASTNode> indexes, int row, int column) {
         super();
         this.name = name;
         this.vec = vec;
         this.indexes = indexes;
+        this.row = row;
+        this.column = column;
     }
     
     @Override
@@ -29,7 +33,7 @@ public class VecRef implements ASTNode{
         for(ASTNode index : indexes){
             Object o = index.execute(environment, LError);
             if(o instanceof Vec2){
-                TError error = new TError(name, "Semántico", "El tipo de acceso [[]] no se puede usar en los vectores", 0, 0);
+                TError error = new TError(name, "Semántico", "El tipo de acceso [[]] no se puede usar en los vectores", row, column);
                 LError.add(error);
                 return error;
             }
@@ -54,23 +58,25 @@ public class VecRef implements ASTNode{
                     }
                     //De lo contrario vuelvo a llamar a este mismo método pero con el primer índice ya eliminado
                     else{
-                        Object o = new VecRef(name, value, indexes).execute(environment, LError);
+                        Object o = new VecRef(name, value, indexes, row, column).execute(environment, LError);
                         if(o instanceof Vec)
                             return (Vec)o;
+                        else
+                            return o;
                     }
                 }else{
-                    TError error = new TError(name, "Semántico", "El índice es mayor al tamaño del vector", 0, 0);
+                    TError error = new TError(name, "Semántico", "El índice es mayor al tamaño del vector o es negativo", row, column);
                     LError.add(error);
                     return error;
                 }
             }else{
-                TError error = new TError(name, "Semántico", "El índice no es de tipo integer", 0, 0);
+                TError error = new TError(name, "Semántico", "El índice no es de tipo integer", row, column);
                 LError.add(error);
                 return error;
             }
         }
         
-        TError error = new TError(name, "Semántico", "El índice debe ser un vector de sólo un elemento", 0, 0);
+        TError error = new TError(name, "Semántico", "El índice debe ser un vector de sólo un elemento", row, column);
         LError.add(error);
         return error;
     }

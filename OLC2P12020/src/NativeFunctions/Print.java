@@ -15,10 +15,14 @@ import symbols.Vec;
  */
 public class Print implements ASTNode{
     private ASTNode exp;
+    private int row;
+    private int column;
 
-    public Print(ASTNode exp) {
+    public Print(ASTNode exp, int row, int column) {
         super();
         this.exp = exp;
+        this.row = row;
+        this.column = column;
     }
     
     public String printVec(Object vec[], String output){
@@ -126,7 +130,7 @@ public class Print implements ASTNode{
             return output;
         }
         
-        TError error = new TError("print", "Semántico", "La expresión dentro de la función print no es válida", 0, 0);
+        TError error = new TError("print", "Semántico", "La expresión dentro de la función print no es válida", row, column);
         LError.add(error);
 
         return error;

@@ -12,10 +12,14 @@ import symbols.Vec;
  */
 public class C implements ASTNode{ 
     private LinkedList<ASTNode> lexp;
+    private int row;
+    private int column;
 
-    public C(LinkedList<ASTNode> lexp) {
+    public C(LinkedList<ASTNode> lexp, int row, int column) {
         super();
         this.lexp = lexp;
+        this.row = row;
+        this.column = column;
     }
     
     public Object cast(LinkedList<Object> list){
@@ -33,7 +37,7 @@ public class C implements ASTNode{
                 if(vec[0] instanceof String){
                     flagString = true;
                     break;
-                }else if(vec[0] instanceof Float){
+                }else if(vec[0] instanceof Double){
                     flagNumeric = true;
                 }else if(vec[0] instanceof Integer){
                     flagInteger = true;
@@ -74,9 +78,9 @@ public class C implements ASTNode{
                     else{
                         if(flagNumeric){
                             if(vals[i] instanceof Boolean)
-                                values[cont++] = Boolean.parseBoolean(vals[i].toString())?Float.parseFloat("1.0"):Float.parseFloat("0.0");
+                                values[cont++] = Boolean.parseBoolean(vals[i].toString())?Double.parseDouble("1.0"):Double.parseDouble("0.0");
                             else
-                                values[cont++] = Float.parseFloat(vals[i].toString());
+                                values[cont++] = Double.parseDouble(vals[i].toString());
                         }else if(flagInteger)
                             if(vals[i] instanceof Boolean)
                                 values[cont++] = Boolean.parseBoolean(vals[i].toString())? 1 : 0;
@@ -101,7 +105,7 @@ public class C implements ASTNode{
         
         for(Object exp : list){
             if(!(exp instanceof Vec) && !(exp instanceof ListStruct)){
-                TError error = new TError("C", "Semántico", "La función c solo acepta vectores y listas", 0, 0);
+                TError error = new TError("C", "Semántico", "La función c solo acepta vectores y listas", row, column);
                 LError.add(error);
 
                 return error;

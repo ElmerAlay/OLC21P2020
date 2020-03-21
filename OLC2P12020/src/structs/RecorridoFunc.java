@@ -1,5 +1,6 @@
 package structs;
 
+import View.MainWindow;
 import abstracto.ASTNode;
 import abstracto.TError;
 import expressions.*;
@@ -11,23 +12,45 @@ import symbols.*;
  *
  * @author junio
  */
-public class Recorrido {
-    private Environment global; //= new Environment(null);
-    private LinkedList<TError> LError; //= new LinkedList<TError>();
+public class RecorridoFunc {
+    private Environment global;
+    private LinkedList<TError> LError;
     private LinkedList<ASTNode> lInst;
 
-    public Recorrido(Environment global, LinkedList<TError> LError, LinkedList<ASTNode> lInst) {
+    public RecorridoFunc(Environment global, LinkedList<TError> LError, LinkedList<ASTNode> lInst) {
         this.global = global;
         this.LError = LError;
         this.lInst = lInst;
     }
     
     public void Resultado(AST root){
-        for(ASTNode exp : getInstruccions(root, lInst)){
-            exp.execute(global, LError);
-        }
+        //Llenamos la tabla de símbolos con las funciones nativas
+        global.put(new Symbol(new Type(Type.Types.VOID, "Funcion"), "print_func", null,0,0,"global"));
+        global.put(new Symbol(new Type(Type.Types.VOID, "Funcion"), "stringlength_func", null,0,0,"global"));
+        global.put(new Symbol(new Type(Type.Types.VOID, "Funcion"), "remove_func", null,0,0,"global"));
+        global.put(new Symbol(new Type(Type.Types.VOID, "Funcion"), "tolowercase_func", null,0,0,"global"));
+        global.put(new Symbol(new Type(Type.Types.VOID, "Funcion"), "touppercase_func", null,0,0,"global"));
+        global.put(new Symbol(new Type(Type.Types.VOID, "Funcion"), "trunk_func", null,0,0,"global"));
+        global.put(new Symbol(new Type(Type.Types.VOID, "Funcion"), "round_func", null,0,0,"global"));
+        global.put(new Symbol(new Type(Type.Types.VOID, "Funcion"), "mean_func", null,0,0,"global"));
+        global.put(new Symbol(new Type(Type.Types.VOID, "Funcion"), "median_func", null,0,0,"global"));
+        global.put(new Symbol(new Type(Type.Types.VOID, "Funcion"), "mode_func", null,0,0,"global"));
+        global.put(new Symbol(new Type(Type.Types.VOID, "Funcion"), "list_func", null,0,0,"global"));
+        global.put(new Symbol(new Type(Type.Types.VOID, "Funcion"), "c_func", null,0,0,"global"));
+        global.put(new Symbol(new Type(Type.Types.VOID, "Funcion"), "matrix_func", null,0,0,"global"));
+        global.put(new Symbol(new Type(Type.Types.VOID, "Funcion"), "array_func", null,0,0,"global"));
+        global.put(new Symbol(new Type(Type.Types.VOID, "Funcion"), "typeof_func", null,0,0,"global"));
+        global.put(new Symbol(new Type(Type.Types.VOID, "Funcion"), "length_func", null,0,0,"global"));
+        global.put(new Symbol(new Type(Type.Types.VOID, "Funcion"), "ncol_func", null,0,0,"global"));
+        global.put(new Symbol(new Type(Type.Types.VOID, "Funcion"), "nrow_func", null,0,0,"global"));
+        global.put(new Symbol(new Type(Type.Types.VOID, "Funcion"), "pie_func", null,0,0,"global"));
+        global.put(new Symbol(new Type(Type.Types.VOID, "Funcion"), "barplot_func", null,0,0,"global"));
+        global.put(new Symbol(new Type(Type.Types.VOID, "Funcion"), "plot_func", null,0,0,"global"));
+        global.put(new Symbol(new Type(Type.Types.VOID, "Funcion"), "hist_func", null,0,0,"global"));
         
-        //return global;
+        MainWindow.general = global;
+        
+        getInstruccions(root, lInst);
     }
     
     private ASTNode getExpression(AST root){
@@ -218,6 +241,19 @@ public class Recorrido {
                     LinkedList<ASTNode> linst = new LinkedList<>();
                     linst = getInstruccions(root.getChildren().get(2), linst);
                     return new For(root.getChildren().get(0).getValue() ,exp, linst, root.getRow(), root.getColumn());
+                }else if(root.getLabel().equals("FUNC")){
+                    String id = root.getChildren().get(0).getValue() + "_func";
+                    LinkedList<ASTNode> lparam = new LinkedList<>();
+                    lparam = getParam2(root.getChildren().get(1), lparam);
+                    LinkedList<ASTNode> linst = new LinkedList<>();
+                    linst = getInstruccions(root.getChildren().get(2), linst);
+                    if(global.get(id)==null){
+                        global.put(new Symbol(new Type(Type.Types.VOID, "FUNCION"), id, new Function(id, lparam, linst), root.getRow(), root.getColumn(), global.getName()));
+                        MainWindow.general.put(new Symbol(new Type(Type.Types.VOID, "FUNCION"), id, new Function(id, lparam, linst), root.getRow(), root.getColumn(), global.getName()));
+                    }else{
+                        TError error = new TError(id, "Semántico", "El nombre de la función ya existe", 0, 0);
+                        LError.add(error);
+                    }
                 }
             case 4:
                 if(root.getLabel().equals("IF")){
@@ -246,8 +282,6 @@ public class Recorrido {
             case 1:
                 if(root.getLabel().equals("INICIO")){
                     return getInstruccions(root.getChildren().get(0), lInst);
-                }else if(root.getLabel().equals("LINST") && root.getChildren().get(0).getLabel().equals("FUNC")){
-                    return lInst;
                 }else if(root.getLabel().equals("LINST") && !root.getChildren().get(0).getLabel().equals("LINST")){
                     lInst.add(getExpression(root.getChildren().get(0)));
                     return lInst;
@@ -255,12 +289,9 @@ public class Recorrido {
                     return getInstruccions(root.getChildren().get(0), lInst);
                 }
             case 2:
-                if(root.getLabel().equals("LINST") && !root.getChildren().get(1).getLabel().equals("FUNC")){
+                if(root.getLabel().equals("LINST")){
                     lInst = getInstruccions(root.getChildren().get(0), lInst);
                     lInst.add(getExpression(root.getChildren().get(1)));
-                    return lInst;
-                }else if(root.getLabel().equals("LINST") && root.getChildren().get(1).getLabel().equals("FUNC")){
-                    lInst = getInstruccions(root.getChildren().get(0), lInst);
                     return lInst;
                 }
         }
@@ -360,6 +391,32 @@ public class Recorrido {
                     lcase.add(new CASE(expT, getExpression(root.getChildren().get(1)), linst, root.getRow(), root.getColumn()));
                     
                     return lcase;
+                }
+        }
+        return null;
+    }
+    
+    private LinkedList<ASTNode> getParam2(AST root, LinkedList<ASTNode> lparam){
+        switch(root.getChildren().size()){
+            case 1:
+                if(root.getLabel().equals("LPARAM2")){
+                    lparam.add(new IdParam(root.getChildren().get(0).getValue(), null, root.getRow(), root.getColumn()));
+                    return lparam;
+                }
+            case 2:
+                if(root.getLabel().equals("LPARAM2") && root.getChildren().get(0).getLabel().equals("LPARAM2")){
+                    lparam = getParam2(root.getChildren().get(0), lparam);
+                    lparam.add(new IdParam(root.getChildren().get(1).getValue(), null, root.getRow(), root.getColumn()));
+                    return lparam;
+                }else if(root.getLabel().equals("LPARAM2") && root.getChildren().get(0).getLabel().equals("ID")){
+                    lparam.add(new IdParam(root.getChildren().get(0).getValue(), getExpression(root.getChildren().get(1)), root.getRow(), root.getColumn()));
+                    return lparam;
+                }
+            case 3:
+                if(root.getLabel().equals("LPARAM2")){
+                    lparam = getParam2(root.getChildren().get(0), lparam);
+                    lparam.add(new IdParam(root.getChildren().get(0).getValue(), getExpression(root.getChildren().get(1)), root.getRow(), root.getColumn()));
+                    return lparam;
                 }
         }
         return null;

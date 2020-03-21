@@ -11,10 +11,14 @@ import symbols.Vec;
  */
 public class ToUpperCase implements ASTNode{
     private ASTNode exp;
+    private int row;
+    private int column;
 
-    public ToUpperCase(ASTNode exp) {
+    public ToUpperCase(ASTNode exp, int row, int column) {
         super();
         this.exp = exp;
+        this.row = row;
+        this.column = column;
     }
     
     @Override
@@ -30,20 +34,20 @@ public class ToUpperCase implements ASTNode{
                     Object tam[] = {values[0].toString().toUpperCase()};
                     return new Vec(tam);
                 }else{
-                    TError error = new TError("ToUpperCase", "Semántico", "El vector dentro de la función no es de tipo String", 0, 0);
+                    TError error = new TError("ToUpperCase", "Semántico", "El vector dentro de la función no es de tipo String", row, column);
                     LError.add(error);
 
                     return error;
                 }
             }else{
-                TError error = new TError("ToUpperCase", "Semántico", "El vector dentro de la función no es de tamaño 1", 0, 0);
+                TError error = new TError("ToUpperCase", "Semántico", "El vector dentro de la función no es de tamaño 1", row, column);
                 LError.add(error);
 
                 return error;
             }
         }
         
-        TError error = new TError("ToUpperCase", "Semántico", "La expresión dentro de la función no es válida", 0, 0);
+        TError error = new TError("ToUpperCase", "Semántico", "La expresión dentro de la función no es válida", row, column);
         LError.add(error);
 
         return error;

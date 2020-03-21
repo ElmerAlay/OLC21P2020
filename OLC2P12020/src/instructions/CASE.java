@@ -14,12 +14,16 @@ public class CASE implements ASTNode{
     private ASTNode exp;
     private ASTNode exp1;
     private LinkedList<ASTNode> linst;
+    private int row;
+    private int column;
 
-    public CASE(ASTNode exp, ASTNode exp1, LinkedList<ASTNode> linst) {
+    public CASE(ASTNode exp, ASTNode exp1, LinkedList<ASTNode> linst, int row, int column) {
         super();
         this.exp = exp;
         this.exp1 = exp1;
         this.linst = linst;
+        this.row = row;
+        this.column = column;
     }
 
     @Override
@@ -31,15 +35,15 @@ public class CASE implements ASTNode{
                     ((Vec)op).getValues().length==1){
             boolean flag = false;
             Object op2 = exp1.execute(environment, LError);
-            if(((Vec)op).getValues()[0] instanceof Integer && ((Vec)op2).getValues().length==1 && 
-                        op2 instanceof Vec && ((Vec)op2).getValues()[0] instanceof Integer){
+            if(((Vec)op).getValues()[0] instanceof Integer && op2 instanceof Vec && 
+                        ((Vec)op2).getValues().length==1 && ((Vec)op2).getValues()[0] instanceof Integer){
                 flag = Integer.parseInt((((Vec)op).getValues()[0]).toString())==Integer.parseInt((((Vec)op2).getValues()[0]).toString());
             }
-            else if(((Vec)op).getValues()[0] instanceof String && ((Vec)op2).getValues().length==1 && 
-                    op2 instanceof Vec && ((Vec)op2).getValues()[0] instanceof String){
+            else if(((Vec)op).getValues()[0] instanceof String && op2 instanceof Vec  && 
+                    ((Vec)op2).getValues().length==1 && ((Vec)op2).getValues()[0] instanceof String){
                 flag = (((Vec)op).getValues()[0]).toString().compareTo((((Vec)op2).getValues()[0]).toString())==0;
             }else {
-                TError error = new TError("CASE", "Semántico", "La expresión del case no es del mismo tipo de la del switch", 0, 0);
+                TError error = new TError("CASE", "Semántico", "La expresión del case no es del mismo tipo de la del switch", row, column);
                 LError.add(error);
                 return error;
             }
@@ -47,11 +51,11 @@ public class CASE implements ASTNode{
             boolean bandera = false;
             if(flag){
                 for(ASTNode in: linst){
-                    Object result = in.execute(environment, LError);
-                    if(((String)result).equals("break")){
+                    if(in instanceof Break){
                         bandera = true;
                         return bandera;
                     }
+                    in.execute(environment, LError);
                 }
                 return bandera;
             }else{
@@ -59,7 +63,7 @@ public class CASE implements ASTNode{
             }
         }
             
-        TError error = new TError("SWITCH", "Semántico", "La expresión debe ser integer o string", 0, 0);
+        TError error = new TError("SWITCH", "Semántico", "La expresión debe ser integer o string", row, column);
         LError.add(error);
         return error;
     }

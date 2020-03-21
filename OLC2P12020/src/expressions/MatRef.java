@@ -16,11 +16,15 @@ public class MatRef implements ASTNode{
     private String name;
     private ASTNode exp1;
     private ASTNode exp2;
+    private int row;
+    private int column;
 
-    public MatRef(String name, ASTNode exp1, ASTNode exp2) {
+    public MatRef(String name, ASTNode exp1, ASTNode exp2, int row, int column) {
         this.name = name;
         this.exp1 = exp1;
         this.exp2 = exp2;
+        this.row = row;
+        this.column = column;
     }
     
     @Override
@@ -41,22 +45,22 @@ public class MatRef implements ASTNode{
                 //Verificar que la fila y la columna no sobrepasen el tamaño de la matriz
                 if(row<=mat.row && col<=mat.col && row>0 && col>0){
                     int ind = SupportFunctions.mapLexiMat(row-1, col-1, row*col);
-                    Object result[] = {mat.getValues()[ind]};
-                    //Object result[] = { mat.getValues()[row-1][col-1] };
+                    //Object result[] = {mat.getValues()[ind]};
+                    Object result[] = { mat.getValues()[row-1][col-1] };
                     return new Vec(result);
                 }else{
-                    TError error = new TError(name, "Semántico", "Los índices sobrepasan el tamaño de la matriz", 0, 0);
+                    TError error = new TError(name, "Semántico", "Los índices sobrepasan el tamaño de la matriz", row, column);
                     LError.add(error);
                     return error;
                 }
             }else{
-                TError error = new TError(name, "Semántico", "Los índices no son vectores de un solo valor de tipo integer", 0, 0);
+                TError error = new TError(name, "Semántico", "Los índices no son vectores de un solo valor de tipo integer", row, column);
                 LError.add(error);
                 return error;
             }
         }
     
-        TError error = new TError(name, "Semántico", "La variable no existe o no es de tipo matriz", 0, 0);
+        TError error = new TError(name, "Semántico", "La variable no existe o no es de tipo matriz", row, column);
         LError.add(error);
         return error;
     }

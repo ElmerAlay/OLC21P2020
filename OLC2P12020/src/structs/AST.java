@@ -11,6 +11,8 @@ public class AST {
     private ArrayList<AST> children = new ArrayList<>(); //Arreglo de hijos que tendran los nodos
     private String value = "vacio";    //Representa el valor del nodo
     private int idNode;      //Este id servirá para que tengamos problema al graficar
+    private int row;
+    private int column;
     
     /**
      * Permite agregar un nodo como hijo al AST
@@ -75,6 +77,20 @@ public class AST {
     public void setIdNode(int idNode) {
         this.idNode = idNode;
     }
-    
-    
+
+    public int getRow() {
+        return row;
+    }
+
+    public void setRow(int row) {
+        this.row = row;
+    }
+
+    public int getColumn() {
+        return column;
+    }
+
+    public void setColumn(int column) {
+        this.column = column;
+    }
 }

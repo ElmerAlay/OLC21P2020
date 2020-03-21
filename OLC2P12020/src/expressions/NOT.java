@@ -12,10 +12,14 @@ import symbols.Vec;
  */
 public class NOT implements ASTNode{
     private ASTNode op;
+    private int row;
+    private int column;
 
-    public NOT(ASTNode op) {
+    public NOT(ASTNode op, int row, int column) {
         super();
         this.op = op;
+        this.row = row;
+        this.column = column;
     }
 
     @Override
@@ -47,7 +51,7 @@ public class NOT implements ASTNode{
             if(flag){
                 return new Vec(result);
             }else{
-                TError error = new TError("!", "Semántico", "no se pueden comparar lógicamente esos 2 tipos de datos", 0, 0);
+                TError error = new TError("!", "Semántico", "no se pueden comparar lógicamente esos 2 tipos de datos", row, column);
                 LError.add(error);
 
                 return error;
@@ -65,7 +69,7 @@ public class NOT implements ASTNode{
                 }
             }
                 
-            Object res = new NOT(new Constant(new Vec(o1))).execute(environment, LError);
+            Object res = new NOT(new Constant(new Vec(o1)), row, column).execute(environment, LError);
             Object result[][] = new Object[mat1.row][mat1.col];
             con1 = 0;
             if(res instanceof Vec){
@@ -77,14 +81,14 @@ public class NOT implements ASTNode{
                 }
                 return new Mat(result, mat1.row, mat1.col); 
             }else{
-                TError error = new TError("!", "Semántico", "Error al aplicar not a la matriz", 0, 0);
+                TError error = new TError("!", "Semántico", "Error al aplicar not a la matriz", row, column);
                 LError.add(error);
 
                 return error;
             }
         } 
         
-        TError error = new TError("!", "Semántico", "no se puede comparar lógicamente esos 2 tipos de datos", 0, 0);
+        TError error = new TError("!", "Semántico", "no se puede comparar lógicamente esos 2 tipos de datos", row, column);
         LError.add(error);
         
         return error;

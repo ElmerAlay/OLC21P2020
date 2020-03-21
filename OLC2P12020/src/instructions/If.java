@@ -3,7 +3,9 @@ package instructions;
 import abstracto.ASTNode;
 import abstracto.TError;
 import java.util.LinkedList;
+import symbols.Arr;
 import symbols.Environment;
+import symbols.ListStruct;
 import symbols.Mat;
 import symbols.Vec;
 
@@ -16,11 +18,15 @@ public class If implements ASTNode{
     private LinkedList<ASTNode> lexpT;
     private LinkedList<ASTNode> lexpEI;
     private LinkedList<ASTNode> lexpE;
+    private int row;
+    private int column;
 
-    public If(ASTNode condition, LinkedList<ASTNode> lexpT) {
+    public If(ASTNode condition, LinkedList<ASTNode> lexpT, int row, int column) {
         super();
         this.condition = condition;
         this.lexpT = lexpT;
+        this.row = row;
+        this.column = column;
     }
 
     public If(ASTNode condition, LinkedList<ASTNode> lexpT, LinkedList<ASTNode> lexpE) {
@@ -67,14 +73,38 @@ public class If implements ASTNode{
                     break;
             }
         }else {
-            TError error = new TError("If", "Semántico", "La condición del no es de tipo booleano", 0, 0);
+            TError error = new TError("If", "Semántico", "La condición del no es de tipo booleano", row, column);
             LError.add(error);
             return error;
         }
         
         if(flag){
+            Environment local = new Environment(environment, "local_if");
+            
             for(ASTNode in: lexpT){
-                in.execute(environment, LError);
+                if(in instanceof Break)
+                    return null;
+                else if(in instanceof Continue)
+                    break;
+                else if(in instanceof Return){
+                    Object op = ((Return)in).getExp().execute(local, LError);
+                    if(op instanceof Vec)
+                        return (Vec)op;
+                    else if(op instanceof ListStruct)
+                        return (ListStruct)op;
+                    else if(op instanceof Mat)
+                        return (Mat)op;
+                    else if(op instanceof Arr)
+                        return (Arr)op;
+
+                    TError error = new TError("return", "Semántico", "La expresión no es correcta", row, column);
+                    LError.add(error);
+
+                    return error;
+                }
+                else if(in instanceof ReturnEmpty)
+                    return null;
+                in.execute(local, LError);
             }
             return true;
         }else{
@@ -88,8 +118,31 @@ public class If implements ASTNode{
                 }
             }
             if(lexpE!=null && !bandera){
+                Environment local = new Environment(environment, "local_else");
                 for(ASTNode in: lexpE){
-                    in.execute(environment, LError);
+                    if(in instanceof Break)
+                        return null;
+                    else if(in instanceof Continue)
+                        continue;
+                    else if(in instanceof Return){
+                        Object op = ((Return)in).getExp().execute(local, LError);
+                        if(op instanceof Vec)
+                            return (Vec)op;
+                        else if(op instanceof ListStruct)
+                            return (ListStruct)op;
+                        else if(op instanceof Mat)
+                            return (Mat)op;
+                        else if(op instanceof Arr)
+                            return (Arr)op;
+
+                        TError error = new TError("return", "Semántico", "La expresión no es correcta", row, column);
+                        LError.add(error);
+
+                        return error;
+                    }
+                    else if(in instanceof ReturnEmpty)
+                        return null;
+                    in.execute(local, LError);
                 }            
             }
         }

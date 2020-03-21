@@ -12,21 +12,19 @@ import symbols.Vec;
  */
 public class NegU implements ASTNode{
     private ASTNode opu;
-
-    public NegU(ASTNode opu) {
+    private int row;
+    private int column;
+    
+    public NegU(ASTNode opu, int row, int column) {
         super();
         this.opu = opu;
+        this.row = row;
+        this.column = column;
     }
     
     @Override
     public Object execute(Environment environment, LinkedList<TError> LError) {
         Object opu = this.opu.execute(environment, LError);
-        
-        if(opu instanceof Float){
-            return Float.parseFloat(opu.toString()) * -1;
-        }else if(opu instanceof Integer){
-            return Integer.parseInt(opu.toString()) * -1;
-        }
         
         //Primero verifico que el operador sea de tipo vector
         if(opu instanceof Vec){
@@ -34,14 +32,14 @@ public class NegU implements ASTNode{
             
             //Verifico si el vector es de tamaño 1
             if (vec1.length==1) {
-                if(vec1[0] instanceof Float){
-                    Object result[] = { Float.parseFloat(vec1[0].toString()) * -1 };
+                if(vec1[0] instanceof Double){
+                    Object result[] = { Double.parseDouble(vec1[0].toString()) * -1 };
                     return new Vec(result);
                 }else if(vec1[0] instanceof Integer){
                     Object result[] = {Integer.parseInt(vec1[0].toString()) * -1 };
                     return new Vec(result);
                 }else{
-                    TError error = new TError("-", "Semántico", "no se puede aplicar negación unaria a ese tipo de dato", 0, 0);
+                    TError error = new TError("-", "Semántico", "no se puede aplicar negación unaria a ese tipo de dato", row, column);
                     LError.add(error);
 
                     return error;
@@ -54,8 +52,8 @@ public class NegU implements ASTNode{
                 
                 //Recorrro los vectores y opero
                 for(int i=0; i<vec1.length; i++){
-                    if(vec1[i] instanceof Float){
-                        result[i] = Float.parseFloat(vec1[i].toString()) * -1;
+                    if(vec1[i] instanceof Double){
+                        result[i] = Double.parseDouble(vec1[i].toString()) * -1;
                     }else if(vec1[i] instanceof Integer){
                         result[i] = Integer.parseInt(vec1[i].toString()) * -1;
                     }else {
@@ -68,7 +66,7 @@ public class NegU implements ASTNode{
                 if(flag){
                     return new Vec(result);
                 }else{
-                    TError error = new TError("-", "Semántico", "no se puede aplicar negación unaria a ese tipo de dato", 0, 0);
+                    TError error = new TError("-", "Semántico", "no se puede aplicar negación unaria a ese tipo de dato", row, column);
                     LError.add(error);
 
                     return error;
@@ -87,7 +85,7 @@ public class NegU implements ASTNode{
                 }
             }
                 
-            Object res = new NegU(new Constant(new Vec(o1))).execute(environment, LError);
+            Object res = new NegU(new Constant(new Vec(o1)), row, column).execute(environment, LError);
             Object result[][] = new Object[mat1.row][mat1.col];
             con1 = 0;
             if(res instanceof Vec){
@@ -99,7 +97,7 @@ public class NegU implements ASTNode{
                 }
                 return new Mat(result, mat1.row, mat1.col); 
             }else{
-                TError error = new TError("-", "Semántico", "Error al aplicar negación unaria a la matriz", 0, 0);
+                TError error = new TError("-", "Semántico", "Error al aplicar negación unaria a la matriz", row, column);
                 LError.add(error);
 
                 return error;
@@ -107,7 +105,7 @@ public class NegU implements ASTNode{
         }
         
         
-        TError error = new TError("-", "Semántico", "no se puede aplicar negación unaria a ese tipo de dato", 0, 0);
+        TError error = new TError("-", "Semántico", "no se puede aplicar negación unaria a ese tipo de dato", row, column);
         LError.add(error);
         
         return error;

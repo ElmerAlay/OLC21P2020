@@ -18,13 +18,17 @@ public class MatAssig1 implements ASTNode{
     private ASTNode ind1;
     private ASTNode ind2;
     private ASTNode exp;
+    private int row;
+    private int column;
 
-    public MatAssig1(String name, ASTNode ind1, ASTNode ind2,ASTNode exp) {
+    public MatAssig1(String name, ASTNode ind1, ASTNode ind2,ASTNode exp, int row, int column) {
         super();
         this.name = name;
         this.ind1 = ind1;
         this.ind2 = ind2;
         this.exp = exp;
+        this.row = row;
+        this.column = column;
     }
     
     @Override
@@ -69,24 +73,21 @@ public class MatAssig1 implements ASTNode{
                         }
                     }
                     ((Mat)environment.get(name).getValue()).setValues(result);
-                    return "Asignación correcta";
+                    return null;
                 }else{
-                    TError error = new TError(name, "Semántico", "Se está intentando agregar un vector de más de un elemento a una posición de la matriz", 0, 0);
+                    TError error = new TError(name, "Semántico", "Se está intentando agregar un vector de más de un elemento a una posición de la matriz", row, column);
                     LError.add(error);
-
                     return error;
                 }
             }else{
-                TError error = new TError(name, "Semántico", "Error de índices de la matríz", 0, 0);
+                TError error = new TError(name, "Semántico", "Error de índices de la matríz", row, column);
                 LError.add(error);
-
                 return error;
             }
         }
         
-        TError error = new TError(name, "Semántico", "La variable no existe o no es de tipo matriz", 0, 0);
+        TError error = new TError(name, "Semántico", "La variable no existe o no es de tipo matriz", row, column);
         LError.add(error);
-
         return error;
     }
 }

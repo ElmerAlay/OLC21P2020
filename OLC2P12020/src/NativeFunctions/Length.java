@@ -16,10 +16,14 @@ import symbols.Vec;
  */
 public class Length implements ASTNode{
     private ASTNode exp;
+    private int row;
+    private int column;
 
-    public Length(ASTNode exp) {
+    public Length(ASTNode exp, int row, int column) {
         super();
         this.exp = exp;
+        this.row = row;
+        this.column = column;
     }
     
     @Override
@@ -41,7 +45,7 @@ public class Length implements ASTNode{
             }
             result[0] = tam;
         }else{
-            TError error = new TError("Length", "Semántico", "La expresión no es de ningún tipo de estructura", 0, 0);
+            TError error = new TError("Length", "Semántico", "La expresión no es de ningún tipo de estructura", row, column);
             LError.add(error);
 
             return error;

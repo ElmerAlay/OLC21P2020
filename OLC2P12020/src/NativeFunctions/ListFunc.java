@@ -13,10 +13,14 @@ import symbols.Vec;
  */
 public class ListFunc implements ASTNode{
     private LinkedList<ASTNode> lexp;
+    private int row;
+    private int column;
 
-    public ListFunc(LinkedList<ASTNode> lexp) {
+    public ListFunc(LinkedList<ASTNode> lexp, int row, int column) {
         super();
         this.lexp = lexp;
+        this.row = row;
+        this.column = column;
     }
     
     @Override
@@ -29,7 +33,8 @@ public class ListFunc implements ASTNode{
             if(op instanceof Vec || op instanceof ListStruct){
                 values.add(op);
             }else {
-                flag = true;
+                flag = false;
+                break;
             }
         }
         
@@ -37,7 +42,7 @@ public class ListFunc implements ASTNode{
             return new ListStruct(values);
         }
         
-        TError error = new TError("List", "Semántico", "En esta función sólo pueden venir vectores u otras listas", 0, 0);
+        TError error = new TError("List", "Semántico", "En esta función sólo pueden venir vectores u otras listas", row, column);
         LError.add(error);
 
         return error;

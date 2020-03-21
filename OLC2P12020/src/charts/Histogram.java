@@ -12,10 +12,14 @@ import symbols.Vec;
  */
 public class Histogram implements ASTNode{
     private LinkedList<ASTNode> largs;
+    private int row;
+    private int column;
 
-    public Histogram(LinkedList<ASTNode> largs) {
+    public Histogram(LinkedList<ASTNode> largs, int row, int column) {
         super();
         this.largs = largs;
+        this.row = row;
+        this.column = column;
     }
     
     @Override
@@ -45,25 +49,25 @@ public class Histogram implements ASTNode{
                         hc.start();
                         return null;
                     }else{
-                        TError error = new TError("histogram", "Semántico", "Existen valores negativos en el vector", 0, 0);
+                        TError error = new TError("histogram", "Semántico", "Existen valores negativos en el vector", row, column);
                         LError.add(error);
 
                         return error;
                     }
                 }else{
-                    TError error = new TError("histogram", "Semántico", "Los valores no son de tipo numerico o Integer", 0, 0);
+                    TError error = new TError("histogram", "Semántico", "Los valores no son de tipo numerico o Integer", row, column);
                     LError.add(error);
 
                     return error;
                 }
             }else{
-                TError error = new TError("histogram", "Semántico", "Los argumentos de etiquetas no son de tipo String", 0, 0);
+                TError error = new TError("histogram", "Semántico", "Los argumentos de etiquetas no son de tipo String", row, column);
                 LError.add(error);
 
                 return error;
             }
         }
-        TError error = new TError("histogram", "Semántico", "Algún argumento no es de tipo vector", 0, 0);
+        TError error = new TError("histogram", "Semántico", "Algún argumento no es de tipo vector", row, column);
         LError.add(error);
 
         return error;

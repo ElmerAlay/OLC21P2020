@@ -17,11 +17,15 @@ import symbols.Vec;
 public class StructRef implements ASTNode{
     private String name;
     private LinkedList<ASTNode> indexes;
+    private int row;
+    private int column;
 
-    public StructRef(String name, LinkedList<ASTNode> indexes) {
+    public StructRef(String name, LinkedList<ASTNode> indexes, int row, int column) {
         super();
         this.name = name;
         this.indexes = indexes;
+        this.row = row;
+        this.column = column;
     }
     
     @Override
@@ -29,25 +33,25 @@ public class StructRef implements ASTNode{
         if(environment.get(name) != null){  //Primero verifico que la variable existe 
             //Verifico si el símbolo es un vector
             if(environment.get(name).getValue() instanceof Vec){
-                Object o = new VecRef(name, ((Vec)environment.get(name).getValue()).getValues(), indexes).execute(environment, LError);
+                Object o = new VecRef(name, ((Vec)environment.get(name).getValue()).getValues(), indexes, row, column).execute(environment, LError);
                 if(o instanceof Vec){
                     return (Vec)o;
                 }else{
-                    TError error = new TError(name, "Semántico", "Error de índices en el vector", 0, 0);
+                    TError error = new TError(name, "Semántico", "Error de índices en el vector", row, column);
                     LError.add(error);
                     return error;
                 }
             }
             //Verifico si el símbolo es una lista
             else if(environment.get(name).getValue() instanceof ListStruct){
-                Object o = new ListRef(name, ((ListStruct)environment.get(name).getValue()).getValues(), indexes).execute(environment, LError);
+                Object o = new ListRef(name, ((ListStruct)environment.get(name).getValue()).getValues(), indexes, row, column).execute(environment, LError);
                 if(o instanceof ListStruct){
                     return (ListStruct)o;
                 }else if (o instanceof Vec){
                     return (Vec)o;
                 }
                 else{
-                    TError error = new TError(name, "Semántico", "Error de índices en la lista", 0, 0);
+                    TError error = new TError(name, "Semántico", "Error de índices en la lista", row, column);
                     LError.add(error);
                     return error;
                 }
@@ -74,22 +78,22 @@ public class StructRef implements ASTNode{
                                 }
                             }
                         }else{
-                            TError error = new TError(name, "Semántico", "El índice sobrepasa el tamaño del vector o es negativo", 0, 0);
+                            TError error = new TError(name, "Semántico", "El índice sobrepasa el tamaño del vector o es negativo", row, column);
                             LError.add(error);
                             return error;
                         }
                     }else{
-                        TError error = new TError(name, "Semántico", "El índice debe ser un vector de tipo integer de tamaño 1", 0, 0);
+                        TError error = new TError(name, "Semántico", "El índice debe ser un vector de tipo integer de tamaño 1", row, column);
                         LError.add(error);
                         return error;
                     } 
                 }else{
-                    TError error = new TError(name, "Semántico", "La variable es de tipo matriz, pero tiene más de un índice para acceder", 0, 0);
+                    TError error = new TError(name, "Semántico", "La variable es de tipo matriz, pero tiene más de un índice para acceder", row, column);
                     LError.add(error);
                     return error;
                 }
             }
-             //Verifico si el símbolo es una arreglo
+             //Verifico si el símbolo es un arreglo
             else if(environment.get(name).getValue() instanceof Arr){
                 Arr arr = ((Arr)environment.get(name).getValue());
                 int tam[] = new int[arr.dim.length+2];
@@ -162,24 +166,28 @@ public class StructRef implements ASTNode{
                             else
                                 return (ListStruct)result;
                         }else{
-                            TError error = new TError(name, "Semántico", "El índice sobrepasa el tamaño del arreglo", 0, 0);
+                            TError error = new TError(name, "Semántico", "El índice sobrepasa el tamaño del arreglo", row, column);
                             LError.add(error);
                             return error;
                         }
                     }else{
-                        TError error = new TError(name, "Semántico", "Los índices deben ser vectores de tipo integer y tamaño 1", 0, 0);
+                        TError error = new TError(name, "Semántico", "Los índices deben ser vectores de tipo integer y tamaño 1", row, column);
                         LError.add(error);
                         return error;
                     }
                 }else{
-                    TError error = new TError(name, "Semántico", "La variable es de tipo arreglo y el número de índices no es igual al de sus dimensiones", 0, 0);
+                    TError error = new TError(name, "Semántico", "La variable es de tipo arreglo y el número de índices no es igual al de sus dimensiones", row, column);
                     LError.add(error);
                     return error;
                 }
+            }else{
+                TError error = new TError(name, "Semántico", "La referencia no representa ningúna estructura", row, column);
+                LError.add(error);
+                return error;
             }
         }
         
-        TError error = new TError(name, "Semántico", "La variable no existe", 0, 0);
+        TError error = new TError(name, "Semántico", "La variable no existe", row, column);
         LError.add(error);
         return error;
     }

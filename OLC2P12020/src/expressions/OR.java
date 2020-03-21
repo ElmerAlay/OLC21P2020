@@ -13,11 +13,15 @@ import symbols.Vec;
 public class OR implements ASTNode{
     private ASTNode op1;
     private ASTNode op2;
+    private int row;
+    private int column;
 
-    public OR(ASTNode op1, ASTNode op2) {
+    public OR(ASTNode op1, ASTNode op2, int row, int column) {
         super();
         this.op1 = op1;
         this.op2 = op2;
+        this.row = row;
+        this.column = column;
     }
 
     @Override
@@ -36,7 +40,7 @@ public class OR implements ASTNode{
                     Object result[] = { Boolean.parseBoolean(vec1[0].toString()) || Boolean.parseBoolean(vec2[0].toString()) };
                     return new Vec(result);
                 }else{
-                    TError error = new TError("|", "Semántico", "no se pueden comparar lógicamente esos 2 tipos de datos", 0, 0);
+                    TError error = new TError("|", "Semántico", "no se pueden comparar lógicamente esos 2 tipos de datos", row, column);
                     LError.add(error);
 
                     return error;
@@ -61,7 +65,7 @@ public class OR implements ASTNode{
                 if(flag){
                     return new Vec(result);
                 }else{
-                    TError error = new TError("|", "Semántico", "no se pueden comparar lógicamente esos 2 tipos de datos", 0, 0);
+                    TError error = new TError("|", "Semántico", "no se pueden comparar lógicamente esos 2 tipos de datos", row, column);
                     LError.add(error);
 
                     return error;
@@ -86,7 +90,7 @@ public class OR implements ASTNode{
                 if(flag){
                     return new Vec(result);
                 }else{
-                    TError error = new TError("|", "Semántico", "no se pueden comparar lógicamente esos 2 tipos de datos", 0, 0);
+                    TError error = new TError("|", "Semántico", "no se pueden comparar lógicamente esos 2 tipos de datos", row, column);
                     LError.add(error);
 
                     return error;
@@ -111,7 +115,7 @@ public class OR implements ASTNode{
                 if(flag){
                     return new Vec(result);
                 }else{
-                    TError error = new TError("|", "Semántico", "no se pueden comparar esos 2 tipos de datos", 0, 0);
+                    TError error = new TError("|", "Semántico", "no se pueden comparar esos 2 tipos de datos", row, column);
                     LError.add(error);
 
                     return error;
@@ -119,7 +123,7 @@ public class OR implements ASTNode{
             }
             //Por último es el caso en el que los vectores son de distinto tamaño
             else{
-                TError error = new TError("|", "Semántico", "no se pueden comparar 2 vectores de distinto tamaño", 0, 0);
+                TError error = new TError("|", "Semántico", "no se pueden comparar 2 vectores de distinto tamaño", row, column);
                 LError.add(error);
 
                 return error;
@@ -145,7 +149,7 @@ public class OR implements ASTNode{
                         con2++;
                     }
                 }
-                Object res = new OR(new Constant(new Vec(o1)), new Constant(new Vec(o2))).execute(environment, LError);
+                Object res = new OR(new Constant(new Vec(o1)), new Constant(new Vec(o2)), row, column).execute(environment, LError);
                 Object result[][] = new Object[mat1.row][mat1.col];
                 con1 = 0;
                 if(res instanceof Vec){
@@ -157,13 +161,13 @@ public class OR implements ASTNode{
                     }
                     return new Mat(result, mat1.row, mat1.col); 
                 }else{
-                    TError error = new TError("|", "Semántico", "Error al comparar lógicamente las matrices", 0, 0);
+                    TError error = new TError("|", "Semántico", "Error al comparar lógicamente las matrices", row, column);
                     LError.add(error);
 
                     return error;
                 }
             }else{
-                TError error = new TError("|", "Semántico", "no se puede comparar lógicamente las matrices porque no tienen las mismas dimensiones", 0, 0);
+                TError error = new TError("|", "Semántico", "no se puede comparar lógicamente las matrices porque no tienen las mismas dimensiones", row, column);
                 LError.add(error);
 
                 return error;
@@ -184,7 +188,7 @@ public class OR implements ASTNode{
                     }
                 }
                 
-                Object res = new OR(new Constant(new Vec(o1)), new Constant((Vec)op2)).execute(environment, LError);
+                Object res = new OR(new Constant(new Vec(o1)), new Constant((Vec)op2), row, column).execute(environment, LError);
                 Object result[][] = new Object[mat1.row][mat1.col];
                 con1 = 0;
                 if(res instanceof Vec){
@@ -196,13 +200,13 @@ public class OR implements ASTNode{
                     }
                     return new Mat(result, mat1.row, mat1.col);
                 }else{
-                    TError error = new TError("|", "Semántico", "Error al comparar lógicamente la matriz con el vector", 0, 0);
+                    TError error = new TError("|", "Semántico", "Error al comparar lógicamente la matriz con el vector", row, column);
                     LError.add(error);
 
                     return error;
                 }
             }else{
-                TError error = new TError("|", "Semántico", "no se puede comparar lógicamente una matriz y un vector de más de un valor", 0, 0);
+                TError error = new TError("|", "Semántico", "no se puede comparar lógicamente una matriz y un vector de más de un valor", row, column);
                 LError.add(error);
 
                 return error;
@@ -223,7 +227,7 @@ public class OR implements ASTNode{
                     }
                 }
                 
-                Object res = new OR(new Constant((Vec)op1), new Constant(new Vec(o1))).execute(environment, LError);
+                Object res = new OR(new Constant((Vec)op1), new Constant(new Vec(o1)), row, column).execute(environment, LError);
                 Object result[][] = new Object[mat1.row][mat1.col];
                 con1 = 0;
                 if(res instanceof Vec){
@@ -235,20 +239,20 @@ public class OR implements ASTNode{
                     }
                     return new Mat(result, mat1.row, mat1.col);
                 }else{
-                    TError error = new TError("|", "Semántico", "Error al comparar lógicamente la matriz con el vector", 0, 0);
+                    TError error = new TError("|", "Semántico", "Error al comparar lógicamente la matriz con el vector", row, column);
                     LError.add(error);
 
                     return error;
                 }
             }else{
-                TError error = new TError("|", "Semántico", "no se puede comparar lógicamente una matriz y un vector de más de un valor", 0, 0);
+                TError error = new TError("|", "Semántico", "no se puede comparar lógicamente una matriz y un vector de más de un valor", row, column);
                 LError.add(error);
 
                 return error;
             }
         }
          
-        TError error = new TError("|", "Semántico", "no se puede comparar lógicamente esos 2 tipos de datos", 0, 0);
+        TError error = new TError("|", "Semántico", "no se puede comparar lógicamente esos 2 tipos de datos", row, column);
         LError.add(error);
         
         return error;

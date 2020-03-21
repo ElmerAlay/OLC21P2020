@@ -13,10 +13,14 @@ import symbols.Vec;
  */
 public class NRow implements ASTNode{
     private ASTNode exp;
+    private int row;
+    private int column;
 
-    public NRow(ASTNode exp) {
+    public NRow(ASTNode exp, int row, int column) {
         super();
         this.exp = exp;
+        this.row = row;
+        this.column = column;
     }
     
     @Override
@@ -29,7 +33,7 @@ public class NRow implements ASTNode{
             return new Vec(result);
         }
         
-        TError error = new TError("NRow", "Semántico", "El argumento no es de tipo matriz", 0, 0);
+        TError error = new TError("NRow", "Semántico", "El argumento no es de tipo matriz", row, column);
         LError.add(error);
 
         return error;

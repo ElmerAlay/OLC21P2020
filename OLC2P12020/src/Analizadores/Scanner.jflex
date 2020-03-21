@@ -53,6 +53,9 @@ comentariomulti =   "#*" ~"*#"
     "break"             { return new Symbol(Simbolo.brek, yycolumn, yyline, yytext().toLowerCase()); }
     "default"           { return new Symbol(Simbolo.def, yycolumn, yyline, yytext().toLowerCase()); }
 
+    "function"          { return new Symbol(Simbolo.func, yycolumn, yyline, yytext().toLowerCase()); }
+    "=>"                { return new Symbol(Simbolo.arrow, yycolumn, yyline, yytext().toLowerCase()); }
+
     "+"                 { return new Symbol(Simbolo.plus, yycolumn, yyline, yytext().toLowerCase()); }
     "-"                 { return new Symbol(Simbolo.minus, yycolumn, yyline, yytext().toLowerCase()); }
     "*"                 { return new Symbol(Simbolo.mul, yycolumn, yyline, yytext().toLowerCase()); }

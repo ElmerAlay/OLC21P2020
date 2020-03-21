@@ -17,12 +17,16 @@ public class MatAssig2 implements ASTNode{
     private String name;
     private ASTNode ind1;
     private ASTNode exp;
+    private int row;
+    private int column;
 
-    public MatAssig2(String name, ASTNode ind1,ASTNode exp) {
+    public MatAssig2(String name, ASTNode ind1,ASTNode exp, int row, int column) {
         super();
         this.name = name;
         this.ind1 = ind1;
         this.exp = exp;
+        this.row = row;
+        this.column = column;
     }
     
     @Override
@@ -63,7 +67,7 @@ public class MatAssig2 implements ASTNode{
                         }
                     }
                     ((Mat)environment.get(name).getValue()).setValues(result);
-                    return "Asignación correcta";
+                    return null;
                 }
                 else if(op instanceof Vec && ((Vec)op).getValues().length==mat.col){
                     int row = Integer.parseInt((((Vec)op1).getValues()[0]).toString());
@@ -90,25 +94,22 @@ public class MatAssig2 implements ASTNode{
                         }
                     }
                     ((Mat)environment.get(name).getValue()).setValues(result);
-                    return "Asignación correcta";
+                    return null;
                 }
                 else{
-                    TError error = new TError(name, "Semántico", "El tamaño de la expresión sobrepasa el tamaño del vector", 0, 0);
+                    TError error = new TError(name, "Semántico", "El tamaño de la expresión sobrepasa el tamaño del vector", row, column);
                     LError.add(error);
-
                     return error;
                 }
             }else{
-                TError error = new TError(name, "Semántico", "Error de índices de la matríz", 0, 0);
+                TError error = new TError(name, "Semántico", "Error de índices de la matríz", row, column);
                 LError.add(error);
-
                 return error;
             }
         }
         
-        TError error = new TError(name, "Semántico", "La variable no existe o no es de tipo matriz", 0, 0);
+        TError error = new TError(name, "Semántico", "La variable no existe o no es de tipo matriz", row, column);
         LError.add(error);
-
         return error;
     }
 }

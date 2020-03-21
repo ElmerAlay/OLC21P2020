@@ -3,7 +3,6 @@ package View;
 import abstracto.*;
 import analizadores.Lexer;
 import analizadores.Parser;
-import java.awt.Desktop;
 import structs.Graficar;
 import structs.Recorrido;
 import java.io.BufferedReader;
@@ -14,26 +13,20 @@ import symbols.Environment;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
-import java.io.IOException;
-import java.net.URISyntaxException;
 import java.util.Scanner;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.util.Enumeration;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextPane;
 import javax.swing.JViewport;
 import javax.swing.event.CaretEvent;
 import javax.swing.event.CaretListener;
+import structs.RecorridoFunc;
 import symbols.Symbol;
 
 /**
@@ -41,6 +34,7 @@ import symbols.Symbol;
  * @author junio
  */
 public class MainWindow extends javax.swing.JFrame {
+    public static Environment general = new Environment(null, "global");
     private Environment global; //= new Environment(null);
     private LinkedList<TError> LError; //= new LinkedList<TError>();
     private LinkedList<ASTNode> lInst;
@@ -188,6 +182,8 @@ public class MainWindow extends javax.swing.JFrame {
         });
 
         btn_clean.setText("Clean");
+        btn_clean.setMaximumSize(new java.awt.Dimension(57, 25));
+        btn_clean.setMinimumSize(new java.awt.Dimension(57, 25));
         btn_clean.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btn_cleanActionPerformed(evt);
@@ -223,6 +219,7 @@ public class MainWindow extends javax.swing.JFrame {
         });
 
         jTextArea1.setColumns(20);
+        jTextArea1.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
         jTextArea1.setRows(5);
         jScrollPane1.setViewportView(jTextArea1);
 
@@ -247,7 +244,7 @@ public class MainWindow extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btn_saveAs)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btn_clean)
+                        .addComponent(btn_clean, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btn_Run)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -274,20 +271,20 @@ public class MainWindow extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(btn_open, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(btn_save, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(btn_saveAs, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(btn_clean, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(btn_Run, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(btn_errorReport, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(btn_ast, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(btn_ts, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(btn_newPage, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(pestañas, javax.swing.GroupLayout.DEFAULT_SIZE, 221, Short.MAX_VALUE)
+                        .addComponent(btn_newPage, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btn_clean, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(13, 13, 13)
+                .addComponent(pestañas, javax.swing.GroupLayout.DEFAULT_SIZE, 218, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(lbl_ncolumn)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -295,7 +292,7 @@ public class MainWindow extends javax.swing.JFrame {
                 .addGap(13, 13, 13)
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 115, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 112, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -319,19 +316,24 @@ public class MainWindow extends javax.swing.JFrame {
             
             Graficar.graficar(Graficar.Recorrido(parser.root),"AST_proyecto");
             
-            global = new Environment(null);
+            global = new Environment(null, "global");
             LError = new LinkedList<>();
             lInst = new LinkedList<>();
             
             LError.addAll(scanner.TablaEL);
             LError.addAll(parser.TablaES);
             
+            RecorridoFunc ref = new RecorridoFunc(global, LError, lInst);
+            ref.Resultado(parser.root);
+            lInst = new LinkedList<>();
             Recorrido re = new Recorrido(global, LError, lInst);
             re.Resultado(parser.root);
             txt_console.setText(output);
             output = "";
             this.createFileErrorReports(LError);
-            createFileSymbolTable(global.getTable());
+            //createFileSymbolTable(global.getTable());
+            createFileSymbolTable(general.getTable());
+            general = new Environment(null, "global");
         }catch(Exception e){}
     }//GEN-LAST:event_btn_RunActionPerformed
 
@@ -496,7 +498,7 @@ public class MainWindow extends javax.swing.JFrame {
                             "								<th class=\"column2\">Descripción</th>\n" +
                             "								<th class=\"column3\">Tipo</th>\n" +
                             "								<th class=\"column4\">Fila</th>\n" +
-                            "								<th class=\"column5\">Columna</th>\n" +
+                            "								<th class=\"column6\">Columna</th>\n" +
                             "							</tr>\n" +
                             "						</thead>\n" +
                             "						<tbody>\n";
@@ -516,7 +518,7 @@ public class MainWindow extends javax.swing.JFrame {
 "									<td class=\"column2\">"+LError.get(i).getDescripcion()+"</td>\n" +
 "									<td class=\"column3\">"+LError.get(i).getTipo()+"</td>\n" +
 "									<td class=\"column4\">"+LError.get(i).getLinea()+"</td>\n" +
-"									<td class=\"column5\">"+LError.get(i).getColumna()+"</td>\n" +
+"									<td class=\"column6\">"+LError.get(i).getColumna()+"</td>\n" +
 "								</tr>\n";
                 }
                 data2 += "</tbody>\n" +
@@ -598,7 +600,9 @@ public class MainWindow extends javax.swing.JFrame {
                             "								<th class=\"column1\">Id</th>\n" +
                             "								<th class=\"column2\">Tipo</th>\n" +
                             "								<th class=\"column3\">Tipo Objeto</th>\n" +
-                            "								<th class=\"column4\">Ámbito</th>\n" +
+                            "								<th class=\"column4\">Fila</th>\n" +
+                            "								<th class=\"column5\">Columna</th>\n" +
+                            "								<th class=\"column6\">Ámbito</th>\n" +
                             "							</tr>\n" +
                             "						</thead>\n" +
                             "						<tbody>\n";
@@ -619,7 +623,9 @@ public class MainWindow extends javax.swing.JFrame {
 "									<td class=\"column1\">"+table.get(key).getId()+"</td>\n" +
 "									<td class=\"column2\">"+table.get(key).getType().getTypes().toString()+"</td>\n" +
 "									<td class=\"column3\">"+table.get(key).getType().getTypeObject()+"</td>\n" +
-"									<td class=\"column4\">"+ "global "+"</td>\n" +
+"									<td class=\"column4\">"+table.get(key).getRow()+"</td>\n" +
+"									<td class=\"column5\">"+table.get(key).getColumn()+"</td>\n" +
+"									<td class=\"column6\">"+ table.get(key).getEnvironmentName() +"</td>\n" +
 "								</tr>\n";
                 }
                 data2 += "</tbody>\n" +

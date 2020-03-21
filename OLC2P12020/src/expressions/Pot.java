@@ -13,11 +13,15 @@ import symbols.Vec;
 public class Pot implements ASTNode{
     private ASTNode op1;
     private ASTNode op2;
+    private int row;
+    private int column;
 
-    public Pot(ASTNode op1, ASTNode op2) {
+    public Pot(ASTNode op1, ASTNode op2, int row, int column) {
         super();
         this.op1 = op1;
         this.op2 = op2;
+        this.row = row;
+        this.column = column;
     }
 
     @Override
@@ -32,12 +36,12 @@ public class Pot implements ASTNode{
             
             //Verifico si el 1er vector es de tamaño 1 y el 2do también
             if (vec1.length==1 && vec2.length==1) {
-                if((vec1[0] instanceof Float || vec1[0] instanceof Integer) && (vec2[0] instanceof Float || vec2[0] instanceof Integer)){
-                    Double res = Math.pow(Float.parseFloat(vec1[0].toString()), Float.parseFloat(vec2[0].toString()));
-                    Object result[] = { Float.parseFloat(res.toString()) };
+                if((vec1[0] instanceof Double || vec1[0] instanceof Integer) && (vec2[0] instanceof Double || vec2[0] instanceof Integer)){
+                    Double res = Math.pow(Double.parseDouble(vec1[0].toString()), Double.parseDouble(vec2[0].toString()));
+                    Object result[] = { res };
                     return new Vec(result);
                 }else{
-                    TError error = new TError("^", "Semántico", "no se puede realizar potencia a esos 2 tipos de datos", 0, 0);
+                    TError error = new TError("^", "Semántico", "no se puede realizar potencia a esos 2 tipos de datos", row, column);
                     LError.add(error);
 
                     return error;
@@ -50,9 +54,9 @@ public class Pot implements ASTNode{
                 
                 //Recorrro los vectores y opero
                 for(int i=0; i<vec1.length; i++){
-                    if((vec1[0] instanceof Float || vec1[0] instanceof Integer) && (vec2[0] instanceof Float || vec2[0] instanceof Integer)){
-                        Double res = Math.pow(Float.parseFloat(vec1[i].toString()), Float.parseFloat(vec2[i].toString()));
-                        result[i] = Float.parseFloat(res.toString());
+                    if((vec1[0] instanceof Double || vec1[0] instanceof Integer) && (vec2[0] instanceof Double || vec2[0] instanceof Integer)){
+                        Double res = Math.pow(Double.parseDouble(vec1[i].toString()), Double.parseDouble(vec2[i].toString()));
+                        result[i] = res;
                     }else {
                         flag = false;
                         break;
@@ -63,7 +67,7 @@ public class Pot implements ASTNode{
                 if(flag){
                     return new Vec(result);
                 }else{
-                    TError error = new TError("^", "Semántico", "no se puede realizar potencia a esos 2 tipos de datos", 0, 0);
+                    TError error = new TError("^", "Semántico", "no se puede realizar potencia a esos 2 tipos de datos", row, column);
                     LError.add(error);
 
                     return error;
@@ -76,9 +80,9 @@ public class Pot implements ASTNode{
                 
                 //Recorrro los vectores y opero
                 for(int i=0; i<vec2.length; i++){
-                    if((vec1[0] instanceof Float || vec1[0] instanceof Integer) && (vec2[0] instanceof Float || vec2[0] instanceof Integer)){
-                        Double res = Math.pow(Float.parseFloat(vec1[0].toString()), Float.parseFloat(vec2[i].toString()));
-                        result[i] = Float.parseFloat(res.toString());
+                    if((vec1[0] instanceof Double || vec1[0] instanceof Integer) && (vec2[0] instanceof Double || vec2[0] instanceof Integer)){
+                        Double res = Math.pow(Double.parseDouble(vec1[0].toString()), Double.parseDouble(vec2[i].toString()));
+                        result[i] = res;
                     }else {
                         flag = false;
                         break;
@@ -89,7 +93,7 @@ public class Pot implements ASTNode{
                 if(flag){
                     return new Vec(result);
                 }else{
-                    TError error = new TError("^", "Semántico", "no se puede realizar potencia a esos 2 tipos de datos", 0, 0);
+                    TError error = new TError("^", "Semántico", "no se puede realizar potencia a esos 2 tipos de datos", row, column);
                     LError.add(error);
 
                     return error;
@@ -102,9 +106,9 @@ public class Pot implements ASTNode{
                 
                 //Recorrro los vectores y opero
                 for(int i=0; i<vec1.length; i++){
-                    if((vec1[0] instanceof Float || vec1[0] instanceof Integer) && (vec2[0] instanceof Float || vec2[0] instanceof Integer)){
-                        Double res = Math.pow(Float.parseFloat(vec1[i].toString()), Float.parseFloat(vec2[0].toString()));
-                        result[i] = Float.parseFloat(res.toString());
+                    if((vec1[0] instanceof Double || vec1[0] instanceof Integer) && (vec2[0] instanceof Double || vec2[0] instanceof Integer)){
+                        Double res = Math.pow(Double.parseDouble(vec1[i].toString()), Double.parseDouble(vec2[0].toString()));
+                        result[i] = res;
                     }else {
                         flag = false;
                         break;
@@ -115,7 +119,7 @@ public class Pot implements ASTNode{
                 if(flag){
                     return new Vec(result);
                 }else{
-                    TError error = new TError("^", "Semántico", "no se puede realizar potencia a esos 2 tipos de datos", 0, 0);
+                    TError error = new TError("^", "Semántico", "no se puede realizar potencia a esos 2 tipos de datos", row, column);
                     LError.add(error);
 
                     return error;
@@ -123,7 +127,7 @@ public class Pot implements ASTNode{
             }
             //Por último es el caso en el que los vectores son de distinto tamaño
             else{
-                TError error = new TError("^", "Semántico", "no se puede realizar potencia a esos 2 vectores de distinto tamaño", 0, 0);
+                TError error = new TError("^", "Semántico", "no se puede realizar potencia a esos 2 vectores de distinto tamaño", row, column);
                 LError.add(error);
 
                 return error;
@@ -148,7 +152,7 @@ public class Pot implements ASTNode{
                         con2++;
                     }
                 }
-                Object res = new Pot(new Constant(new Vec(o1)), new Constant(new Vec(o2))).execute(environment, LError);
+                Object res = new Pot(new Constant(new Vec(o1)), new Constant(new Vec(o2)), row, column).execute(environment, LError);
                 Object result[][] = new Object[mat1.row][mat1.col];
                 con1 = 0;
                 if(res instanceof Vec){
@@ -160,13 +164,13 @@ public class Pot implements ASTNode{
                     }
                     return new Mat(result, mat1.row, mat1.col); 
                 }else{
-                    TError error = new TError("^", "Semántico", "Error al aplicar potencia las matrices", 0, 0);
+                    TError error = new TError("^", "Semántico", "Error al aplicar potencia las matrices", row, column);
                     LError.add(error);
 
                     return error;
                 }
             }else{
-                TError error = new TError("^", "Semántico", "no se puede aplicar potencia a las matrices porque no tienen las mismas dimensiones", 0, 0);
+                TError error = new TError("^", "Semántico", "no se puede aplicar potencia a las matrices porque no tienen las mismas dimensiones", row, column);
                 LError.add(error);
 
                 return error;
@@ -187,7 +191,7 @@ public class Pot implements ASTNode{
                     }
                 }
                 
-                Object res = new Pot(new Constant(new Vec(o1)), new Constant((Vec)op2)).execute(environment, LError);
+                Object res = new Pot(new Constant(new Vec(o1)), new Constant((Vec)op2), row, column).execute(environment, LError);
                 Object result[][] = new Object[mat1.row][mat1.col];
                 con1 = 0;
                 if(res instanceof Vec){
@@ -199,13 +203,13 @@ public class Pot implements ASTNode{
                     }
                     return new Mat(result, mat1.row, mat1.col);
                 }else{
-                    TError error = new TError("^", "Semántico", "Error al aplicar potencia a la matriz con el vector", 0, 0);
+                    TError error = new TError("^", "Semántico", "Error al aplicar potencia a la matriz con el vector", row, column);
                     LError.add(error);
 
                     return error;
                 }
             }else{
-                TError error = new TError("^", "Semántico", "no se puede aplicar potencia a una matriz y un vector de más de un valor", 0, 0);
+                TError error = new TError("^", "Semántico", "no se puede aplicar potencia a una matriz y un vector de más de un valor", row, column);
                 LError.add(error);
 
                 return error;
@@ -226,7 +230,7 @@ public class Pot implements ASTNode{
                     }
                 }
                 
-                Object res = new Pot(new Constant((Vec)op1), new Constant(new Vec(o1))).execute(environment, LError);
+                Object res = new Pot(new Constant((Vec)op1), new Constant(new Vec(o1)), row, column).execute(environment, LError);
                 Object result[][] = new Object[mat1.row][mat1.col];
                 con1 = 0;
                 if(res instanceof Vec){
@@ -238,13 +242,13 @@ public class Pot implements ASTNode{
                     }
                     return new Mat(result, mat1.row, mat1.col);
                 }else{
-                    TError error = new TError("^", "Semántico", "Error al aplicar potencia a la matriz con el vector", 0, 0);
+                    TError error = new TError("^", "Semántico", "Error al aplicar potencia a la matriz con el vector", row, column);
                     LError.add(error);
 
                     return error;
                 }
             }else{
-                TError error = new TError("^", "Semántico", "no se puede aplicar potencia a una matriz y un vector de más de un valor", 0, 0);
+                TError error = new TError("^", "Semántico", "no se puede aplicar potencia a una matriz y un vector de más de un valor", row, column);
                 LError.add(error);
 
                 return error;
@@ -252,7 +256,7 @@ public class Pot implements ASTNode{
         }
         
         
-        TError error = new TError("^", "Semántico", "no es vector, no se puede realizar potencia a esos 2 tipos de datos", 0, 0);
+        TError error = new TError("^", "Semántico", "no es vector, no se puede realizar potencia a esos 2 tipos de datos", row, column);
         LError.add(error);
         
         return error;

@@ -16,12 +16,16 @@ public class ListRef implements ASTNode{
     String name;
     private LinkedList<Object> list;
     private LinkedList<ASTNode> indexes;
+    private int row;
+    private int column;
 
-    public ListRef(String name, LinkedList<Object> list, LinkedList<ASTNode> indexes) {
+    public ListRef(String name, LinkedList<Object> list, LinkedList<ASTNode> indexes, int row, int column) {
         super();
         this.name = name;
         this.list = list;
         this.indexes = indexes;
+        this.row = row;
+        this.column = column;
     }
     
     @Override
@@ -37,11 +41,11 @@ public class ListRef implements ASTNode{
                 if(Integer.parseInt((((Vec)index).getValues()[0]).toString()) <= list.size() && Integer.parseInt((((Vec)index).getValues()[0]).toString()) > 0){
                     //Creo una nueva lista para retornar
                     LinkedList<Object> value= new LinkedList<>();
-                    if(list.get(Integer.parseInt((((Vec)index).getValues()[0]).toString())-1) instanceof LinkedList)
-                        value = (LinkedList)list.get(Integer.parseInt((((Vec)index).getValues()[0]).toString())-1);
-                    else
+                    if(list.get(Integer.parseInt((((Vec)index).getValues()[0]).toString())-1) instanceof ListStruct){
+                        value = ((ListStruct)list.get(Integer.parseInt((((Vec)index).getValues()[0]).toString())-1)).getValues();
+                    }else if(list.get(Integer.parseInt((((Vec)index).getValues()[0]).toString())-1) instanceof Vec){
                         value.add(list.get(Integer.parseInt((((Vec)index).getValues()[0]).toString())-1));
-
+                    }
                     //Verifico si la lista de índices está vacía
                     if(indexes.isEmpty()){
                         //Retorno una nueva lista con el valor solicitado
@@ -49,20 +53,24 @@ public class ListRef implements ASTNode{
                     }
                     //De lo contrario vuelvo a llamar a este mismo método pero con el primer índice ya eliminado
                     else{
-                        Object o = new ListRef(name, value, indexes).execute(environment, LError);
+                        Object o = new ListRef(name, value, indexes, row, column).execute(environment, LError);
                         if(o instanceof ListStruct){
                             return (ListStruct)o;
                         }else if(o instanceof Vec){
                             return (Vec)o;
+                        }else{
+                            TError error = new TError(name, "Semántico", "Error en el índice", row, column);
+                            LError.add(error);
+                            return error;
                         }
                     }
                 }else{
-                    TError error = new TError(name, "Semántico", "El índice es mayor al tamaño de la lista", 0, 0);
+                    TError error = new TError(name, "Semántico", "El índice es mayor al tamaño de la lista o es negativo", row, column);
                     LError.add(error);
                     return error;
                 }
             }else{
-                TError error = new TError(name, "Semántico", "El índice no es de tipo integer", 0, 0);
+                TError error = new TError(name, "Semántico", "El índice no es de tipo integer", row, column);
                 LError.add(error);
                 return error;
             }
@@ -84,9 +92,14 @@ public class ListRef implements ASTNode{
                         }
                         //De lo contrario vuelvo llamo a vecRef pero con el primer índice ya eliminado
                         else{
-                            Object o = new VecRef(name, value, indexes).execute(environment, LError);
+                            Object o = new VecRef(name, value, indexes, row, column).execute(environment, LError);
                             if(o instanceof Vec)
                                 return (Vec)o;
+                            else{
+                                TError error = new TError(name, "Semántico", "Error en el índice", row, column);
+                                LError.add(error);
+                                return error;
+                            }
                         }
                     }
                     else if(list.get(Integer.parseInt((((Vec2)index).getValues()[0]).toString())-1) instanceof ListStruct){
@@ -98,32 +111,36 @@ public class ListRef implements ASTNode{
                         //De lo contrario vuelvo llamo a ListRef pero con el primer índice ya eliminado
                         else{
                             LinkedList<Object> a = ((ListStruct)list.get(Integer.parseInt((((Vec2)index).getValues()[0]).toString())-1)).getValues();
-                            Object o = new ListRef(name, a, indexes).execute(environment, LError);
+                            Object o = new ListRef(name, a, indexes, row, column).execute(environment, LError);
                             if(o instanceof ListStruct){
                                 return (ListStruct)o;
                             }else if(o instanceof Vec){
                                 return (Vec)o;
+                            }else{
+                                TError error = new TError(name, "Semántico", "Error en el índice", row, column);
+                                LError.add(error);
+                                return error;
                             }
                         }
                     }
                     else{
-                        TError error = new TError(name, "Semántico", "El contenido del índice específicado no es de tipo primitivo o vector", 0, 0);
+                        TError error = new TError(name, "Semántico", "El contenido del índice específicado no es de tipo primitivo o vector", row, column);
                         LError.add(error);
                         return error;
                     }
                 }else{
-                    TError error = new TError(name, "Semántico", "El índice es mayor al tamaño del vector", 0, 0);
+                    TError error = new TError(name, "Semántico", "El índice es mayor al tamaño del vector", row, column);
                     LError.add(error);
                     return error;
                 }
             }else{
-                TError error = new TError(name, "Semántico", "El índice no es de tipo integer", 0, 0);
+                TError error = new TError(name, "Semántico", "El índice no es de tipo integer", row, column);
                 LError.add(error);
                 return error;
             }
         }
         
-        TError error = new TError(name, "Semántico", "El índice debe ser un vector de sólo un elemento", 0, 0);
+        TError error = new TError(name, "Semántico", "El índice debe ser un vector de sólo un elemento", row, column);
         LError.add(error);
         return error;
     }

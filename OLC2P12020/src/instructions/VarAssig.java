@@ -1,8 +1,10 @@
 package instructions;
 
+import View.MainWindow;
 import abstracto.*;
 import java.util.LinkedList;
 import symbols.Arr;
+import symbols.Casteo;
 import symbols.Environment;
 import symbols.ListStruct;
 import symbols.Mat;
@@ -17,11 +19,15 @@ import symbols.Vec;
 public class VarAssig implements ASTNode{
     private String name;
     private ASTNode exp;
+    private int row;
+    private int column;
 
-    public VarAssig(String name, ASTNode exp) {
+    public VarAssig(String name, ASTNode exp, int row, int column) {
         super();
         this.name = name;
         this.exp = exp;
+        this.row = row;
+        this.column = column;
     }
     
     @Override
@@ -37,84 +43,61 @@ public class VarAssig implements ASTNode{
             //Modificamos el tipo primitivo 
             if(result[0] instanceof String)
                 type.setTypes(Type.Types.STRING);
-            else if (result[0] instanceof Float)
+            else if (result[0] instanceof Double)
                 type.setTypes(Type.Types.NUMERICO);
             else if (result[0] instanceof Integer)
                 type.setTypes(Type.Types.INTEGER);
             else if (result[0] instanceof Boolean)
                 type.setTypes(Type.Types.BOOLEANO);
             else {
-                TError error = new TError(name, "Semántico", "No se pudo asignar el valor a la variable", 0, 0);
+                TError error = new TError(name, "Semántico", "No se pudo asignar el valor a la variable", row, column);
                 LError.add(error);
 
                 return error;
             }
             
-            if(environment.get(name) == null) //Significa que no encontró una variable con ese nombre registrado    
-                environment.put(new Symbol(type, name, new Vec(result))); //Entonces lo agregamos a la tabla de simbolos
-            else {
+            if(environment.get(name) == null){ //Significa que no encontró una variable con ese nombre registrado    
+                environment.put(new Symbol(type, name, new Vec(result), row, column, environment.getName())); //Entonces lo agregamos a la tabla de simbolos
+                MainWindow.general.put(new Symbol(type, name, new Vec(result), row, column, environment.getName())); //Entonces lo agregamos a la tabla de simbolos
+            }else {
                 environment.get(name).setValue(new Vec(result)); //De lo contrario actualizo su valor en la tabla
                 environment.get(name).setType(type);
             }
         }
+        //Verificamos que el value sea de tipo lista
         else if(value instanceof ListStruct){
             type.setTypeObject("Lista");
             type.setTypes(Type.Types.LISTA);
-            LinkedList<Object> result = ((ListStruct)value).getValues();
             
-            if(environment.get(name) == null) //Significa que no encontró una variable con ese nombre registrado    
-                environment.put(new Symbol(type, name, new ListStruct(result))); //Entonces lo agregamos a la tabla de simbolos
-            else {
-                environment.get(name).setValue(new ListStruct(result)); //De lo contrario actualizo su valor en la tabla
+            if(environment.get(name) == null){ //Significa que no encontró una variable con ese nombre registrado    
+                environment.put(new Symbol(type, name, (ListStruct)value, row, column, environment.getName())); //Entonces lo agregamos a la tabla de simbolos
+                MainWindow.general.put(new Symbol(type, name, (ListStruct)value, row, column, environment.getName())); //Entonces lo agregamos a la tabla de simbolos
+            }else {
+                environment.get(name).setValue((ListStruct)value); //De lo contrario actualizo su valor en la tabla
                 environment.get(name).setType(type);
             }
         }
         else if(value instanceof Mat){
-            type.setTypeObject("Matriz");
-            //Modificamos el tipo primitivo 
-            if(((Mat)value).getValues()[0][0] instanceof String)
-                type.setTypes(Type.Types.STRING);
-            else if (((Mat)value).getValues()[0][0] instanceof Float)
-                type.setTypes(Type.Types.NUMERICO);
-            else if (((Mat)value).getValues()[0][0] instanceof Integer)
-                type.setTypes(Type.Types.INTEGER);
-            else if (((Mat)value).getValues()[0][0] instanceof Boolean)
-                type.setTypes(Type.Types.BOOLEANO);
-            
             if(environment.get(name) == null){ //Significa que no encontró una variable con ese nombre registrado    
-                environment.put(new Symbol(type, name, (Mat)value)); //Entonces lo agregamos a la tabla de simbolos
+                environment.put(new Symbol(Casteo.setType(value), name, (Mat)value, row, column, environment.getName())); //Entonces lo agregamos a la tabla de simbolos
+                MainWindow.general.put(new Symbol(Casteo.setType(value), name, (Mat)value, row, column, environment.getName())); //Entonces lo agregamos a la tabla de simbolos
             }else {
                 environment.get(name).setValue((Mat)value); //De lo contrario actualizo su valor en la tabla
-                environment.get(name).setType(type);
+                environment.get(name).setType(Casteo.setType(value));
             }
             
         }
         else if(value instanceof Arr){
-            type.setTypeObject("Arreglo");
-            if(((Arr)value).getData().get(0) instanceof ListStruct)
-                type.setTypes(Type.Types.LISTA);
-            else{
-                //Modificamos el tipo primitivo 
-                if(((Arr)value).getData().get(0) instanceof String)
-                    type.setTypes(Type.Types.STRING);
-                else if (((Arr)value).getData().get(0) instanceof Float)
-                    type.setTypes(Type.Types.NUMERICO);
-                else if (((Arr)value).getData().get(0) instanceof Integer)
-                    type.setTypes(Type.Types.INTEGER);
-                else if (((Arr)value).getData().get(0) instanceof Boolean)
-                    type.setTypes(Type.Types.BOOLEANO);
-            }
-            
             if(environment.get(name) == null){ //Significa que no encontró una variable con ese nombre registrado    
-                environment.put(new Symbol(type, name, (Arr)value)); //Entonces lo agregamos a la tabla de simbolos
+                environment.put(new Symbol(Casteo.setType(value), name, (Arr)value, row, column, environment.getName())); //Entonces lo agregamos a la tabla de simbolos
+                MainWindow.general.put(new Symbol(Casteo.setType(value), name, (Arr)value, row, column, environment.getName())); //Entonces lo agregamos a la tabla de simbolos
             }else {
                 environment.get(name).setValue((Arr)value); //De lo contrario actualizo su valor en la tabla
-                environment.get(name).setType(type);
+                environment.get(name).setType(Casteo.setType(value));
             }
-            
         }
         
-        return "asignación correcta\n";
+        return null;
     }
     
 }

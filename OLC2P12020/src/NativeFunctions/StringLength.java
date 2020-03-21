@@ -12,10 +12,14 @@ import symbols.Vec;
  */
 public class StringLength implements ASTNode{
     private ASTNode exp;
+    private int row;
+    private int column;
 
-    public StringLength(ASTNode exp) {
+    public StringLength(ASTNode exp, int row, int column) {
         super();
         this.exp = exp;
+        this.row = row;
+        this.column = column;
     }
     
     @Override
@@ -31,20 +35,20 @@ public class StringLength implements ASTNode{
                     Object tam[] = {values[0].toString().length()};
                     return new Vec(tam);
                 }else{
-                    TError error = new TError("stringlength", "Semántico", "El vector dentro de la función no es de tipo String", 0, 0);
+                    TError error = new TError("stringlength", "Semántico", "El vector dentro de la función no es de tipo String", row, column);
                     LError.add(error);
 
                     return error;
                 }
             }else{
-                TError error = new TError("stringlength", "Semántico", "El vector dentro de la función no es de tamaño 1", 0, 0);
+                TError error = new TError("stringlength", "Semántico", "El vector dentro de la función no es de tamaño 1", row, column);
                 LError.add(error);
 
                 return error;
             }
         }
         
-        TError error = new TError("stringlength", "Semántico", "La expresión dentro de la función no es válida", 0, 0);
+        TError error = new TError("stringlength", "Semántico", "La expresión dentro de la función no es válida", row, column);
         LError.add(error);
 
         return error;

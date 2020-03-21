@@ -17,10 +17,14 @@ import symbols.Vec;
  */
 public class TypeOf implements ASTNode{
     private ASTNode exp;
+    private int row;
+    private int column;
 
-    public TypeOf(ASTNode exp) {
+    public TypeOf(ASTNode exp, int row, int column) {
         super();
         this.exp = exp;
+        this.row = row;
+        this.column = column;
     }
     
     @Override
@@ -41,13 +45,13 @@ public class TypeOf implements ASTNode{
             }else if(data.get(0) instanceof ListStruct){
                 result[0] = "Lista";
             }else{
-                TError error = new TError("TypeOf", "Semántico", "La expresión no es de tipo lista o vector", 0, 0);
+                TError error = new TError("TypeOf", "Semántico", "La expresión no es de tipo lista o vector", row, column);
                 LError.add(error);
 
                 return error;
             }
         }else{
-            TError error = new TError("TypeOf", "Semántico", "La expresión no es de ningún tipo de estructura", 0, 0);
+            TError error = new TError("TypeOf", "Semántico", "La expresión no es de ningún tipo de estructura", row, column);
             LError.add(error);
 
             return error;

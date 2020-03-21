@@ -17,6 +17,6 @@ public class Continue implements ASTNode{
 
     @Override
     public Object execute(Environment environment, LinkedList<TError> LError) {
-        return "continue";
+        return null;
     }
 }

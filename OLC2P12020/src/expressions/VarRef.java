@@ -14,10 +14,14 @@ import symbols.Vec;
  */
 public class VarRef implements ASTNode{
     private String name;
+    private int row;
+    private int column;
 
-    public VarRef(String name) {
+    public VarRef(String name, int row, int column) {
         super();
         this.name = name;
+        this.row = row;
+        this.column = column;
     }
 
     @Override
@@ -27,17 +31,22 @@ public class VarRef implements ASTNode{
             //verifico que la variable sea de tipo vector
             if(environment.get(name).getValue() instanceof Vec){
                 //retorno el vector 
-                return new Vec(((Vec)environment.get(name).getValue()).getValues());   
+                return (Vec)environment.get(name).getValue();   
             }else if(environment.get(name).getValue() instanceof ListStruct){  //Verifico que la variable sea de tipo lista
-                return new ListStruct(((ListStruct)environment.get(name).getValue()).getValues());
+                return (ListStruct)environment.get(name).getValue();
             }else if(environment.get(name).getValue() instanceof Mat){  //Verifico que la variable sea de tipo matriz
                 return (Mat)environment.get(name).getValue();
             }else if(environment.get(name).getValue() instanceof Arr){  //Verifico que la variable sea de tipo arreglo
                 return (Arr)environment.get(name).getValue();
+            }else{
+                TError error = new TError(name, "Semántico", "Error de contenido de la variable", row, column);
+                LError.add(error);
+
+                return error;
             }
         }
         
-        TError error = new TError(name, "Semántico", "La variable no existe", 0, 0);
+        TError error = new TError(name, "Semántico", "La variable no existe", row, column);
         LError.add(error);
 
         return error;

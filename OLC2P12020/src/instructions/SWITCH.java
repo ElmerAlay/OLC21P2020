@@ -33,16 +33,18 @@ public class SWITCH implements ASTNode{
         
         
         for(CASE in: lcase){
-            Object res = in.execute(environment, LError);
+            Environment local = new Environment(environment, "local_switch_case");
+            Object res = in.execute(local, LError);
             if(res instanceof Boolean && (Boolean.parseBoolean(res.toString())))
                 return Boolean.parseBoolean(res.toString());
         }
         if(linstf!=null){
+            Environment local = new Environment(environment, "local_switch_default");
             for(ASTNode in: linstf){
-                in.execute(environment, LError);
+                in.execute(local, LError);
             } 
         }
         
-        return false;
+        return null;
     }
 }

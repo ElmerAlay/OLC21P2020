@@ -24,15 +24,17 @@ public class Casteo {
         for(Object exp: list){
             if(exp instanceof Vec){
                 Object vec[] = ((Vec)exp).getValues();
-                if(vec[0] instanceof String){
-                    flagString = true;
-                    break;
-                }else if(vec[0] instanceof Float){
-                    flagNumeric = true;
-                }else if(vec[0] instanceof Integer){
-                    flagInteger = true;
-                }else
-                    flagBoolean = true;
+                for(int i=0; i<vec.length; i++){
+                    if(vec[i] instanceof String){
+                        flagString = true;
+                        break;
+                    }else if(vec[i] instanceof Double){
+                        flagNumeric = true;
+                    }else if(vec[i] instanceof Integer){
+                        flagInteger = true;
+                    }else
+                        flagBoolean = true;
+                }
             }
         }
         
@@ -68,9 +70,9 @@ public class Casteo {
                     else{
                         if(flagNumeric){
                             if(vals[i] instanceof Boolean)
-                                values[cont++] = Boolean.parseBoolean(vals[i].toString())?Float.parseFloat("1.0"):Float.parseFloat("0.0");
+                                values[cont++] = Boolean.parseBoolean(vals[i].toString())?Double.parseDouble("1.0"):Double.parseDouble("0.0");
                             else
-                                values[cont++] = Float.parseFloat(vals[i].toString());
+                                values[cont++] = Double.parseDouble(vals[i].toString());
                         }else if(flagInteger)
                             if(vals[i] instanceof Boolean)
                                 values[cont++] = Boolean.parseBoolean(vals[i].toString())? 1 : 0;
@@ -93,17 +95,17 @@ public class Casteo {
                     val[i] = val[i].toString();
                     val[index-1] = v.toString();
                 }else{
-                    if(v instanceof Float || val[0] instanceof Float){
+                    if(v instanceof Double || val[0] instanceof Double){
                         if(val[i] instanceof Boolean){
-                            val[i]=Boolean.parseBoolean(val[i].toString())?Float.parseFloat("1.0"):Float.parseFloat("0.0");
+                            val[i]=Boolean.parseBoolean(val[i].toString())?Double.parseDouble("1.0"):Double.parseDouble("0.0");
                         }else{
-                            val[i] = Float.parseFloat(val[i].toString());
+                            val[i] = Double.parseDouble(val[i].toString());
                         }
                         
                         if(v instanceof Boolean){
-                            val[index-1]=Boolean.parseBoolean(v.toString())?Float.parseFloat("1.0"):Float.parseFloat("0.0");
+                            val[index-1]=Boolean.parseBoolean(v.toString())?Double.parseDouble("1.0"):Double.parseDouble("0.0");
                         }else{
-                            val[index-1] =Float.parseFloat(v.toString());
+                            val[index-1] =Double.parseDouble(v.toString());
                         }
                     }else if((v instanceof Integer && (val[0] instanceof Integer||val[0] instanceof Boolean)) ||
                              (v instanceof Boolean && val[0] instanceof Integer)){
@@ -132,8 +134,8 @@ public class Casteo {
                 if(v instanceof String || val[0] instanceof String){
                     val2[i] = "null";
                 }else{
-                    if(v instanceof Float || val[0] instanceof Float){
-                        val2[i] = Float.parseFloat("0.0");
+                    if(v instanceof Double || val[0] instanceof Double){
+                        val2[i] = Double.parseDouble("0.0");
                     }else if((v instanceof Integer && (val[0] instanceof Integer||val[0] instanceof Boolean)) ||
                              (v instanceof Boolean && val[0] instanceof Integer)){
                         val2[i] = 0;
@@ -148,16 +150,16 @@ public class Casteo {
                     val2[i] = val[i].toString();
                     val2[index-1] = v.toString();
                 }else{
-                    if(val2[0] instanceof Float){
+                    if(val2[0] instanceof Double){
                         if(val[i] instanceof Boolean){
-                            val2[i]=Boolean.parseBoolean(val[i].toString())?Float.parseFloat("1.0"):Float.parseFloat("0.0");
+                            val2[i]=Boolean.parseBoolean(val[i].toString())?Double.parseDouble("1.0"):Double.parseDouble("0.0");
                         }else{
-                            val2[i] = Float.parseFloat(val[i].toString());
+                            val2[i] = Double.parseDouble(val[i].toString());
                         }
                         if(v instanceof Boolean){
-                            val2[index-1]=Boolean.parseBoolean(v.toString())?Float.parseFloat("1.0"):Float.parseFloat("0.0");
+                            val2[index-1]=Boolean.parseBoolean(v.toString())?Double.parseDouble("1.0"):Double.parseDouble("0.0");
                         }else{
-                            val2[index-1] =Float.parseFloat(v.toString());
+                            val2[index-1] =Double.parseDouble(v.toString());
                         }
                     }else if(val2[0] instanceof Integer){
                         if(val[i] instanceof Boolean){
@@ -176,15 +178,71 @@ public class Casteo {
                     }
                 }
             }
-            
             return val2;
         }
     }
     
-    public static Object[] convertFloat(Object[] v){
+    public static LinkedList<Object> llenarList(LinkedList<Object> list, Object v, int index){
+        for(int i=list.size(); i<index-1; i++){
+            Object value[] = {"null"};
+            list.add(new Vec(value));
+        }
+        list.add(v);
+        return list;
+    }
+    
+    public static Object[] convertDouble(Object[] v){
         for(int i=0; i<v.length; i++){
-            v[i] = Float.parseFloat(v[i].toString());
+            v[i] = Double.parseDouble(v[i].toString());
         }
         return v;
+    }
+    
+    public static Type setType(Object v){
+        if(v instanceof String){
+            return new Type(Type.Types.STRING, "Vector");
+        }
+        if(v instanceof Double){
+            return new Type(Type.Types.NUMERICO, "Vector");
+        }
+        if(v instanceof Integer){
+            return new Type(Type.Types.INTEGER, "Vector");
+        }
+        if(v instanceof Boolean){
+            return new Type(Type.Types.BOOLEANO, "Vector");
+        }
+        if(v instanceof ListStruct){
+            return new Type(Type.Types.LISTA, "Lista");
+        }
+        if(v instanceof Mat){
+            if(((Mat)v).getValues()[0][0] instanceof String)
+                return new Type(Type.Types.STRING, "Matriz");
+            if(((Mat)v).getValues()[0][0] instanceof Double){
+                return new Type(Type.Types.NUMERICO, "Matriz");
+            }
+            if(((Mat)v).getValues()[0][0] instanceof Integer){
+                return new Type(Type.Types.INTEGER, "Matriz");
+            }
+            if(((Mat)v).getValues()[0][0] instanceof Boolean){
+                return new Type(Type.Types.BOOLEANO, "Matriz");
+            }
+        }
+        if(v instanceof Arr){
+            if(((Arr)v).getData().get(0) instanceof ListStruct)
+                return new Type(Type.Types.LISTA, "Arreglo");
+            else if(((Arr)v).getData().get(0) instanceof Vec){
+                //Modificamos el tipo primitivo 
+                if(((Vec)((Arr)v).getData().get(0)).getValues()[0] instanceof String)
+                    return new Type(Type.Types.STRING, "Arreglo");
+                else if (((Vec)((Arr)v).getData().get(0)).getValues()[0] instanceof Double)
+                    return new Type(Type.Types.NUMERICO, "Arreglo");
+                else if (((Vec)((Arr)v).getData().get(0)).getValues()[0] instanceof Integer)
+                    return new Type(Type.Types.INTEGER, "Arreglo");
+                else if (((Vec)((Arr)v).getData().get(0)).getValues()[0] instanceof Boolean)
+                    return new Type(Type.Types.BOOLEANO, "Arreglo");
+            }
+        }
+        
+        return new Type(Type.Types.MATRIZ, "Error");
     }
 }

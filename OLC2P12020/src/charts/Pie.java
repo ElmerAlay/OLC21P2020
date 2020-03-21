@@ -12,10 +12,14 @@ import symbols.Vec;
  */
 public class Pie implements ASTNode{
     private LinkedList<ASTNode> params;
+    private int row;
+    private int column;
 
-    public Pie(LinkedList<ASTNode> params) {
+    public Pie(LinkedList<ASTNode> params, int row, int column) {
         super();
         this.params = params;
+        this.row = row;
+        this.column = column;
     }
     
     @Override
@@ -55,7 +59,7 @@ public class Pie implements ASTNode{
                                 }
                                 PieCharts pie = new PieCharts(vals, label, main);
                                 pie.start();
-                                TError error = new TError("Pie", "Semántico", "El vector de labels es menor a los datos", 0, 0);
+                                TError error = new TError("Pie", "Semántico", "El vector de labels es menor a los datos", row, column);
                                 LError.add(error);
 
                                 return error;
@@ -64,32 +68,32 @@ public class Pie implements ASTNode{
                             PieCharts pie = new PieCharts(vals, labels, "Desconocido");
                             pie.start();
 
-                            TError error = new TError("Pie", "Semántico", "El tercer argumento no es de tipo string", 0, 0);
+                            TError error = new TError("Pie", "Semántico", "El tercer argumento no es de tipo string", row, column);
                             LError.add(error);
 
                             return error;
                         }
                     }else{
-                        TError error = new TError("Pie", "Semántico", "El segundo argumento no es de tipo string", 0, 0);
+                        TError error = new TError("Pie", "Semántico", "El segundo argumento no es de tipo string", row, column);
                         LError.add(error);
 
                         return error;
                     }
                 }else{
-                    TError error = new TError("Pie", "Semántico", "El vector de datos tiene numeros negativos", 0, 0);
+                    TError error = new TError("Pie", "Semántico", "El vector de datos tiene numeros negativos", row, column);
                     LError.add(error);
 
                     return error;
                 }
             }else{
-                TError error = new TError("Pie", "Semántico", "El tipo del primer argumento debe ser numerico o integer", 0, 0);
+                TError error = new TError("Pie", "Semántico", "El tipo del primer argumento debe ser numerico o integer", row, column);
                 LError.add(error);
 
                 return error;
             }
         }
         
-        TError error = new TError("Pie", "Semántico", "El primer argumento debe ser un vector", 0, 0);
+        TError error = new TError("Pie", "Semántico", "El primer argumento debe ser un vector", row, column);
         LError.add(error);
 
         return error;

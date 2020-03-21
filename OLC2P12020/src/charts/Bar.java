@@ -12,10 +12,14 @@ import symbols.Vec;
  */
 public class Bar implements ASTNode{
     private LinkedList<ASTNode> largs;
+    private int row;
+    private int column;
 
-    public Bar(LinkedList<ASTNode> largs) {
+    public Bar(LinkedList<ASTNode> largs, int row, int column) {
         super();
         this.largs = largs;
+        this.row = row;
+        this.column = column;
     }
     
     @Override
@@ -63,38 +67,38 @@ public class Bar implements ASTNode{
                                 }
                                 BarCharts bar = new BarCharts(values, xlab[0].toString(), ylab[0].toString(), main[0].toString(), label);
                                 bar.start();
-                                TError error = new TError("barplot", "Semántico", "El vector de labels es menor a los datos", 0, 0);
+                                TError error = new TError("barplot", "Semántico", "El vector de labels es menor a los datos", row, column);
                                 LError.add(error);
 
                                 return error;
                             }
                         }else{
-                            TError error = new TError("barplot", "Semántico", "El vector de valores no tiene números negativos", 0, 0);
+                            TError error = new TError("barplot", "Semántico", "El vector de valores no tiene números negativos", row, column);
                             LError.add(error);
 
                             return error;
                         }
                     }else{
-                        TError error = new TError("barplot", "Semántico", "El vector de valores no es de tipo numérico", 0, 0);
+                        TError error = new TError("barplot", "Semántico", "El vector de valores no es de tipo numérico", row, column);
                         LError.add(error);
 
                         return error;
                     }
                 }else{
-                    TError error = new TError("barplot", "Semántico", "El último argumento debe ser de tipo String", 0, 0);
+                    TError error = new TError("barplot", "Semántico", "El último argumento debe ser de tipo String", row, column);
                     LError.add(error);
 
                     return error;
                 }
             }
             else{
-                TError error = new TError("barplot", "Semántico", "Los argumentos para las etiquetas deben ser de tipo String", 0, 0);
+                TError error = new TError("barplot", "Semántico", "Los argumentos para las etiquetas deben ser de tipo String", row, column);
                 LError.add(error);
 
                 return error;
             }
         }
-        TError error = new TError("barplot", "Semántico", "Algún argumento no es de tipo vector", 0, 0);
+        TError error = new TError("barplot", "Semántico", "Algún argumento no es de tipo vector", row, column);
         LError.add(error);
 
         return error;

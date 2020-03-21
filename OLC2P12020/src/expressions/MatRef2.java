@@ -14,10 +14,14 @@ import symbols.Vec;
 public class MatRef2 implements ASTNode{
     private String name;
     private ASTNode exp1;
-
-    public MatRef2(String name, ASTNode exp1) {
+    private int row;
+    private int column;
+    
+    public MatRef2(String name, ASTNode exp1, int row, int column) {
         this.name = name;
         this.exp1 = exp1;
+        this.row = row;
+        this.column = column;
     }
     
     @Override
@@ -41,18 +45,18 @@ public class MatRef2 implements ASTNode{
                         }
                         return new Vec(result);
                     }else{
-                        TError error = new TError(name, "Semántico", "El índice sobrepasa el tamaño del vector", 0, 0);
+                        TError error = new TError(name, "Semántico", "El índice sobrepasa el tamaño del vector", this.row, column);
                         LError.add(error);
                         return error;
                     }
             }else{
-                TError error = new TError(name, "Semántico", "El índice no es un vector de un solo valor de tipo integer", 0, 0);
+                TError error = new TError(name, "Semántico", "El índice no es un vector de un solo valor de tipo integer", row, column);
                 LError.add(error);
                 return error;
             }
         }
     
-        TError error = new TError(name, "Semántico", "La variable no existe o no es de tipo matriz", 0, 0);
+        TError error = new TError(name, "Semántico", "La variable no existe o no es de tipo matriz", row, column);
         LError.add(error);
         return error;
     }

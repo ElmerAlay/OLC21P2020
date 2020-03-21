@@ -10,10 +10,12 @@ import java.util.Map;
 public class Environment {
     private Map<String, Symbol> Table;
     private Environment Anterior;
+    private String name;
     
-    public Environment(Environment Anterior) {
+    public Environment(Environment Anterior, String name) {
         this.Table = new HashMap<>();
         this.Anterior = Anterior;
+        this.name = name;
     }
     
     /**
@@ -64,5 +66,13 @@ public class Environment {
 
     public void setAnterior(Environment Anterior) {
         this.Anterior = Anterior;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }

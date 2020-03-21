@@ -11,10 +11,14 @@ import symbols.Vec;
  */
 public class Mean implements ASTNode{
     private LinkedList<ASTNode> lexp;
+    private int row;
+    private int column;
 
-    public Mean(LinkedList<ASTNode> lexp) {
+    public Mean(LinkedList<ASTNode> lexp, int row, int column) {
         super();
         this.lexp = lexp;
+        this.row = row;
+        this.column = column;
     }
     
     @Override
@@ -25,12 +29,12 @@ public class Mean implements ASTNode{
             //Verificamos que sea un vector
             if(exp instanceof Vec){
                 Object values[] = ((Vec)exp).getValues();
-                float mean = Float.parseFloat("0.0");
+                double mean = Double.parseDouble("0.0");
                 boolean flag = true;
                 
                 for (int i=0; i < values.length; i++) {
-                    if(values[i] instanceof Integer || values[i] instanceof Float)
-                        mean = mean + Float.parseFloat(values[i].toString());
+                    if(values[i] instanceof Integer || values[i] instanceof Double)
+                        mean = mean + Double.parseDouble(values[i].toString());
                     else{
                         flag = false;
                         break;
@@ -41,13 +45,13 @@ public class Mean implements ASTNode{
                     Object result[] = {mean / values.length};
                     return new Vec(result);
                 }else{
-                    TError error = new TError("Mean", "Semántico", "El vector no es de tipo integer o numérico", 0, 0);
+                    TError error = new TError("Mean", "Semántico", "El vector no es de tipo integer o numérico", row, column);
                     LError.add(error);
 
                     return error; 
                 }
             }else{
-                TError error = new TError("Mean", "Semántico", "La expresión dentro de la función no es vector", 0, 0);
+                TError error = new TError("Mean", "Semántico", "La expresión dentro de la función no es vector", row, column);
                 LError.add(error);
 
                 return error;
@@ -61,51 +65,80 @@ public class Mean implements ASTNode{
                 Object trim[] = ((Vec)exp2).getValues();
                 
                 //Verificar que trim sea de tamaño 1
-                if(trim.length==1){
-                    if(trim[0] instanceof Integer || trim[0] instanceof Float){
-                        
-                    }
-                    float mean = Float.parseFloat("0.0");
+                if(trim.length==1 && (trim[0] instanceof Integer || trim[0] instanceof Double)){
+                    boolean f = false;
                     Object values[] = ((Vec)exp).getValues();
-                    int cont = 0;
-                    boolean flag = true;
-
-                    for (int i=0; i < values.length; i++) {
-                        if(values[i] instanceof Integer || values[i] instanceof Float){
-                            if(Float.parseFloat(values[i].toString())>= Float.parseFloat(trim[0].toString())){
-                                mean = mean + Float.parseFloat(values[i].toString());
-                                cont++;
-                            }
-                        }else{
-                            flag = false;
+                    for(int i=0; i<values.length; i++){
+                        if(Double.parseDouble(values[i].toString())>=Double.parseDouble(trim[0].toString())){
+                            f = true;
                             break;
                         }
                     }
+                    
+                    if(f){
+                        double mean = Double.parseDouble("0.0");
+                        int cont = 0;
+                        boolean flag = true;
 
-                    if(flag){
-                        Object result[] = {mean / cont};
-                        return new Vec(result);
+                        for (int i=0; i < values.length; i++) {
+                            if(values[i] instanceof Integer || values[i] instanceof Double){
+                                if(Double.parseDouble(values[i].toString()) >= Double.parseDouble(trim[0].toString())){
+                                    mean = mean + Double.parseDouble(values[i].toString());
+                                    cont++;
+                                }
+                            }else{
+                                flag = false;
+                                break;
+                            }
+                        }
+
+                        if(flag){
+                            Object result[] = {mean / cont};
+                            return new Vec(result);
+                        }else{
+                            TError error = new TError("Mean", "Semántico", "El primer argumento no es de tipo integer o numérico", row, column);
+                            LError.add(error);
+
+                            return error; 
+                        }
                     }else{
-                        TError error = new TError("Mean", "Semántico", "El primer argumento no es de tipo integer o numérico", 0, 0);
-                        LError.add(error);
+                        double mean = Double.parseDouble("0.0");
+                        boolean flag = true;
 
-                        return error; 
+                        for (int i=0; i < values.length; i++) {
+                            if(values[i] instanceof Integer || values[i] instanceof Double)
+                                mean = mean + Double.parseDouble(values[i].toString());
+                            else{
+                                flag = false;
+                                break;
+                            }
+                        }
+
+                        if(flag){
+                            Object result[] = {mean / values.length};
+                            return new Vec(result);
+                        }else{
+                            TError error = new TError("Mean", "Semántico", "El vector no es de tipo integer o numérico", row, column);
+                            LError.add(error);
+
+                            return error; 
+                        }
                     }
                 }else{
-                    TError error = new TError("Mean", "Semántico", "El 2do argumento debe contener sólo un valor y ser de tipo integer o numérico", 0, 0);
+                    TError error = new TError("Mean", "Semántico", "El 2do argumento debe contener sólo un valor y ser de tipo integer o numérico", row, column);
                     LError.add(error);
 
                     return error; 
                 }
             }else{
-                TError error = new TError("Mean", "Semántico", "Alguna expresión dentro de la función no es vector", 0, 0);
+                TError error = new TError("Mean", "Semántico", "Alguna expresión dentro de la función no es vector", row, column);
                 LError.add(error);
 
                 return error;
             }
         }
             
-        TError error = new TError("Mean", "Semántico", "La función sólo puede traer 2 argumentos", 0, 0);
+        TError error = new TError("Mean", "Semántico", "La función sólo puede traer 2 argumentos", row, column);
         LError.add(error);
 
         return error;

@@ -14,10 +14,14 @@ import symbols.Vec;
  */
 public class Matrix implements ASTNode{
     private LinkedList<ASTNode> lexp;
+    private int row;
+    private int column;
 
-    public Matrix(LinkedList<ASTNode> lexp) {
+    public Matrix(LinkedList<ASTNode> lexp, int row, int column) {
         super();
         this.lexp = lexp;
+        this.row = row;
+        this.column = column;
     }
     
     @Override
@@ -65,22 +69,19 @@ public class Matrix implements ASTNode{
                     }
                     return new Mat(result,row,col);
                 }else {
-                    TError error = new TError("matrix", "Semántico", "La cantidad de datos no es múltiplo o submúltiplo de la matriz", 0, 0);
+                    TError error = new TError("matrix", "Semántico", "La cantidad de datos no es múltiplo o submúltiplo de la matriz", this.row, column);
                     LError.add(error);
-
                     return error;
                 }
             }else{
-                TError error = new TError("matrix", "Semántico", "Los datos no son de tipo vector", 0, 0);
+                TError error = new TError("matrix", "Semántico", "Los datos no son de tipo vector", this.row, column);
                 LError.add(error);
-
                 return error;
             }
         }
         
-        TError error = new TError("matrix", "Semántico", "La fila y columna deben ser vectores enteros de 1 solo valor", 0, 0);
+        TError error = new TError("matrix", "Semántico", "La fila y columna deben ser vectores enteros de 1 solo valor", row, column);
         LError.add(error);
-
         return error;
     }
 }
